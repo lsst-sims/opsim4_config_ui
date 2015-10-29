@@ -1,4 +1,5 @@
-from PyQt4 import QtGui
+import os
+from PyQt4 import QtCore, QtGui
 
 import lsst.pex.config.listField
 
@@ -60,3 +61,24 @@ class ConfigurationTab(QtGui.QWidget):
 
         widget.setToolTip(v.doc)
         return widget
+
+    def save(self, save_dir):
+        filename = self.tab_name + ".py"
+        with open(os.path.join(save_dir, filename), 'w') as ofile:
+            ofile.write("import {}".format(self.config_cls.__module__))
+            ofile.write(os.linesep)
+            ofile.write("assert type(config)=={0}.{1}, \'config is of type %s.%s instead of {0}.{1}\' % "
+                        "(type(config).__module__, type(config).__name__)".format(self.config_cls.__module__,
+                                                                                  self.config_cls.__name__))
+            ofile.write(os.linesep)
+
+            for i in range(self.layout.rowCount()):
+                property_label = self.layout.itemAtPosition(i, 0).widget()
+                property_name = str(property_label.text())
+                property_value = self.config_obj.toDict()[property_name]
+                if isinstance(property_value, str):
+                    property_format = "config.{}=\'{}\'"
+                else:
+                    property_format = "config.{}={}"
+                ofile.write(property_format.format(property_name, property_value))
+                ofile.write(os.linesep)
