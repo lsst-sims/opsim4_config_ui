@@ -13,11 +13,8 @@ except TypeError:
     VERSION = "%d.%d.%s" % (MAJOR, MINOR, PATCH)
 
 def write_version(filename="version.py"):
-    vfile = open(os.path.join(PACKAGE, filename), 'w')
-    try:
-        vfile.write("version='%s'" % VERSION)
-    finally:
-        vfile.close()
+    with open(os.path.join(PACKAGE, filename), 'w') as vfile:
+        vfile.write("version = '{}'".format(VERSION)+os.linesep)
 
 if __name__ == '__main__':
     write_version()
