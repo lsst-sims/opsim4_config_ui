@@ -14,8 +14,8 @@ class OpsimConfigDlg(QtGui.QDialog):
         self.create_tabs()
 
         self.buttonbox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Save | QtGui.QDialogButtonBox.Cancel)
-        self.connect(self.buttonbox, QtCore.SIGNAL("rejected()"), self, QtCore.SLOT("reject()"))
-        self.connect(self.buttonbox, QtCore.SIGNAL("accepted()"), self.save_configurations)
+        self.buttonbox.rejected.connect(self.reject)
+        self.buttonbox.accepted.connect(self.save_configurations)
 
         self.main_layout = QtGui.QVBoxLayout()
         self.main_layout.addWidget(self.tab_widget)
