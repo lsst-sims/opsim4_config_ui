@@ -135,3 +135,15 @@ class ConfigurationTab(QtGui.QWidget):
                 property_label.setText(property_name)
                 self.change_label_color(property_label, QtCore.Qt.black)
                 property_widget.setText(str(self.get_dict_value(property_name)))
+
+    def reset_active_field(self):
+        for i in range(self.layout.rowCount()):
+            property_label = self.layout.itemAtPosition(i, 0).widget()
+            property_name_mod = str(property_label.text())
+            if property_name_mod.endswith('*'):
+                property_widget = self.layout.itemAtPosition(i, 1).widget()
+                if property_widget.hasFocus():
+                    property_name = property_name_mod.strip('*')
+                    property_label.setText(property_name)
+                    self.change_label_color(property_label, QtCore.Qt.black)
+                    property_widget.setText(str(self.get_dict_value(property_name)))
