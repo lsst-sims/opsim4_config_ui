@@ -15,6 +15,11 @@ class OpsimConfigDlg(QtGui.QDialog):
 
         self.buttonbox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Save | QtGui.QDialogButtonBox.Close |
                                                 QtGui.QDialogButtonBox.RestoreDefaults)
+
+        reset_tab_button = QtGui.QPushButton("Reset Tab")
+        reset_tab_button.setAutoDefault(False)
+        self.buttonbox.addButton(reset_tab_button, QtGui.QDialogButtonBox.ResetRole)
+
         self.buttonbox.rejected.connect(self.reject)
         self.buttonbox.accepted.connect(self.save_configurations)
         self.buttonbox.clicked.connect(self.check_buttonbox_clicked)
@@ -45,11 +50,17 @@ class OpsimConfigDlg(QtGui.QDialog):
         button_name = str(button.text())
         if "Restore Defaults" == button_name:
             self.reset_tabs()
+        if "Reset Tab" == button_name:
+            self.reset_active_tab()
 
     def reset_tabs(self):
         for i in range(self.tab_widget.count()):
             tab = self.tab_widget.widget(i)
             tab.reset_all()
+
+    def reset_active_tab(self):
+        tab = self.tab_widget.widget(self.tab_widget.currentIndex())
+        tab.reset_all()
 
 def run(opts):
     import sys
