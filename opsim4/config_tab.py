@@ -74,6 +74,8 @@ class ConfigurationTab(QtGui.QWidget):
         pos = self.layout.indexOf(pwidget)
         plabel = self.layout.itemAt(pos - 1).widget()
         pname = str(plabel.text())
+        if pname.endswith('*'):
+            return
 
         try:
             v1 = float(pwidget.text())
@@ -122,3 +124,14 @@ class ConfigurationTab(QtGui.QWidget):
                 ofile.write(os.linesep)
                 for line in changed_values:
                     ofile.write(line)
+
+    def reset_all(self):
+        for i in range(self.layout.rowCount()):
+            property_label = self.layout.itemAtPosition(i, 0).widget()
+            property_name_mod = str(property_label.text())
+            if property_name_mod.endswith('*'):
+                property_name = property_name_mod.strip('*')
+                property_widget = self.layout.itemAtPosition(i, 1).widget()
+                property_label.setText(property_name)
+                self.change_label_color(property_label, QtCore.Qt.black)
+                property_widget.setText(str(self.get_dict_value(property_name)))
