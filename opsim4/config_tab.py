@@ -1,4 +1,5 @@
 import os
+import re
 from PyQt4 import QtCore, QtGui
 
 import lsst.pex.config.listField
@@ -12,6 +13,7 @@ class ConfigurationTab(QtGui.QWidget):
         self.tab_name = tab_name
         self.config_obj = config_obj
         self.config_cls = load_class(self.config_obj)
+        self.paren_match = re.compile(r'\(([^\)]+)\)')
 
         self.layout = QtGui.QGridLayout()
         self.signal_mapper = QtCore.QSignalMapper(self)
@@ -53,7 +55,7 @@ class ConfigurationTab(QtGui.QWidget):
                 pwidget.editingFinished.connect(self.signal_mapper.map)
                 self.signal_mapper.setMapping(pwidget, pwidget)
                 self.layout.addWidget(pwidget, i, 1)
-                unit_label = QtGui.QLabel("")
+                unit_label = QtGui.QLabel(self.make_unit_label(v))
                 self.layout.addWidget(unit_label, i, 2)
 
     def make_property_widget(self, tcls, v):
@@ -66,6 +68,14 @@ class ConfigurationTab(QtGui.QWidget):
 
         widget.setToolTip(v.doc)
         return widget
+
+    def make_unit_label(self, v):
+        units = ""
+        for match in self.paren_match.findall(v.doc):
+            if match.startswith("units"):
+                units = match.split('=')[-1]
+
+        return units
 
     def get_dict_value(self, name):
         return self.config_obj.toDict()[name]
