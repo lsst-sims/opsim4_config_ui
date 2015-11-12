@@ -62,6 +62,9 @@ class ConfigurationTab(QtGui.QWidget):
         widget = QtGui.QWidget()
         if tcls == "Str":
             widget = QtGui.QLineEdit(self.get_dict_value(v.name))
+            regex_val = self.make_regex(v.doc)
+            if regex_val is not None:
+                widget.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp(regex_val)))
         if tcls == "Float":
             widget = QtGui.QLineEdit(str(self.get_dict_value(v.name)))
             widget.setValidator(QtGui.QDoubleValidator())
@@ -76,6 +79,15 @@ class ConfigurationTab(QtGui.QWidget):
                 units = match.split('=')[-1]
 
         return units
+
+    def make_regex(self, doc):
+        regex = None
+        for match in self.paren_match.findall(doc):
+            if match.startswith("format"):
+                value = match.split('=')[-1]
+                if value == 'YYYY-MM-DD':
+                    regex = r'\d{4}-\d{2}-\d{2}'
+        return regex
 
     def get_dict_value(self, name):
         return self.config_obj.toDict()[name]
