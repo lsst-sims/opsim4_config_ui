@@ -52,7 +52,6 @@ class ConfigurationTab(QtGui.QWidget):
                 self.layout.addWidget(name_label, i, 0)
                 pwidget = self.make_property_widget(tcls, v)
                 name_label.setBuddy(pwidget)
-                pwidget.editingFinished.connect(self.signal_mapper.map)
                 self.signal_mapper.setMapping(pwidget, pwidget)
                 self.layout.addWidget(pwidget, i, 1)
                 unit_label = QtGui.QLabel(self.make_unit_label(v))
@@ -65,9 +64,11 @@ class ConfigurationTab(QtGui.QWidget):
             regex_val = self.make_regex(v.doc)
             if regex_val is not None:
                 widget.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp(regex_val)))
+            widget.editingFinished.connect(self.signal_mapper.map)
         if tcls == "Float":
             widget = QtGui.QLineEdit(str(self.get_dict_value(v.name)))
             widget.setValidator(QtGui.QDoubleValidator())
+            widget.editingFinished.connect(self.signal_mapper.map)
 
         widget.setToolTip(v.doc)
         return widget
