@@ -20,7 +20,14 @@ class ConfigurationTab(QtGui.QWidget):
         self.signal_mapper.mapped[QtGui.QWidget].connect(self.check_property)
 
         self.create_form()
-        self.setLayout(self.layout)
+        temp_widget = QtGui.QWidget()
+        temp_widget.setLayout(self.layout)
+        self.scrollable = QtGui.QScrollArea()
+        self.scrollable.setWidget(temp_widget)
+
+        main_layout = QtGui.QVBoxLayout(self)
+        main_layout.addWidget(self.scrollable)
+        self.setLayout(main_layout)
 
     @property
     def title(self):
@@ -33,7 +40,7 @@ class ConfigurationTab(QtGui.QWidget):
         return " ".join(values)
 
     def create_form(self):
-        for i, (k, v) in enumerate(self.config_cls.__dict__["_fields"].items()):
+        for i, (k, v) in enumerate(sorted(self.config_cls.__dict__["_fields"].items())):
             tcls = None
             name_label = QtGui.QLabel(k)
 
@@ -44,7 +51,10 @@ class ConfigurationTab(QtGui.QWidget):
             if v.dtype == str:
                 tcls = "Str"
             if isinstance(v, lsst.pex.config.listField.ListField):
-                tcls = "List"
+                if v.dtype == float:
+                    tcls = "DoubleList"
+                else:
+                    tcls = "StringList"
             if tcls is None:
                 print("Cannot handle {}".format(k))
 
@@ -69,6 +79,14 @@ class ConfigurationTab(QtGui.QWidget):
             widget = QtGui.QLineEdit(str(self.get_dict_value(v.name)))
             widget.setValidator(QtGui.QDoubleValidator())
             widget.editingFinished.connect(self.signal_mapper.map)
+        if tcls == "Bool":
+            widget = QtGui.QCheckBox()
+            widget.setChecked(self.get_dict_value(v.name))
+            widget.stateChanged.connect(self.signal_mapper.map)
+        if tcls.endswith("List"):
+            widget = QtGui.QComboBox()
+            values = self.get_dict_value(v.name)
+            widget.addItems([str(value) for value in values])
 
         widget.setToolTip(v.doc)
         return widget
