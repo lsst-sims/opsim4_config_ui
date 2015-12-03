@@ -29,16 +29,6 @@ class ConfigurationTab(QtGui.QWidget):
         main_layout.addWidget(self.scrollable)
         self.setLayout(main_layout)
 
-    @property
-    def title(self):
-        values = self.tab_name.split('_')
-        for i, value in enumerate(values):
-            if value == "lsst":
-                values[i] = value.upper()
-            else:
-                values[i] = value.capitalize()
-        return " ".join(values)
-
     def create_form(self):
         for i, (k, v) in enumerate(sorted(self.config_cls.__dict__["_fields"].items())):
             tcls = None
@@ -144,12 +134,16 @@ class ConfigurationTab(QtGui.QWidget):
             if property_name_mod.endswith('*'):
                 property_name = property_name_mod.strip('*')
                 property_widget = self.layout.itemAtPosition(i, 1).widget()
+                property_format = "config.{}={}"
                 try:
-                    property_value = float(property_widget.text())
-                    property_format = "config.{}={}"
-                except ValueError:
-                    property_value = str(property_widget.text())
-                    property_format = "config.{}=\'{}\'"
+                    property_value = str(property_widget.isChecked())
+                except AttributeError:
+                    try:
+                        property_value = float(property_widget.text())
+                        property_format = "config.{}={}"
+                    except ValueError:
+                        property_value = str(property_widget.text())
+                        property_format = "config.{}=\'{}\'"
 
                 changed_values.append(property_format.format(property_name, property_value))
                 changed_values.append(os.linesep)
@@ -177,10 +171,14 @@ class ConfigurationTab(QtGui.QWidget):
                 self.change_label_color(property_label, QtCore.Qt.black)
                 property_widget.setText(str(self.get_dict_value(property_name)))
 
+    def reset_active_tab(self):
+        self.reset_all()
+
     def reset_active_field(self):
         for i in range(self.layout.rowCount()):
             property_label = self.layout.itemAtPosition(i, 0).widget()
             property_name_mod = str(property_label.text())
+            property_widget = self.layout.itemAtPosition(i, 1).widget()
             if property_name_mod.endswith('*'):
                 property_widget = self.layout.itemAtPosition(i, 1).widget()
                 if property_widget.hasFocus():

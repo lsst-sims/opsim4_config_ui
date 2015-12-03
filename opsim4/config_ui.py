@@ -3,7 +3,10 @@ import os
 from PyQt4 import QtCore, QtGui
 
 from lsst.sims.ocs.configuration.sim_config import SimulationConfig
+from lsst.sims.ocs.utilities.file_helpers import expand_path
 from opsim4.config_tab import ConfigurationTab
+from opsim4.config_tab_widget import ConfigurationTabWidget
+from opsim4.utilities import title
 
 class OpsimConfigDlg(QtGui.QDialog):
     def __init__(self, parent=None):
@@ -22,6 +25,7 @@ class OpsimConfigDlg(QtGui.QDialog):
 
         reset_field_button = QtGui.QPushButton("Reset Field")
         reset_field_button.setAutoDefault(False)
+        reset_field_button.setFocusPolicy(QtCore.Qt.NoFocus)
         self.buttonbox.addButton(reset_field_button, QtGui.QDialogButtonBox.ResetRole)
 
         self.buttonbox.rejected.connect(self.reject)
@@ -34,10 +38,15 @@ class OpsimConfigDlg(QtGui.QDialog):
         self.setLayout(self.main_layout)
 
     def create_tabs(self):
+        tab_order = ["lsst_survey", "observing_site", "observatory"]
         configuration = SimulationConfig()
-        for key, obj in configuration.items():
-            tab = ConfigurationTab(key, obj)
-            self.tab_widget.addTab(tab, tab.title)
+        for key in tab_order:
+            obj = getattr(configuration, key)
+            if key == "observatory":
+                tab = ConfigurationTabWidget(key, obj)
+            else:
+                tab = ConfigurationTab(key, obj)
+            self.tab_widget.addTab(tab, title(key))
 
     def set_save_directory(self, save_dir):
         self.save_directory = save_dir
@@ -48,7 +57,8 @@ class OpsimConfigDlg(QtGui.QDialog):
                 self.save_directory = os.curdir
         for i in range(self.tab_widget.count()):
             tab = self.tab_widget.widget(i)
-            tab.save(self.save_directory)
+            tab.save(expand_path(self.save_directory))
+        print("Finished saving configuration.")
 
     def check_buttonbox_clicked(self, button):
         button_name = str(button.text())
@@ -66,7 +76,7 @@ class OpsimConfigDlg(QtGui.QDialog):
 
     def reset_active_tab(self):
         tab = self.tab_widget.widget(self.tab_widget.currentIndex())
-        tab.reset_all()
+        tab.reset_active_tab()
 
     def reset_active_field(self):
         tab = self.tab_widget.widget(self.tab_widget.currentIndex())
