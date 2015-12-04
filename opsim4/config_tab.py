@@ -74,12 +74,8 @@ class ConfigurationTab(QtGui.QWidget):
             widget.setChecked(self.get_dict_value(v.name))
             widget.stateChanged.connect(self.signal_mapper.map)
         if tcls.endswith("List"):
-            widget = QtGui.QComboBox()
-            widget.setEditable(True)
-            widget.setDuplicatesEnabled(False)
-            values = self.get_dict_value(v.name)
-            widget.addItems([str(value) for value in values])
-            widget.editTextChanged.connect(self.signal_mapper.map)
+            widget = QtGui.QLineEdit(",".join([str(x) for x in self.get_dict_value(v.name)]))
+            widget.editingFinished.connect(self.signal_mapper.map)
 
         widget.setToolTip(v.doc)
         return widget
@@ -115,9 +111,17 @@ class ConfigurationTab(QtGui.QWidget):
             v1 = bool(pwidget.checkState())
         except AttributeError:
             try:
-                v1 = float(pwidget.text())
+                text = pwidget.text()
+                if "," in text:
+                    v1 = [float(v)for v in text.split(',')]
+                else:
+                    v1 = float(text)
             except ValueError:
-                v1 = pwidget.text()
+                text = pwidget.text()
+                if "," in text:
+                    v1 = [str(v)for v in text.split(',')]
+                else:
+                    v1 = text
         v2 = self.get_dict_value(pname)
         #print("{}, {}".format(v1, type(v1)))
         #print("{}, {}".format(v2, type(v2)))
@@ -145,7 +149,15 @@ class ConfigurationTab(QtGui.QWidget):
                     property_value = str(property_widget.isChecked())
                 except AttributeError:
                     try:
-                        property_value = float(property_widget.text())
+                        property_text = property_widget.text()
+                        if "," in property_text:
+                            values = property_text.split(',')
+                            try:
+                                property_value = str([float(x) for x in values])
+                            except ValueError:
+                                property_value = str([str(x) for x in values])
+                        else:
+                            property_value = float(property_text)
                         property_format = "config.{}={}"
                     except ValueError:
                         property_value = str(property_widget.text())
@@ -173,12 +185,7 @@ class ConfigurationTab(QtGui.QWidget):
             if property_name_mod.endswith('*'):
                 property_name = property_name_mod.strip('*')
                 property_widget = self.layout.itemAtPosition(i, 1).widget()
-                property_label.setText(property_name)
-                self.change_label_color(property_label, QtCore.Qt.black)
-                try:
-                    property_widget.setChecked(self.get_dict_value(property_name))
-                except AttributeError:
-                    property_widget.setText(str(self.get_dict_value(property_name)))
+                self._reset_field(property_name, property_label, property_widget)
 
     def reset_active_tab(self):
         self.reset_all()
@@ -192,9 +199,16 @@ class ConfigurationTab(QtGui.QWidget):
                 property_widget = self.layout.itemAtPosition(i, 1).widget()
                 if property_widget.hasFocus():
                     property_name = property_name_mod.strip('*')
-                    property_label.setText(property_name)
-                    self.change_label_color(property_label, QtCore.Qt.black)
-                    try:
-                        property_widget.setChecked(self.get_dict_value(property_name))
-                    except AttributeError:
-                        property_widget.setText(str(self.get_dict_value(property_name)))
+                    self._reset_field(property_name, property_label, property_widget)
+
+    def _reset_field(self, pn, pl, pw):
+        pl.setText(pn)
+        self.change_label_color(pl, QtCore.Qt.black)
+        try:
+            pw.setChecked(self.get_dict_value(pn))
+        except AttributeError:
+            value = self.get_dict_value(pn)
+            if isinstance(value, list):
+                pw.setText(",".join([str(x) for x in value]))
+            else:
+                pw.setText(str(value))
