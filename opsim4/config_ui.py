@@ -18,9 +18,11 @@ class OpsimConfigDlg(QtGui.QDialog):
 
         self.buttonbox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Save | QtGui.QDialogButtonBox.Close |
                                                 QtGui.QDialogButtonBox.RestoreDefaults)
+        self.buttonbox.button(QtGui.QDialogButtonBox.Save).setFocusPolicy(QtCore.Qt.NoFocus)
 
         reset_tab_button = QtGui.QPushButton("Reset Tab")
         reset_tab_button.setAutoDefault(False)
+        reset_tab_button.setFocusPolicy(QtCore.Qt.NoFocus)
         self.buttonbox.addButton(reset_tab_button, QtGui.QDialogButtonBox.ResetRole)
 
         reset_field_button = QtGui.QPushButton("Reset Field")
