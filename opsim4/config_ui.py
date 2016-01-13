@@ -4,40 +4,73 @@ from PyQt4 import QtCore, QtGui
 
 from lsst.sims.ocs.configuration.sim_config import SimulationConfig
 from lsst.sims.ocs.utilities.file_helpers import expand_path
-from opsim4.config_tab import ConfigurationTab
-from opsim4.config_tab_widget import ConfigurationTabWidget
-from opsim4.utilities import title
+from .config_tab import ConfigurationTab
+from .config_tab_widget import ConfigurationTabWidget
+from .utilities import title
+from . import version
 
-class OpsimConfigDlg(QtGui.QDialog):
+class OpsimConfig(QtGui.QMainWindow):
     def __init__(self, parent=None):
-        super(QtGui.QDialog, self).__init__(parent)
+        super(OpsimConfig, self).__init__(parent)
         self.save_directory = None
+
+        file_set_save_dir = self.create_action("Save Directory", None, "Ctrl+D", None,
+                                               "Set the directory where the configurations will be saved.")
+        file_save_configs = self.create_action("&Save Configuration", self.save_configurations,
+                                               QtGui.QKeySequence.Save,
+                                               None, "Save the configuration to files.")
+        file_quit_action = self.create_action("&Quit", self.close, "Ctrl+Q", None,
+                                              "Close the application,.")
+
+        file_menu = self.menuBar().addMenu("&File")
+        self.add_actions(file_menu, (file_set_save_dir, file_save_configs, file_quit_action))
+
+        reset_all_defaults = self.create_action("All Defaults", self.reset_tabs, "Ctrl+R", None,
+                                                "Reset all values to defaults.")
+        reset_active_tab_defaults = self.create_action("Active Tab Defaults", self.reset_active_tab, "Ctrl+T",
+                                                       None,
+                                                       "Reset all values in the active tab.")
+        reset_active_field_default = self.create_action("Active Field Default", self.reset_active_field,
+                                                        "Ctrl+Alt+F", None,
+                                                        "Reset value of the active field.")
+
+        reset_menu = self.menuBar().addMenu("Reset")
+        self.add_actions(reset_menu, (reset_all_defaults, reset_active_tab_defaults,
+                                      reset_active_field_default))
+
+        help_about = self.create_action("&About", self.about, None, None,
+                                        "About the OpSim Configuration UI program.")
+
+        help_menu = self.menuBar().addMenu("&Help")
+        self.add_actions(help_menu, (help_about,))
 
         self.tab_widget = QtGui.QTabWidget()
         self.create_tabs()
 
-        self.buttonbox = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Save | QtGui.QDialogButtonBox.Close |
-                                                QtGui.QDialogButtonBox.RestoreDefaults)
-        self.buttonbox.button(QtGui.QDialogButtonBox.Save).setFocusPolicy(QtCore.Qt.NoFocus)
+        self.setCentralWidget(self.tab_widget)
 
-        reset_tab_button = QtGui.QPushButton("Reset Tab")
-        reset_tab_button.setAutoDefault(False)
-        reset_tab_button.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.buttonbox.addButton(reset_tab_button, QtGui.QDialogButtonBox.ResetRole)
+    def create_action(self, text, slot=None, shortcut=None, icon=None, tip=None, checkable=False,
+                      signal="triggered()"):
+        action = QtGui.QAction(text, self)
+        if icon is not None:
+            action.setIcon(QtGui.QIcon(":/{}.png".format(icon)))
+        if shortcut is not None:
+            action.setShortcut(shortcut)
+        if tip is not None:
+            action.setToolTip(tip)
+            action.setStatusTip(tip)
+        if slot is not None:
+            self.connect(action, QtCore.SIGNAL(signal), slot)
+        if checkable:
+            action.setCheckable(True)
+        return action
 
-        reset_field_button = QtGui.QPushButton("Reset Field")
-        reset_field_button.setAutoDefault(False)
-        reset_field_button.setFocusPolicy(QtCore.Qt.NoFocus)
-        self.buttonbox.addButton(reset_field_button, QtGui.QDialogButtonBox.ResetRole)
-
-        self.buttonbox.rejected.connect(self.reject)
-        self.buttonbox.accepted.connect(self.save_configurations)
-        self.buttonbox.clicked.connect(self.check_buttonbox_clicked)
-
-        self.main_layout = QtGui.QVBoxLayout()
-        self.main_layout.addWidget(self.tab_widget)
-        self.main_layout.addWidget(self.buttonbox)
-        self.setLayout(self.main_layout)
+    def add_actions(self, target, actions):
+        for action in actions:
+            if action is None:
+                target.addSeparator()
+            else:
+                target.addAction(action)
 
     def create_tabs(self):
         tab_order = ["lsst_survey", "observing_site", "observatory"]
@@ -62,15 +95,6 @@ class OpsimConfigDlg(QtGui.QDialog):
             tab.save(expand_path(self.save_directory))
         print("Finished saving configuration.")
 
-    def check_buttonbox_clicked(self, button):
-        button_name = str(button.text())
-        if "Restore Defaults" == button_name:
-            self.reset_tabs()
-        if "Reset Tab" == button_name:
-            self.reset_active_tab()
-        if "Reset Field" == button_name:
-            self.reset_active_field()
-
     def reset_tabs(self):
         for i in range(self.tab_widget.count()):
             tab = self.tab_widget.widget(i)
@@ -84,10 +108,23 @@ class OpsimConfigDlg(QtGui.QDialog):
         tab = self.tab_widget.widget(self.tab_widget.currentIndex())
         tab.reset_active_field()
 
+    def about(self):
+        QtGui.QMessageBox.about(self, "About OpSim Configuration UI",
+                                """
+                                <b>Operations Simulator Configuration UI</b> v{}
+                                <p>This application is used to create override files to
+                                modify the running of the Operations Simulator from the baseline
+                                configuration.
+                                <br><br>
+                                Copyright 2016 LSST Simulations
+                                """.format(version.version))
+
 def run(opts):
     import sys
     app = QtGui.QApplication(sys.argv)
-    form = OpsimConfigDlg()
-    form.set_save_directory(opts.save_dir)
+    app.setOrganizationName("LSST Simulations")
+    app.setOrganizationDomain("lsst.org")
+    app.setApplicationName("Operations Simulator Configuration UI")
+    form = OpsimConfig()
     form.show()
     app.exec_()
