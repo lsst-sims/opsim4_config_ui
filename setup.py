@@ -4,13 +4,10 @@ from setuptools import setup
 PACKAGE = 'opsim4'
 
 MAJOR = 0
-MINOR = 1
-PATCH = 'dev'
+MINOR = 2
+PATCH = 0
 
-try:
-    VERSION = "%d.%d.%d" % (MAJOR, MINOR, PATCH)
-except TypeError:
-    VERSION = "%d.%d.%s" % (MAJOR, MINOR, PATCH)
+VERSION = "%d.%d.%d" % (MAJOR, MINOR, PATCH)
 
 def write_version(filename="version.py"):
     with open(os.path.join(PACKAGE, filename), 'w') as vfile:
@@ -24,7 +21,7 @@ if __name__ == '__main__':
           author='Michael Reuter',
           author_email='mareuter@lsst.org',
           url='https://github.com/mareuter/opsim4_config_ui',
-          license='GPL',
+          license='MIT',
           long_description=os.linesep+open("README.rst").read(),
           packages=[PACKAGE],
           package_dir={PACKAGE: PACKAGE},
