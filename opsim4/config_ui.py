@@ -14,9 +14,23 @@ class OpsimConfig(QtGui.QMainWindow):
 
     def __init__(self, parent=None):
         super(OpsimConfig, self).__init__(parent)
-
         self.save_directory = None
 
+        self.create_file_menu()
+        self.create_reset_menu()
+        self.create_help_menu()
+
+        self.tab_widget = QtGui.QTabWidget()
+        self.create_tabs()
+
+        self.setCentralWidget(self.tab_widget)
+
+        settings = QtCore.QSettings()
+        self.recent_directories = settings.value("RecentDirectories").toStringList()
+        self.save_directory = settings.value("LastDirectory").toString()
+        self.update_file_menu()
+
+    def create_file_menu(self):
         file_set_save_dir = self.create_action("Save Directory", self.set_save_directory, "Ctrl+D", None,
                                                "Set the directory where the configurations will be saved.")
         file_save_configs = self.create_action("&Save Configuration", self.save_configurations,
@@ -29,6 +43,7 @@ class OpsimConfig(QtGui.QMainWindow):
         self.file_menu_actions = (file_set_save_dir, None, file_save_configs, file_quit_action)
         self.file_menu.aboutToShow.connect(self.update_file_menu)
 
+    def create_reset_menu(self):
         reset_all_defaults = self.create_action("All Defaults", self.reset_tabs, "Ctrl+R", None,
                                                 "Reset all values to defaults.")
         reset_active_tab_defaults = self.create_action("Active Tab Defaults", self.reset_active_tab, "Ctrl+T",
@@ -42,22 +57,12 @@ class OpsimConfig(QtGui.QMainWindow):
         self.add_actions(reset_menu, (reset_all_defaults, reset_active_tab_defaults,
                                       reset_active_field_default))
 
+    def create_help_menu(self):
         help_about = self.create_action("&About", self.about, None, None,
                                         "About the OpSim Configuration UI program.")
 
         help_menu = self.menuBar().addMenu("&Help")
         self.add_actions(help_menu, (help_about,))
-
-        self.tab_widget = QtGui.QTabWidget()
-        self.create_tabs()
-
-        self.setCentralWidget(self.tab_widget)
-
-        settings = QtCore.QSettings()
-        self.recent_directories = settings.value("RecentDirectories").toStringList()
-        #print("A:", self.recent_directories.count())
-        self.save_directory = settings.value("LastDirectory").toString()
-        self.update_file_menu()
 
     def create_action(self, text, slot=None, shortcut=None, icon=None, tip=None, checkable=False,
                       signal="triggered()"):
