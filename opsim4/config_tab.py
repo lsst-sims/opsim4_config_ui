@@ -1,3 +1,4 @@
+import collections
 import os
 import re
 from PyQt4 import QtCore, QtGui
@@ -212,3 +213,42 @@ class ConfigurationTab(QtGui.QWidget):
                 pw.setText(",".join([str(x) for x in value]))
             else:
                 pw.setText(str(value))
+
+    def get_diff(self, parent_name=None):
+        #print("B:", self.tab_name)
+        ddict = collections.defaultdict(dict)
+        for i in range(self.layout.rowCount()):
+            property_label = self.layout.itemAtPosition(i, 0).widget()
+            property_name_mod = str(property_label.text())
+            if property_name_mod.endswith('*'):
+                property_name = property_name_mod.strip('*')
+                print(property_name)
+                property_widget = self.layout.itemAtPosition(i, 1).widget()
+                try:
+                    property_value = str(property_widget.isChecked())
+                except AttributeError:
+                    try:
+                        property_text = property_widget.text()
+                        if "," in property_text:
+                            values = property_text.split(',')
+                            try:
+                                property_value = str([float(x) for x in values])
+                            except ValueError:
+                                property_value = str([str(x) for x in values])
+                        else:
+                            property_value = float(property_text)
+                    except ValueError:
+                        property_value = str(property_widget.text())
+
+                default_value = self.get_dict_value(property_name)
+                if isinstance(default_value, list):
+                    default_value = ",".join([str(x) for x in default_value])
+                else:
+                    default_value = str(default_value)
+
+                if parent_name is not None:
+                    ddict[parent_name + "/" + self.tab_name][property_name] = [default_value,
+                                                                               str(property_value)]
+                else:
+                    ddict[self.tab_name][property_name] = [default_value, str(property_value)]
+        return ddict

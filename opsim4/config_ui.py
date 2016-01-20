@@ -6,6 +6,7 @@ from lsst.sims.ocs.configuration.sim_config import SimulationConfig
 from lsst.sims.ocs.utilities.file_helpers import expand_path
 from .config_tab import ConfigurationTab
 from .config_tab_widget import ConfigurationTabWidget
+from .report_dlg import ReportDialog
 from .utilities import title
 from . import version
 
@@ -18,6 +19,7 @@ class OpsimConfig(QtGui.QMainWindow):
 
         self.create_file_menu()
         self.create_reset_menu()
+        self.create_create_menu()
         self.create_help_menu()
 
         self.tab_widget = QtGui.QTabWidget()
@@ -56,6 +58,13 @@ class OpsimConfig(QtGui.QMainWindow):
         reset_menu = self.menuBar().addMenu("Reset")
         self.add_actions(reset_menu, (reset_all_defaults, reset_active_tab_defaults,
                                       reset_active_field_default))
+
+    def create_create_menu(self):
+        diff_report = self.create_action("Diff Report", self.diff_report, "Ctrl+Alt+R", None,
+                                         "Generate a difference report.")
+
+        create_menu = self.menuBar().addMenu("Create")
+        self.add_actions(create_menu, (diff_report,))
 
     def create_help_menu(self):
         help_about = self.create_action("&About", self.about, None, None,
@@ -179,6 +188,19 @@ class OpsimConfig(QtGui.QMainWindow):
             while self.recent_directories.count() > self.RECENT_DIRECTORIES_TO_LIST:
                 self.recent_directories.takeLast()
         self.update_file_menu()
+
+    def get_diff_dict(self):
+        diff_dict = {}
+        for i in range(self.tab_widget.count()):
+            tab = self.tab_widget.widget(i)
+            rd = tab.get_diff()
+            diff_dict.update(rd)
+        return diff_dict
+
+    def diff_report(self):
+        dlg = ReportDialog()
+        dlg.make_report(self.get_diff_dict())
+        dlg.exec_()
 
     def about(self):
         QtGui.QMessageBox.about(self, "About OpSim Configuration UI",

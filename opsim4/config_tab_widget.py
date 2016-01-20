@@ -37,3 +37,12 @@ class ConfigurationTabWidget(QtGui.QTabWidget):
     def reset_active_field(self):
         tab = self._active_widget()
         tab.reset_active_field()
+
+    def get_diff(self):
+        dd = {}
+        for i in range(self.count()):
+            tab = self.widget(i)
+            #print("A:", self.tab_name)
+            rd = tab.get_diff(self.tab_name)
+            dd.update(rd)
+        return dd
