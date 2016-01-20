@@ -12,6 +12,7 @@ from . import version
 
 class OpsimConfig(QtGui.QMainWindow):
     RECENT_DIRECTORIES_TO_LIST = 9
+    STATUS_BAR_TIMEOUT = 3000
 
     def __init__(self, parent=None):
         super(OpsimConfig, self).__init__(parent)
@@ -29,7 +30,7 @@ class OpsimConfig(QtGui.QMainWindow):
 
         settings = QtCore.QSettings()
         self.recent_directories = settings.value("RecentDirectories").toStringList()
-        self.save_directory = settings.value("LastDirectory").toString()
+        self.save_directory = str(settings.value("LastDirectory").toString())
         self.update_file_menu()
 
     def create_file_menu(self):
@@ -114,20 +115,23 @@ class OpsimConfig(QtGui.QMainWindow):
         for i in range(self.tab_widget.count()):
             tab = self.tab_widget.widget(i)
             tab.save(expand_path(self.save_directory))
-        print("Finished saving configuration.")
+        self.statusBar().showMessage("Finished saving configuration.", self.STATUS_BAR_TIMEOUT)
 
     def reset_tabs(self):
         for i in range(self.tab_widget.count()):
             tab = self.tab_widget.widget(i)
             tab.reset_all()
+        self.statusBar().showMessage("Reset complete.", self.STATUS_BAR_TIMEOUT)
 
     def reset_active_tab(self):
         tab = self.tab_widget.widget(self.tab_widget.currentIndex())
         tab.reset_active_tab()
+        self.statusBar().showMessage("Reset complete.", self.STATUS_BAR_TIMEOUT)
 
     def reset_active_field(self):
         tab = self.tab_widget.widget(self.tab_widget.currentIndex())
         tab.reset_active_field()
+        self.statusBar().showMessage("Reset complete.", self.STATUS_BAR_TIMEOUT)
 
     def closeEvent(self, event):
         if self.ok_to_continue():
