@@ -222,7 +222,7 @@ class ConfigurationTab(QtGui.QWidget):
             property_name_mod = str(property_label.text())
             if property_name_mod.endswith('*'):
                 property_name = property_name_mod.strip('*')
-                print(property_name)
+                #print(property_name)
                 property_widget = self.layout.itemAtPosition(i, 1).widget()
                 try:
                     property_value = str(property_widget.isChecked())
