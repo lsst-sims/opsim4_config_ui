@@ -98,7 +98,7 @@ class OpsimConfig(QtGui.QMainWindow):
                 target.addAction(action)
 
     def create_tabs(self):
-        tab_order = ["lsst_survey", "observing_site", "observatory"]
+        tab_order = ["survey", "observing_site", "observatory"]
         configuration = SimulationConfig()
         for key in tab_order:
             obj = getattr(configuration, key)
