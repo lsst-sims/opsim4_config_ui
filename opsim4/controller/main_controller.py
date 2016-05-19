@@ -1,6 +1,7 @@
 import collections
 
 import opsim4.controller
+from opsim4.utilities import title
 
 __all__ = ["MainController"]
 
@@ -8,10 +9,9 @@ class MainController(object):
 
     def __init__(self):
         self.tab_order = ["survey", "science", "observing_site", "observatory"]
-        self.survey_controller = opsim4.controller.SurveyController()
-        self.science_controller = opsim4.controller.ScienceController()
-        self.observing_site_controller = opsim4.controller.ObservingSiteController()
-        self.observatory_controller = opsim4.controller.ObservatoryController()
+        for tab in self.tab_order:
+            setattr(self, tab + "_controller",
+                    getattr(opsim4.controller, title(tab, spacer="") + "Controller")(tab))
 
     def get_tabs(self):
         tab_dictionary = collections.OrderedDict()

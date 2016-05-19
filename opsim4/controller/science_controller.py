@@ -1,11 +1,8 @@
-from PyQt4 import QtGui
+from opsim4.controller import BaseController
 
 __all__ = ["ScienceController"]
 
-class ScienceController(object):
+class ScienceController(BaseController):
 
-    def __init__(self):
-        pass
-
-    def get_tab(self):
-        return QtGui.QTabWidget()
+    def __init__(self, name):
+        super(ScienceController, self).__init__(name)

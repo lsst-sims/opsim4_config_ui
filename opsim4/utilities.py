@@ -26,7 +26,7 @@ def load_class(instance_obj):
     # Finally, we retrieve the Class
     return getattr(module, class_str)
 
-def title(tab_name):
+def title(tab_name, spacer=" "):
     """Create a title for a tab.
 
     Parameters
@@ -45,4 +45,4 @@ def title(tab_name):
             values[i] = value.upper()
         else:
             values[i] = value.capitalize()
-    return " ".join(values)
+    return spacer.join(values)
