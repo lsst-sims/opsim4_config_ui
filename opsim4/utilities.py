@@ -6,11 +6,15 @@ def load_class(instance_obj):
     This function was taken from the following blog:
     http://thomassileo.com/blog/2012/12/21/dynamically-load-python-modules-or-classes/
 
-    Args:
-        full_class_string (str): A standard import like call.
+    Parameters
+    ----------
+    instance_obj : instance
+        The instance to derive the class from.
 
-    Returns:
-        instance: An instance of the class.
+    Returns
+    -------
+    instance
+        An instance of the class.
     """
     full_class_string = str(type(instance_obj)).split('\'')[1]
 
@@ -25,11 +29,15 @@ def load_class(instance_obj):
 def title(tab_name):
     """Create a title for a tab.
 
-    Args:
-        tab_name (str): A potential title for a tab.
+    Parameters
+    ----------
+    tab_name : str
+        A potential title for a tab.
 
-    Returns:
-        str: A normalized tab title.
+    Returns
+    -------
+    str
+        A normalized tab title.
     """
     values = tab_name.split('_')
     for i, value in enumerate(values):
