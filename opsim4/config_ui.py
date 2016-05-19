@@ -2,10 +2,8 @@ import os
 
 from PyQt4 import QtCore, QtGui
 
-from lsst.sims.ocs.configuration.sim_config import SimulationConfig
+from opsim4.controller import MainController
 from lsst.sims.ocs.utilities.file_helpers import expand_path
-from .config_tab import ConfigurationTab
-from .config_tab_widget import ConfigurationTabWidget
 from .report_dlg import ReportDialog
 from .utilities import title
 from . import version
@@ -24,6 +22,7 @@ class OpsimConfig(QtGui.QMainWindow):
         self.create_help_menu()
 
         self.tab_widget = QtGui.QTabWidget()
+        self.main_controller = MainController()
         self.create_tabs()
 
         self.setCentralWidget(self.tab_widget)
@@ -98,14 +97,8 @@ class OpsimConfig(QtGui.QMainWindow):
                 target.addAction(action)
 
     def create_tabs(self):
-        tab_order = ["survey", "observing_site", "observatory"]
-        configuration = SimulationConfig()
-        for key in tab_order:
-            obj = getattr(configuration, key)
-            if key == "observatory":
-                tab = ConfigurationTabWidget(key, obj)
-            else:
-                tab = ConfigurationTab(key, obj)
+        tab_dict = self.main_controller.get_tabs()
+        for key, tab in tab_dict.items():
             self.tab_widget.addTab(tab, title(key))
 
     @QtCore.pyqtSlot()
