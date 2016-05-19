@@ -4,7 +4,7 @@ from PyQt4 import QtCore, QtGui
 
 from opsim4.controller import MainController
 from lsst.sims.ocs.utilities.file_helpers import expand_path
-from .report_dlg import ReportDialog
+from opsim4.widgets import ReportDialog
 from .utilities import title
 from . import version
 

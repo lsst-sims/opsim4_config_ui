@@ -3,7 +3,7 @@ import os
 
 from PyQt4 import QtCore, QtGui
 
-from .utilities import title
+from opsim4.utilities import title
 
 class ReportDialog(QtGui.QDialog):
     def __init__(self, parent=None):
