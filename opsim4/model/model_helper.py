@@ -37,7 +37,7 @@ class ModelHelper(object):
             value = ','.join([str(x) for x in value])
         return value
 
-    def make_parameter_dictionary(self, fields=None):
+    def make_parameter_dictionary(self, fields=None, obj=None):
         """Create a parameter information dictionary from configuration.
 
         This function creates a parameter information dictionary from a particular
@@ -64,6 +64,8 @@ class ModelHelper(object):
         """
         if fields is None:
             fields = self.config_cls._fields
+        if obj is None:
+            obj = self.config_obj
 
         param_dict = collections.defaultdict(dict)
         for k, v in fields.items():
@@ -89,7 +91,7 @@ class ModelHelper(object):
             pinfo["units"] = self.make_unit_label(v.doc)
             pinfo["doc"] = v.doc
             pinfo["format"] = self.make_regex(v.doc)
-            pinfo["value"] = self.get_dict_value(k, is_list=pinfo["dtype"].endswith("List"))
+            pinfo["value"] = self.get_dict_value(k, is_list=pinfo["dtype"].endswith("List"), obj=obj)
             pinfo["complex"] = None
 
         return param_dict
