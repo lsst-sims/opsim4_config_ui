@@ -2,6 +2,7 @@ import collections
 import re
 
 import lsst.pex.config.listField
+import lsst.pex.config.configDictField
 
 from opsim4.utilities import load_class
 
@@ -9,9 +10,9 @@ __all__ = ["ModelHelper"]
 
 class ModelHelper(object):
 
-    def __init__(self, config_obj):
+    def __init__(self, config_obj=None):
         self.config_obj = config_obj
-        self.config_cls = load_class(self.config_obj)
+        self.config_cls = load_class(self.config_obj) if config_obj is not None else None
         self.paren_match = re.compile(r'\(([^\)]+)\)')
 
     def get_dict_value(self, name, is_list=False, obj=None):
@@ -37,7 +38,45 @@ class ModelHelper(object):
             value = ','.join([str(x) for x in value])
         return value
 
-    def make_parameter_dictionary(self, fields=None, obj=None):
+    def make_parameter(self, pinfo, k, v, obj=None):
+        """Create a single set of parameter information.
+
+        Parameters
+        ----------
+        pinfo : dict
+            The parameter information dictionary to fill.
+        obj : instance
+            (Optional) An instance of the configuration object.
+        """
+        tcls = None
+
+        pinfo["doc"] = v.doc
+
+        if v.dtype == int:
+            tcls = "Int"
+        if v.dtype == float:
+            tcls = "Float"
+        if v.dtype == bool:
+            tcls = "Bool"
+        if v.dtype == str:
+            tcls = "Str"
+        if isinstance(v, lsst.pex.config.listField.ListField):
+            if v.dtype == float:
+                tcls = "DoubleList"
+            else:
+                tcls = "StringList"
+        if tcls is None:
+            #print("Cannot handle {}".format(k))
+            pinfo["dtype"] = tcls
+            pinfo["value"] = tcls
+            return
+
+        pinfo["dtype"] = tcls
+        pinfo["units"] = self.make_unit_label(v.doc)
+        pinfo["format"] = self.make_regex(v.doc)
+        pinfo["value"] = self.get_dict_value(k, is_list=pinfo["dtype"].endswith("List"), obj=obj)
+
+    def make_parameter_dictionary(self, fields=None, obj=None, pd=None):
         """Create a parameter information dictionary from configuration.
 
         This function creates a parameter information dictionary from a particular
@@ -67,32 +106,14 @@ class ModelHelper(object):
         if obj is None:
             obj = self.config_obj
 
-        param_dict = collections.defaultdict(dict)
+        if pd is None:
+            param_dict = collections.defaultdict(dict)
+        else:
+            param_dict = pd
+
         for k, v in fields.items():
             pinfo = param_dict[k]
-
-            tcls = None
-
-            if v.dtype == float:
-                tcls = "Float"
-            if v.dtype == bool:
-                tcls = "Bool"
-            if v.dtype == str:
-                tcls = "Str"
-            if isinstance(v, lsst.pex.config.listField.ListField):
-                if v.dtype == float:
-                    tcls = "DoubleList"
-                else:
-                    tcls = "StringList"
-            if tcls is None:
-                print("Cannot handle {}".format(k))
-
-            pinfo["dtype"] = tcls if tcls is not None else str(type(k))
-            pinfo["units"] = self.make_unit_label(v.doc)
-            pinfo["doc"] = v.doc
-            pinfo["format"] = self.make_regex(v.doc)
-            pinfo["value"] = self.get_dict_value(k, is_list=pinfo["dtype"].endswith("List"), obj=obj)
-            pinfo["complex"] = None
+            self.make_parameter(pinfo, k, v, obj=obj)
 
         return param_dict
 

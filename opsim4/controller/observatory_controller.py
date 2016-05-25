@@ -2,7 +2,6 @@ from opsim4.controller import BaseController
 from opsim4.model import ObservatoryModel
 from opsim4.widgets import ConfigurationTabWidget
 
-
 __all__ = ["ObservatoryController"]
 
 class ObservatoryController(BaseController):
