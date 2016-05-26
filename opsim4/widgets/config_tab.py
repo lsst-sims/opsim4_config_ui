@@ -58,7 +58,6 @@ class ConfigurationTab(QtGui.QWidget):
                         #print("B:", i, prg2)
                 group_box.setLayout(grid_layout)
                 widget_layout.addWidget(group_box, i + progress, 0, 1, 3)
-                print(self.signal_mapper)
 
             i += 1
         #print("G:", i, progress)
@@ -92,16 +91,50 @@ class ConfigurationTab(QtGui.QWidget):
         widget.setToolTip(v["doc"])
         return widget
 
-    def get_dict_value(self, name):
-        return self.config_dict[name]["value"]
+    def get_dict_value(self, name, keys=None):
+        if keys is not None:
+            keys.reverse()
+            print(keys)
+            item = self.config_dict[keys.pop(0)]["value"]
+            for key in keys:
+                item = item[key]["value"]
+            return item[name]["value"]
+        else:
+            return self.config_dict[name]["value"]
 
     def check_property(self, pwidget):
-        pos = self.layout.indexOf(pwidget)
-        plabel = self.layout.itemAt(pos - 1).widget()
+        print("Checking property")
+        parent = pwidget.parentWidget()
+        layout = None
+        parent_keys = None
+        found_first_parent = True
+        while True:
+            if isinstance(parent, QtGui.QGroupBox):
+                title = str(parent.title())
+                try:
+                    parent_keys.append(title)
+                except AttributeError:
+                    parent_keys = [title]
+                if found_first_parent:
+                    layout = parent.layout()
+                    found_first_parent = False
+                parent = parent.parentWidget()
+            else:
+                break
+        print("Z:", parent_keys)
+
+        if layout is None:
+            layout = self.layout
+
+        pos = layout.indexOf(pwidget)
+        print("HelpA")
+        plabel = layout.itemAt(pos - 1).widget()
+        print("HelpB")
         pname = str(plabel.text())
+        print("HelpC", pname)
         if pname.endswith('*'):
             return
-
+        print("Help1")
         try:
             v1 = bool(pwidget.checkState())
         except AttributeError:
@@ -117,10 +150,13 @@ class ConfigurationTab(QtGui.QWidget):
                     v1 = [str(v)for v in text.split(',')]
                 else:
                     v1 = text
-        v2 = self.get_dict_value(pname)
+        print("Help2")
+        v2 = self.get_dict_value(pname, parent_keys)
+        print("Help3")
         #print("{}, {}".format(v1, type(v1)))
         #print("{}, {}".format(v2, type(v2)))
         if v1 != v2:
+            print("Help4")
             #print("{} finished editing.".format(pname))
             changed_label = "{}*".format(pname)
             plabel.setText(changed_label)
