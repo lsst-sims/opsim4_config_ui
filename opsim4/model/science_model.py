@@ -1,5 +1,4 @@
 import collections
-import copy
 
 from lsst.sims.ocs.configuration import ScienceProposals
 
@@ -20,7 +19,7 @@ class ScienceModel(ModelHelper):
         self.ad_tab_order = ["name", "sky_region", "filters", "scheduling"]
 
     def make_parameter_dictionary(self):
-        param_dict = []
+        param_dict = {}
         for ad_obj in self.ad_objs:
             pdict = super(ScienceModel,
                           self).make_parameter_dictionary(fields=self.ad_cls._fields,
@@ -47,6 +46,8 @@ class ScienceModel(ModelHelper):
 
                     psub_dict = pdict[key]["value"]
                     for k1 in psub_dict:
+                        if isinstance(psub_dict[k1], collections.defaultdict):
+                            continue
                         if psub_dict[k1]["dtype"] is None:
                             psub_dict[k1]["dtype"] = "GroupBox"
 
@@ -67,6 +68,6 @@ class ScienceModel(ModelHelper):
                                     psub_dict[k1]["value"][i] = sub_dict2
 
                             pdict[key]["value"] = psub_dict
-            param_dict.append(pdict)
+            param_dict[ad_obj.name] = pdict
 
         return param_dict

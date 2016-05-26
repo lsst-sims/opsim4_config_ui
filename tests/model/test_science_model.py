@@ -18,8 +18,10 @@ class ScienceModelTest(unittest.TestCase):
     def test_make_parameter_dictionary(self):
         pd = self.sci_model.make_parameter_dictionary()
         self.assertEqual(len(pd), self.num_proposals)
-        self.assertEqual(len(pd[0]), self.num_parameters)
-        self.assertEqual(pd[0]["name"]["value"], "UniversalWeak")
-        self.assertEqual(pd[0]["sky_region"]["value"]["dec_window"]["value"], 90.0)
-        self.assertEqual(pd[0]["scheduling"]["value"]["max_num_targets"]["value"], 100)
-        self.assertEqual(len(pd[0]["sky_region"]["value"]["limit_selections"]["value"]), 2)
+        pdd = pd.values()[0]
+        self.assertEqual(len(pdd), self.num_parameters)
+        self.assertEqual(pdd["name"]["value"], "UniversalWeak")
+        self.assertEqual(pdd["sky_region"]["value"]["dec_window"]["value"], 90.0)
+        self.assertEqual(pdd["scheduling"]["value"]["max_num_targets"]["value"], 100)
+        self.assertEqual(len(pdd["sky_region"]["value"]["limit_selections"]["value"]), 2)
+        self.assertEqual(len(pdd["filters"]["value"][0].keys()), 6)

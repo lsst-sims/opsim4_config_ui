@@ -2,6 +2,7 @@ import collections
 import os
 
 from PyQt4 import QtCore, QtGui
+from opsim4.constants import CSS_GROUPBOX
 
 class ConfigurationTab(QtGui.QWidget):
     def __init__(self, tab_name, config_dict, parent=None):
@@ -24,18 +25,44 @@ class ConfigurationTab(QtGui.QWidget):
         main_layout.addWidget(self.scrollable)
         self.setLayout(main_layout)
 
-    def create_form(self):
-        for i, (k, v) in enumerate(sorted(self.config_dict.items())):
+    def create_form(self, cdict=None, layout=None, progress=0):
+        i = 0
+        #print("F:", i, progress)
+        widget_layout = self.layout if layout is None else layout
+        conf_dict = self.config_dict if cdict is None else cdict
+
+        for k, v in sorted(conf_dict.items()):
             name_label = QtGui.QLabel(k)
 
-            if v["dtype"] is not None:
-                self.layout.addWidget(name_label, i, 0)
+            if v["dtype"] != "GroupBox":
+                #print("Z:", k, i, i + progress)
+                widget_layout.addWidget(name_label, i + progress, 0)
                 pwidget = self.make_property_widget(v)
                 name_label.setBuddy(pwidget)
                 self.signal_mapper.setMapping(pwidget, pwidget)
-                self.layout.addWidget(pwidget, i, 1)
+                widget_layout.addWidget(pwidget, i + progress, 1)
                 unit_label = QtGui.QLabel("" if v["units"] is None else v["units"])
-                self.layout.addWidget(unit_label, i, 2)
+                widget_layout.addWidget(unit_label, i + progress, 2)
+            else:
+                #print("ZZ:", k, i, i + progress)
+                group_box = QtGui.QGroupBox(k)
+                group_box.setStyleSheet(CSS_GROUPBOX)
+                grid_layout = QtGui.QGridLayout()
+                #print("A:", v["value"], type(v["value"]))
+                if isinstance(v["value"], collections.defaultdict):
+                    self.create_form(v["value"], grid_layout)
+                else:
+                    prg2 = 0
+                    for value in v["value"].values():
+                        prg2 += self.create_form(value, grid_layout, i + progress + prg2)
+                        #print("B:", i, prg2)
+                group_box.setLayout(grid_layout)
+                widget_layout.addWidget(group_box, i + progress, 0, 1, 3)
+                print(self.signal_mapper)
+
+            i += 1
+        #print("G:", i, progress)
+        return i
 
     def make_property_widget(self, v):
         widget = QtGui.QWidget()
@@ -49,6 +76,10 @@ class ConfigurationTab(QtGui.QWidget):
         if tcls == "Float":
             widget = QtGui.QLineEdit(str(v["value"]))
             widget.setValidator(QtGui.QDoubleValidator())
+            widget.editingFinished.connect(self.signal_mapper.map)
+        if tcls == "Int":
+            widget = QtGui.QLineEdit(str(v["value"]))
+            widget.setValidator(QtGui.QIntValidator())
             widget.editingFinished.connect(self.signal_mapper.map)
         if tcls == "Bool":
             widget = QtGui.QCheckBox()

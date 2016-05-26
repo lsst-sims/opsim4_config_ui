@@ -8,6 +8,7 @@ class ConfigurationTabWidget(QtGui.QTabWidget):
         super(QtGui.QTabWidget, self).__init__(parent)
 
         self.tab_name = tab_name
+        #print(self.tab_name)
         self.config_dict = config_dict
         self.create_tabs()
 
