@@ -10,6 +10,7 @@ class ConfigurationTab(QtGui.QWidget):
 
         self.tab_name = tab_name
         self.config_dict = config_dict
+        #print(self.config_dict)
 
         self.layout = QtGui.QGridLayout()
         self.signal_mapper = QtCore.QSignalMapper(self)
@@ -30,8 +31,15 @@ class ConfigurationTab(QtGui.QWidget):
         #print("F:", i, progress)
         widget_layout = self.layout if layout is None else layout
         conf_dict = self.config_dict if cdict is None else cdict
+        #print("A:", conf_dict)
 
-        for k, v in sorted(conf_dict.items()):
+        if isinstance(conf_dict, collections.OrderedDict):
+            sorted_items = conf_dict.items()
+        else:
+            sorted_items = sorted(conf_dict.items())
+
+        for k, v in sorted_items:
+            #print("B:", k)
             name_label = QtGui.QLabel(k)
 
             if v["dtype"] != "GroupBox":
@@ -48,7 +56,7 @@ class ConfigurationTab(QtGui.QWidget):
                 group_box = QtGui.QGroupBox(k)
                 group_box.setStyleSheet(CSS_GROUPBOX)
                 grid_layout = QtGui.QGridLayout()
-                #print("A:", v["value"], type(v["value"]))
+                #print("C:", v["value"], type(v["value"]))
                 if isinstance(v["value"], collections.defaultdict):
                     self.create_form(v["value"], grid_layout)
                 else:

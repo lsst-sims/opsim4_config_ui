@@ -10,4 +10,5 @@ class ScienceController(BaseController):
         super(ScienceController, self).__init__(name)
         self.model = ScienceModel()
         params = self.model.make_parameter_dictionary()
+        #print(params)
         self.widget = ConfigurationTabWidget(self.name, params)

@@ -6,8 +6,8 @@ class ScienceModelTest(unittest.TestCase):
 
     def setUp(self):
         self.sci_model = ScienceModel()
-        self.num_parameters = 4
-        self.num_proposals = 1
+        self.num_parameters = 7
+        self.num_proposals = 3
 
     def test_basic_information_after_creation(self):
         self.assertIsNone(self.sci_model.config_obj)
@@ -18,10 +18,11 @@ class ScienceModelTest(unittest.TestCase):
     def test_make_parameter_dictionary(self):
         pd = self.sci_model.make_parameter_dictionary()
         self.assertEqual(len(pd), self.num_proposals)
-        pdd = pd.values()[0]
+        pdd = pd.get("WeakLensing")
+        #print(pdd)
         self.assertEqual(len(pdd), self.num_parameters)
-        self.assertEqual(pdd["name"]["value"], "UniversalWeak")
-        self.assertEqual(pdd["sky_region"]["value"]["dec_window"]["value"], 90.0)
+        self.assertEqual(pdd["name"]["value"], "WeakLensing")
+        self.assertEqual(pdd["sky_exclusion"]["value"]["dec_window"]["value"], 90.0)
         self.assertEqual(pdd["scheduling"]["value"]["max_num_targets"]["value"], 100)
-        self.assertEqual(len(pdd["sky_region"]["value"]["limit_selections"]["value"]), 2)
+        self.assertEqual(len(pdd["sky_region"]["value"]["selections"]["value"]), 1)
         self.assertEqual(len(pdd["filters"]["value"][0].keys()), 6)

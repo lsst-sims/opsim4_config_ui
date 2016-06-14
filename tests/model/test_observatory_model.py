@@ -6,7 +6,7 @@ class ObservatoryModelTest(unittest.TestCase):
 
     def setUp(self):
         self.obs_model = ObservatoryModel()
-        self.num_parameters = 7
+        self.num_parameters = 8
 
     def test_basic_information_after_creation(self):
         self.assertIsNotNone(self.obs_model.config_obj)

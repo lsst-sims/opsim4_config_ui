@@ -10,7 +10,8 @@ class ObservatoryModel(ModelHelper):
 
     def __init__(self):
         super(ObservatoryModel, self).__init__(Observatory())
-        self.tab_order = ["telescope", "dome", "rotator", "camera", "slew", "park", "obs_var"]
+        self.tab_order = ["telescope", "dome", "rotator", "camera", "optics_loop_corr", "slew",
+                          "park", "obs_var"]
 
     def make_parameter_dictionary(self):
         param_dict = collections.OrderedDict()

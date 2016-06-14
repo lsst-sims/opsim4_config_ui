@@ -16,7 +16,8 @@ class ScienceModel(ModelHelper):
 
         self.ad_objs = sci_props.area_dist_props.active
         self.ad_cls = load_class(self.ad_objs[0])
-        self.ad_tab_order = ["name", "sky_region", "filters", "scheduling"]
+        self.ad_tab_order = ["name", "sky_region", "sky_exclusion", "sky_nightly_bounds", "sky_constraints",
+                             "scheduling", "filters"]
 
     def make_parameter_dictionary(self):
         param_dict = {}
@@ -68,6 +69,13 @@ class ScienceModel(ModelHelper):
                                     psub_dict[k1]["value"][i] = sub_dict2
 
                             pdict[key]["value"] = psub_dict
-            param_dict[ad_obj.name] = pdict
+
+            fdict = collections.OrderedDict()
+            for tab_name in self.ad_tab_order:
+                #print(tab_name)
+                fdict[tab_name] = pdict.get(tab_name)
+
+            #print(fdict)
+            param_dict[ad_obj.name] = fdict
 
         return param_dict
