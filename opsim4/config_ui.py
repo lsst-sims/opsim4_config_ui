@@ -2,19 +2,21 @@ import os
 
 from PyQt4 import QtCore, QtGui
 
-from lsst.sims.ocs.configuration.sim_config import SimulationConfig
 from lsst.sims.ocs.utilities.file_helpers import expand_path
-from .config_tab import ConfigurationTab
-from .config_tab_widget import ConfigurationTabWidget
+from opsim4.controller import MainController
 from .report_dlg import ReportDialog
 from .utilities import title
 from . import version
 
 class OpsimConfig(QtGui.QMainWindow):
+    """Top-level UI.
+    """
     RECENT_DIRECTORIES_TO_LIST = 9
     STATUS_BAR_TIMEOUT = 3000
 
     def __init__(self, parent=None):
+        """Initialize the class.
+        """
         super(OpsimConfig, self).__init__(parent)
         self.save_directory = None
 
@@ -24,6 +26,7 @@ class OpsimConfig(QtGui.QMainWindow):
         self.create_help_menu()
 
         self.tab_widget = QtGui.QTabWidget()
+        self.main_controller = MainController()
         self.create_tabs()
 
         self.setCentralWidget(self.tab_widget)
@@ -34,6 +37,8 @@ class OpsimConfig(QtGui.QMainWindow):
         self.update_file_menu()
 
     def create_file_menu(self):
+        """Create the file menu for the UI.
+        """
         file_set_save_dir = self.create_action("Save Directory", self.set_save_directory, "Ctrl+D", None,
                                                "Set the directory where the configurations will be saved.")
         file_save_configs = self.create_action("&Save Configuration", self.save_configurations,
@@ -47,6 +52,8 @@ class OpsimConfig(QtGui.QMainWindow):
         self.file_menu.aboutToShow.connect(self.update_file_menu)
 
     def create_reset_menu(self):
+        """Create the reset menu for the UI.
+        """
         reset_all_defaults = self.create_action("All Defaults", self.reset_tabs, "Ctrl+R", None,
                                                 "Reset all values to defaults.")
         reset_active_tab_defaults = self.create_action("Active Tab Defaults", self.reset_active_tab, "Ctrl+T",
@@ -61,6 +68,8 @@ class OpsimConfig(QtGui.QMainWindow):
                                       reset_active_field_default))
 
     def create_create_menu(self):
+        """ Create the create menu for the UI.
+        """
         diff_report = self.create_action("Diff Report", self.diff_report, "Ctrl+Alt+R", None,
                                          "Generate a difference report.")
 
@@ -68,6 +77,8 @@ class OpsimConfig(QtGui.QMainWindow):
         self.add_actions(create_menu, (diff_report,))
 
     def create_help_menu(self):
+        """Create the help menu for the UI.
+        """
         help_about = self.create_action("&About", self.about, None, None,
                                         "About the OpSim Configuration UI program.")
 
@@ -98,14 +109,10 @@ class OpsimConfig(QtGui.QMainWindow):
                 target.addAction(action)
 
     def create_tabs(self):
-        tab_order = ["survey", "observing_site", "observatory"]
-        configuration = SimulationConfig()
-        for key in tab_order:
-            obj = getattr(configuration, key)
-            if key == "observatory":
-                tab = ConfigurationTabWidget(key, obj)
-            else:
-                tab = ConfigurationTab(key, obj)
+        """Create all the configuration tabs.
+        """
+        tab_dict = self.main_controller.get_tabs()
+        for key, tab in tab_dict.items():
             self.tab_widget.addTab(tab, title(key))
 
     @QtCore.pyqtSlot()
