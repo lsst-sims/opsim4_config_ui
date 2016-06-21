@@ -16,6 +16,29 @@ class ModelHelper(object):
         self.paren_match = re.compile(r'\(([^\)]+)\)')
         self.params = self.make_parameter_dictionary() if config_obj is not None else None
 
+    def check_parameter(self, parameter_name, value_to_check):
+        """Check a given value against the currently stored information.
+
+        Parameters
+        ----------
+        parameter_name : str
+            The name of the parameter to check.
+        value_to_check : str
+            The string representation of the parameter's associated value to check.
+
+        Returns
+        -------
+        bool
+            True if value is different from stored, false if same.
+        """
+        if self.params is not None:
+            srep = str(self.params[parameter_name]["value"])
+
+            print("D:", parameter_name, value_to_check, srep)
+            return value_to_check != srep
+        else:
+            return False
+
     def get_dict_value(self, name, is_list=False, obj=None):
         """Get the parameter value from the configuration.
 

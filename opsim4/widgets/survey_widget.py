@@ -1,5 +1,3 @@
-from PyQt4 import QtCore, QtGui
-
 from opsim4.widgets import ConfigurationTab
 
 __all__ = ["SurveyWidget"]
@@ -15,10 +13,14 @@ class SurveyWidget(ConfigurationTab):
         ----------
         name : str
             The name for the tab title.
+        parent : QWidget
+            The parent widget of this one.
         """
-        super(SurveyWidget, self).__init__(name, parent)
+        ConfigurationTab.__init__(self, name, parent)
 
     def create_form(self):
+        """Create the UI form for the Survey widget.
+        """
         print("in create form")
         self.create_widget("Float", "duration")
         self.create_widget("Str", "start_date")

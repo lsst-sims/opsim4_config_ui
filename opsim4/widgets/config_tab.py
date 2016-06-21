@@ -8,6 +8,8 @@ class ConfigurationTab(QtGui.QWidget):
     """Widget for configuration information.
     """
 
+    checkProperty = QtCore.pyqtSignal('QString', 'QString', int)
+
     def __init__(self, name, parent=None):
         """Initialize the class.
 
@@ -15,14 +17,16 @@ class ConfigurationTab(QtGui.QWidget):
         ----------
         name : str
             The name for the tab title.
+        parent : QWidget
+            The parent widget of this one.
         """
-        super(ConfigurationTab, self).__init__(parent)
+        QtGui.QWidget.__init__(self, parent)
 
         self.name = name
         self.layout = QtGui.QGridLayout()
         self.layout.setSizeConstraint
         self.signal_mapper = QtCore.QSignalMapper(self)
-        self.signal_mapper.mapped[QtGui.QWidget].connect(self.check_property)
+        self.signal_mapper.mapped[QtGui.QWidget].connect(self.property_changed)
         self.rows = 0
 
         self.create_form()
@@ -37,6 +41,15 @@ class ConfigurationTab(QtGui.QWidget):
         self.setLayout(main_layout)
 
     def create_widget(self, wtype, name):
+        """Create a parameter widget.
+
+        Parameters
+        ----------
+        wtype : str
+            The representation string for the parameter type.
+        name : str
+            The name of the parameter.
+        """
         parameter_label = QtGui.QLabel(name)
         parameter_widget, change_signal = get_widget_by_type(wtype)
         parameter_label.setBuddy(parameter_widget)
@@ -54,9 +67,20 @@ class ConfigurationTab(QtGui.QWidget):
         self.rows += 1
 
     def create_form(self):
+        """Create UI form.
+        """
         raise NotImplementedError("Classes must override this!")
 
     def set_information(self, key, info):
+        """Set information in a particular parameter widget.
+
+        Parameters
+        ----------
+        key : str
+            The name of the parameter.
+        info : dict
+            The set of information that describes this parameter.
+        """
         for i in xrange(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 1).widget()
             if str(widget.objectName()) == key:
@@ -72,5 +96,57 @@ class ConfigurationTab(QtGui.QWidget):
                     unit_widget = self.layout.itemAtPosition(i, 2).widget()
                     unit_widget.setText(info["units"])
 
-    def check_property(self, pwidget):
-        pass
+    def property_changed(self, pwidget):
+        """Get information from a possibly changed parameter.
+
+        Parameters
+        ----------
+        pwidget : QWidget
+            The parameter widget that has possibly changed.
+        """
+        pos = self.layout.indexOf(pwidget)
+        plabel = self.layout.itemAt(pos - 1).widget()
+        pname = plabel.text()
+        if pname.endsWith('*'):
+            return
+        try:
+            pvalue = QtCore.QString(pwidget.checkState())
+        except AttributeError:
+            pvalue = pwidget.text()
+
+        self.checkProperty.emit(pname, pvalue, pos)
+        print("Done")
+
+    @QtCore.pyqtSlot(int, bool)
+    def is_changed(self, position, is_changed):
+        """Mark a parameter widget as changed.
+
+        Parameters
+        ----------
+        position : int
+            The position (usually row) of the widget.
+        is_changed : bool
+            Flag set to True if the parameter has changed from baseline, false if not.
+        """
+        print("is changed")
+        if not is_changed:
+            return
+        plabel = self.layout.itemAt(position - 1).widget()
+        pname = str(plabel.text())
+        changed_label = "{}*".format(pname)
+        plabel.setText(changed_label)
+        self.change_label_color(plabel, QtCore.Qt.red)
+
+    def change_label_color(self, label, color):
+        """Change a label's text color.
+
+        Parameters
+        ----------
+        label : QLabel
+            The label that needs text color change.
+        color : QColor
+            The color for the text change.
+        """
+        palette = label.palette()
+        palette.setColor(label.foregroundRole(), color)
+        label.setPalette(palette)

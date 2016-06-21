@@ -11,4 +11,4 @@ class SurveyModel(ModelHelper):
     def __init__(self):
         """Initialize the class.
         """
-        super(SurveyModel, self).__init__(Survey())
+        ModelHelper.__init__(self, Survey())

@@ -37,3 +37,7 @@ class ModelHelperTest(unittest.TestCase):
     def test_make_parameter_dictionary(self):
         param_dict = self.mh.make_parameter_dictionary()
         self.assertEqual(len(param_dict), 7)
+
+    def test_check_parameter(self):
+        self.assertTrue(self.mh.check_parameter("name", "Sierra Madre"))
+        self.assertFalse(self.mh.check_parameter("height", "2650.0"))
