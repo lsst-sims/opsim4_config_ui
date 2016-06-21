@@ -19,15 +19,13 @@ class BaseController(QtCore.QObject):
         self.model = None
         self.widget = None
 
-    # @QtCore.pyqtSlot('QString', bool, int)
-    # @QtCore.pyqtSlot('QString', float, int)
     @QtCore.pyqtSlot('QString', 'QString', int)
     def check_property(self, param_name, param_value, position):
         """Check the stored value of the parameter name against input.
 
         Parameters
         ----------
-        param_name : str
+        param_name : QtCore.QString
             The parameter name to retrieve the stored value of.
         param_value : any
             The value of the parameter to check against the stored one.
@@ -39,8 +37,22 @@ class BaseController(QtCore.QObject):
         print("A:", param_name, param_value, is_changed)
         self.widget.is_changed(position, is_changed)
 
+    @QtCore.pyqtSlot('QString', int)
+    def get_property(self, param_name, position):
+        """Get the property value for the requested name.
+
+        Parameters
+        ----------
+        param_name : QtCore.QString
+            The parameter name to retrieve the stored value of.
+        position : int
+            The widget position that requested this check.
+        """
+        pvalue = str(self.model.get_parameter(str(param_name)))
+        print("Resetting:", param_name, pvalue)
+        self.widget.reset_field(position, pvalue)
+
     def get_tab(self):
         """Return the view controller's widget.
         """
         return self.widget
-

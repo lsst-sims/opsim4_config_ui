@@ -7,8 +7,10 @@ __all__ = ["ConfigurationTab"]
 class ConfigurationTab(QtGui.QWidget):
     """Widget for configuration information.
     """
+    CHANGED_PARAMETER = '*'
 
     checkProperty = QtCore.pyqtSignal('QString', 'QString', int)
+    getProperty = QtCore.pyqtSignal('QString', int)
 
     def __init__(self, name, parent=None):
         """Initialize the class.
@@ -107,7 +109,7 @@ class ConfigurationTab(QtGui.QWidget):
         pos = self.layout.indexOf(pwidget)
         plabel = self.layout.itemAt(pos - 1).widget()
         pname = plabel.text()
-        if pname.endsWith('*'):
+        if pname.endsWith(self.CHANGED_PARAMETER):
             return
         try:
             pvalue = QtCore.QString(pwidget.checkState())
@@ -133,7 +135,7 @@ class ConfigurationTab(QtGui.QWidget):
             return
         plabel = self.layout.itemAt(position - 1).widget()
         pname = str(plabel.text())
-        changed_label = "{}*".format(pname)
+        changed_label = "{}{}".format(pname, self.CHANGED_PARAMETER)
         plabel.setText(changed_label)
         self.change_label_color(plabel, QtCore.Qt.red)
 
@@ -150,3 +152,49 @@ class ConfigurationTab(QtGui.QWidget):
         palette = label.palette()
         palette.setColor(label.foregroundRole(), color)
         label.setPalette(palette)
+
+    def reset_active_field(self):
+        """Reset the active (has focus) parameter widget.
+        """
+        for i in xrange(self.layout.rowCount()):
+            property_label = self.layout.itemAtPosition(i, 0).widget()
+            property_name = str(property_label.text())
+            if property_name.endswith(self.CHANGED_PARAMETER):
+                property_widget = self.layout.itemAtPosition(i, 1).widget()
+                if property_widget.hasFocus():
+                    self.getProperty.emit(property_name.strip(self.CHANGED_PARAMETER), i)
+
+    def reset_active_tab(self):
+        """Reset the current tab.
+        """
+        self.reset_all()
+
+    def reset_all(self):
+        """Reset all of the changed parameters.
+        """
+        for i in xrange(self.layout.rowCount()):
+            property_label = self.layout.itemAtPosition(i, 0).widget()
+            property_name = str(property_label.text())
+            if property_name.endswith(self.CHANGED_PARAMETER):
+                self.getProperty.emit(property_name.strip(self.CHANGED_PARAMETER), i)
+
+    @QtCore.pyqtSlot(int, str)
+    def reset_field(self, position, param_value):
+        """Reset a specific parameter widget.
+
+        Parameters
+        ----------
+        position : int
+            The position (usually row) of the widget to reset.
+        param_value : str
+            The string representation of the parameter value.
+        """
+        plabel = self.layout.itemAtPosition(position, 0).widget()
+        pname = str(plabel.text())
+        plabel.setText(pname.strip(self.CHANGED_PARAMETER))
+        pwidget = self.layout.itemAtPosition(position, 1).widget()
+        try:
+            pwidget.setChecked(bool(param_value))
+        except AttributeError:
+            pwidget.setText(param_value)
+        self.change_label_color(plabel, QtCore.Qt.black)

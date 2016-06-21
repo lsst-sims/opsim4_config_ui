@@ -62,6 +62,21 @@ class ModelHelper(object):
             value = ','.join([str(x) for x in value])
         return value
 
+    def get_parameter(self, parameter_name):
+        """Get a value for the given parameter.
+
+        Parameters
+        ----------
+        parameter_name : str
+            The name of the parameter to fetch the value of.
+
+        Returns
+        -------
+        any
+            The associated parameter value.
+        """
+        return self.params[parameter_name]["value"]
+
     def make_parameter(self, pinfo, k, v, obj=None):
         """Create a single set of parameter information.
 

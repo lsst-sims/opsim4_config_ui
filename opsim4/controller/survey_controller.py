@@ -26,3 +26,4 @@ class SurveyController(BaseController):
             self.widget.set_information(key, value)
 
         self.widget.checkProperty.connect(self.check_property)
+        self.widget.getProperty.connect(self.get_property)

@@ -41,3 +41,7 @@ class ModelHelperTest(unittest.TestCase):
     def test_check_parameter(self):
         self.assertTrue(self.mh.check_parameter("name", "Sierra Madre"))
         self.assertFalse(self.mh.check_parameter("height", "2650.0"))
+
+    def test_get_parameter(self):
+        self.assertEquals(self.mh.get_parameter("name"), "Cerro Pachon")
+        self.assertEquals(self.mh.get_parameter("height"), 2650.0)
