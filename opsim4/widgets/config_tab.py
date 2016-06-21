@@ -1,3 +1,5 @@
+import collections
+
 from PyQt4 import QtCore, QtGui
 
 from opsim4.widgets import get_widget_by_type
@@ -73,6 +75,49 @@ class ConfigurationTab(QtGui.QWidget):
         """Create UI form.
         """
         raise NotImplementedError("Classes must override this!")
+
+    def get_diff(self, parent_name=None):
+        """Get the changed parameters.
+
+        Parameters
+        ----------
+        parent_name : str, optional
+            The name of a parent tab.
+
+        Returns
+        -------
+        dict{str: str}
+            The set of changed parameters.
+        """
+        ddict = collections.defaultdict(dict)
+        for i in range(self.layout.rowCount()):
+            property_label = self.layout.itemAtPosition(i, 0).widget()
+            property_name_mod = str(property_label.text())
+            if property_name_mod.endswith('*'):
+                property_name = property_name_mod.strip('*')
+                #print(property_name)
+                property_widget = self.layout.itemAtPosition(i, 1).widget()
+                try:
+                    property_value = str(property_widget.isChecked())
+                except AttributeError:
+                    try:
+                        property_text = property_widget.text()
+                        if "," in property_text:
+                            values = property_text.split(',')
+                            try:
+                                property_value = str([float(x) for x in values])
+                            except ValueError:
+                                property_value = str([str(x) for x in values])
+                        else:
+                            property_value = float(property_text)
+                    except ValueError:
+                        property_value = str(property_widget.text())
+
+                if parent_name is not None:
+                    ddict[parent_name + "/" + self.name][property_name] = [str(property_value)]
+                else:
+                    ddict[self.name][property_name] = [str(property_value)]
+        return ddict
 
     def set_information(self, key, info):
         """Set information in a particular parameter widget.

@@ -50,8 +50,8 @@ class ReportDialog(QtGui.QDialog):
                 row_color = "#FFFFFF"
             self.report.append("<tr bgcolor=\"{}\">".format(row_color))
             self.report.append("<td>{}</td>".format(k))
-            self.report.append("<td>{}</td>".format(i[0]))
             self.report.append("<td>{}</td>".format(i[1]))
+            self.report.append("<td>{}</td>".format(i[0]))
             self.report.append("</tr>")
 
     def _make_table(self, value):

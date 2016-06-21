@@ -52,6 +52,25 @@ class BaseController(QtCore.QObject):
         print("Resetting:", param_name, pvalue)
         self.widget.reset_field(position, pvalue)
 
+    def get_diff(self):
+        """Get the changed parameters and associated defaults.
+
+        Returns
+        -------
+        dict
+            Set of changed parameters and their associated defaults.
+        """
+        diff_dict = self.widget.get_diff()
+        for prop in diff_dict.values():
+            for prop_name in prop:
+                default_value = self.model.get_parameter(prop_name)
+                if isinstance(default_value, list):
+                    default_value = ",".join([str(x) for x in default_value])
+                else:
+                    default_value = str(default_value)
+                prop[prop_name].append(default_value)
+        return diff_dict
+
     def get_tab(self):
         """Return the view controller's widget.
         """

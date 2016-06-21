@@ -201,12 +201,13 @@ class OpsimConfig(QtGui.QMainWindow):
         self.update_file_menu()
 
     def get_diff_dict(self):
-        diff_dict = {}
-        for i in range(self.tab_widget.count()):
-            tab = self.tab_widget.widget(i)
-            rd = tab.get_diff()
-            diff_dict.update(rd)
-        return diff_dict
+        # diff_dict = {}
+        # for i in range(self.tab_widget.count()):
+        #     tab = self.tab_widget.widget(i)
+        #     rd = tab.get_diff()
+        #     diff_dict.update(rd)
+        # return diff_dict
+        return self.main_controller.get_diff()
 
     def diff_report(self):
         dlg = ReportDialog()
