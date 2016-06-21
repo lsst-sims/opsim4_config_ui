@@ -1,10 +1,22 @@
 import collections
+import os
+import shutil
 import unittest
 
 from lsst.sims.ocs.configuration import ObservingSite
 from opsim4.model import ModelHelper
 
 class ModelHelperTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        cls.save_dir = "config_dir"
+        if not os.path.exists(cls.save_dir):
+            os.mkdir(cls.save_dir)
+
+    @classmethod
+    def tearDownClass(cls):
+        shutil.rmtree(cls.save_dir)
 
     def setUp(self):
         self.mh = ModelHelper(ObservingSite())
@@ -45,3 +57,15 @@ class ModelHelperTest(unittest.TestCase):
     def test_get_parameter(self):
         self.assertEquals(self.mh.get_parameter("name"), "Cerro Pachon")
         self.assertEquals(self.mh.get_parameter("height"), 2650.0)
+
+    def test_save_configuration(self):
+        name = "obs_site"
+        changed_values = [("name", "Sierra Madre"), ("height", "1243.5"), ("bool_val", "False"),
+                          ("str_list", "a,b,c,d"), ("float_list", "0.0,1.0,2.0")]
+        self.mh.save_configuration(self.save_dir, name, changed_values)
+        output_file = "{}.py".format(name)
+        full_file = os.path.join(self.save_dir, output_file)
+        self.assertTrue(os.path.exists(full_file))
+        with open(full_file, 'r') as ifile:
+            lines = ifile.readlines()
+            self.assertEqual(len(lines), len(changed_values) + 2)

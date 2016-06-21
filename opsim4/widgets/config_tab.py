@@ -11,6 +11,7 @@ class ConfigurationTab(QtGui.QWidget):
 
     checkProperty = QtCore.pyqtSignal('QString', 'QString', int)
     getProperty = QtCore.pyqtSignal('QString', int)
+    saveConfiguration = QtCore.pyqtSignal('QString', 'QString', list)
 
     def __init__(self, name, parent=None):
         """Initialize the class.
@@ -198,3 +199,28 @@ class ConfigurationTab(QtGui.QWidget):
         except AttributeError:
             pwidget.setText(param_value)
         self.change_label_color(plabel, QtCore.Qt.black)
+
+    def save(self, save_dir):
+        """Get the changed parameters for saving.
+
+        Parameters
+        ----------
+        save_dir : str
+            The directory for saving the configuration in.
+        """
+        changed_values = []
+        for i in xrange(self.layout.rowCount()):
+            property_label = self.layout.itemAtPosition(i, 0).widget()
+            property_name = str(property_label.text())
+            if property_name.endswith(self.CHANGED_PARAMETER):
+                property_widget = self.layout.itemAtPosition(i, 1).widget()
+                try:
+                    property_value = str(property_widget.isChecked())
+                except AttributeError:
+                    property_value = property_widget.text()
+                changed_values.append((property_name.strip(self.CHANGED_PARAMETER),
+                                      property_value))
+
+        if len(changed_values):
+            self.saveConfiguration.emit(QtCore.QString(save_dir), self.name, changed_values)
+

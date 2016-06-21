@@ -121,7 +121,7 @@ class OpsimConfig(QtGui.QMainWindow):
                 self.save_directory = os.curdir
         for i in range(self.tab_widget.count()):
             tab = self.tab_widget.widget(i)
-            tab.save(expand_path(self.save_directory))
+            tab.save(expand_path(str(self.save_directory)))
         self.statusBar().showMessage("Finished saving configuration.", self.STATUS_BAR_TIMEOUT)
 
     def reset_tabs(self):

@@ -56,3 +56,9 @@ class BaseController(QtCore.QObject):
         """Return the view controller's widget.
         """
         return self.widget
+
+    @QtCore.pyqtSlot('QString', str, list)
+    def save_configuration(self, save_dir, name, changed_params):
+        """Delegate configuration saving to model.
+        """
+        self.model.save_configuration(str(save_dir), name, changed_params)
