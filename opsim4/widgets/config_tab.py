@@ -45,7 +45,7 @@ class ConfigurationTab(QtGui.QWidget):
         main_layout.addWidget(self.scrollable)
         self.setLayout(main_layout)
 
-    def create_widget(self, wtype, name):
+    def create_widget(self, wtype, name, qualifier=None, layout=None, rows=None):
         """Create a parameter widget.
 
         Parameters
@@ -54,22 +54,43 @@ class ConfigurationTab(QtGui.QWidget):
             The representation string for the parameter type.
         name : str
             The name of the parameter.
+        qualifier : str, optional
+            A prefix to the name for setting to the object name.
+        layout : QtGui.QGridLayout, optional
+            An alternate layout instance.
+        rows : int, optional
+            An alternate value for rows in a layout
         """
         parameter_label = QtGui.QLabel(name)
         parameter_widget, change_signal = get_widget_by_type(wtype)
         parameter_label.setBuddy(parameter_widget)
-        parameter_widget.setObjectName(name)
+        if qualifier is not None:
+            full_name = qualifier + name
+        else:
+            full_name = name
+        parameter_widget.setObjectName(full_name)
         parameter_units = QtGui.QLabel()
 
         signal = getattr(parameter_widget, change_signal)
         signal.connect(self.signal_mapper.map)
         self.signal_mapper.setMapping(parameter_widget, parameter_widget)
 
-        self.layout.addWidget(parameter_label, self.rows, 0)
-        self.layout.addWidget(parameter_widget, self.rows, 1)
-        self.layout.addWidget(parameter_units, self.rows, 2)
+        if layout is None:
+            layout = self.layout
 
-        self.rows += 1
+        if rows is None:
+            current_row = self.rows
+        else:
+            current_row = rows
+
+        layout.addWidget(parameter_label, current_row, 0)
+        layout.addWidget(parameter_widget, current_row, 1)
+        layout.addWidget(parameter_units, current_row, 2)
+
+        if rows is None:
+            self.rows += 1
+        else:
+            rows += 1
 
     def create_form(self):
         """Create UI form.
