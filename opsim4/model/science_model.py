@@ -12,14 +12,14 @@ class ScienceModel(object):
         sci_props = ScienceProposals()
         sci_props.load_proposals()
 
-        self.ad_params = []
+        self.ad_params = {}
 
         ad_objs = sci_props.area_dist_props.active
         for ad_obj in ad_objs:
             ad_model = AreaDistributionPropModel(ad_obj)
             params = ad_model.make_parameter_dictionary()
             prop_name = params["name"]["value"]
-            self.ad_params.append({prop_name: params})
+            self.ad_params[prop_name] = params
 
         #print(self.ad_params)
 
@@ -30,5 +30,5 @@ class ScienceModel(object):
         -------
         list[str]
         """
-        proposal_names = [x.keys()[0] for x in self.ad_params]
+        proposal_names = self.ad_params.keys()
         return proposal_names

@@ -92,7 +92,9 @@ class ConfigurationTab(QtGui.QWidget):
         else:
             rows += 1
 
-    def create_form(self):
+        return rows
+
+    def create_form(self, params=None):
         """Create UI form.
         """
         raise NotImplementedError("Classes must override this!")

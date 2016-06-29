@@ -18,4 +18,5 @@ class ScienceController(BaseController):
         self.model = ScienceModel()
         self.widget = ScienceWidget(name)
 
-        self.widget.create_tabs(self.model.get_proposal_names())
+        self.widget.create_tabs(self.model.ad_params)
+        self.widget.set_information(self.model.ad_params)

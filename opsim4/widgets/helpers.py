@@ -20,7 +20,9 @@ def get_widget_by_type(widget_type):
     switcher = {
         'Str': lineedit_widget,
         'StringList': lineedit_widget,
-        'Float': float_widget
+        'Float': float_widget,
+        'Int': int_widget,
+        'Bool': bool_widget
     }
 
     func = switcher.get(widget_type, default_widget)
@@ -36,3 +38,12 @@ def float_widget():
 
 def lineedit_widget():
     return (QtGui.QLineEdit(" "), "editingFinished")
+
+def int_widget():
+    widget = QtGui.QLineEdit("0")
+    widget.setValidator(QtGui.QIntValidator())
+    return (widget, "editingFinished")
+
+def bool_widget():
+    widget = QtGui.QCheckBox()
+    return (widget, "stateChanged")

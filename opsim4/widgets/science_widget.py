@@ -19,7 +19,7 @@ class ScienceWidget(QtGui.QTabWidget):
         QtGui.QTabWidget.__init__(self, parent)
         self.tab_name = name
 
-    def create_tabs(self, names):
+    def create_tabs(self, params):
         """Create the individual proposal tabs.
 
         Parameters
@@ -27,6 +27,22 @@ class ScienceWidget(QtGui.QTabWidget):
         names : list[str]
             The names for the configuration tabs.
         """
-        for name in names:
-            tab = ProposalWidget(name)
+        #for name in names:
+        for name, values in params.items():
+            tab = ProposalWidget(name, values)
             self.addTab(tab, name)
+
+    def set_information(self, param_dict):
+        """Set information for the configuration tabs.
+
+        Parameters
+        ----------
+        param_dict : dict
+            The set of information for the configuration
+        """
+        for key, value in param_dict.items():
+            for i in xrange(self.count()):
+                name = self.tabText(i)
+                if name == key:
+                    tab = self.widget(i)
+                    tab.set_information(value)
