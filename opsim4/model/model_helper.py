@@ -35,7 +35,7 @@ class ModelHelper(object):
         if self.params is not None:
             srep = str(self.params[parameter_name]["value"])
 
-            print("D:", parameter_name, value_to_check, srep)
+            # print("D:", parameter_name, value_to_check, srep)
             return value_to_check != srep
         else:
             return False

@@ -15,7 +15,7 @@ class AreaDistributionPropModel(ModelHelper):
         config_obj : lsst.sims.ocs.configuration.proposal.AreaDistribution instance
             The instance containing the area distribution proposal information.
         """
-        self.parameter_order = ["name", "sky_region", "sky_exclusions", "sky_nightly_bounds",
+        self.parameter_order = ["name", "sky_region", "sky_exclusion", "sky_nightly_bounds",
                                 "sky_constraints", "scheduling", "filters"]
 
         ModelHelper.__init__(self, config_obj)
@@ -47,9 +47,9 @@ class AreaDistributionPropModel(ModelHelper):
                         continue
                     if iparams1[k2]["dtype"] is None:
                         iparams1[k2]["dtype"] = "GroupBox"
-                        print(k2)
+                        # print(k2)
                         sub_obj2 = getattr(sub_obj, k2)
-                        print(sub_obj2)
+                        # print(sub_obj2)
                         try:
                             sub_cls2 = load_class(sub_obj2)
                         except ValueError:

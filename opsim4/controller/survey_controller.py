@@ -24,7 +24,7 @@ class SurveyController(BaseController):
 
         for key, value in self.model.params.items():
             self.widget.set_information(key, value)
-
+        print("L:", self.widget.signal_mapper.mapping(0))
         self.widget.checkProperty.connect(self.check_property)
         self.widget.getProperty.connect(self.get_property)
         self.widget.saveConfiguration.connect(self.save_configuration)

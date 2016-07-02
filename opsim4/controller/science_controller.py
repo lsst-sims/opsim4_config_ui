@@ -20,3 +20,10 @@ class ScienceController(BaseController):
 
         self.widget.create_tabs(self.model.ad_params)
         self.widget.set_information(self.model.ad_params)
+
+        for i in xrange(self.widget.count()):
+            tab = self.widget.widget(i)
+            tab.checkProperty.connect(self.check_property)
+            tab.getProperty.connect(self.get_property)
+            tab.saveConfiguration.connect(self.save_configuration)
+            print("A:", tab.signal_mapper.mapping(0))

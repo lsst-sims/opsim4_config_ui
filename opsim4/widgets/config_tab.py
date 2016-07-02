@@ -65,12 +65,13 @@ class ConfigurationTab(QtGui.QWidget):
         parameter_widget, change_signal = get_widget_by_type(wtype)
         parameter_label.setBuddy(parameter_widget)
         if qualifier is not None:
-            full_name = qualifier + name
+            full_name = "{}/{}".format(qualifier, name)
         else:
             full_name = name
         parameter_widget.setObjectName(full_name)
         parameter_units = QtGui.QLabel()
 
+        print("G:", full_name)
         signal = getattr(parameter_widget, change_signal)
         signal.connect(self.signal_mapper.map)
         self.signal_mapper.setMapping(parameter_widget, parameter_widget)

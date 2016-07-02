@@ -22,9 +22,6 @@ class ProposalWidget(ConfigurationTab):
         self.setup = params
 
         ConfigurationTab.__init__(self, name, parent)
-        #self.setSizePolicy(QtGui.QSizePolicy.Expanding, QtGui.QSizePolicy.Expanding)
-        #print(params)
-        #self.create_sky_region(params["sky_region"]["value"])
         del self.setup
 
     def create_form(self):
@@ -32,7 +29,7 @@ class ProposalWidget(ConfigurationTab):
         """
         self.create_widget("Str", "name")
         self.create_group_box("sky_region")
-        self.create_group_box("sky_exclusions")
+        self.create_group_box("sky_exclusion")
         self.create_group_box("sky_nightly_bounds")
         self.create_group_box("sky_constraints")
         self.create_group_box("scheduling")
@@ -46,14 +43,12 @@ class ProposalWidget(ConfigurationTab):
         name : str
             Label for the group box widget.
         """
-        #print(self.setup[name])
         try:
             params = self.setup[name]["value"]
         except TypeError:
             print("Oops!")
             return
         self.num_group_boxes += 1
-        #self.group_box_rows.append(0)
         group_box = QtGui.QGroupBox(name)
         group_box.setStyleSheet(CSS_GROUPBOX)
         grid_layout = QtGui.QGridLayout()
@@ -72,30 +67,40 @@ class ProposalWidget(ConfigurationTab):
         params : dict
             The configuration information.
         """
-        pass
-        #self.set_sky_region(params["sky_region"]["value"])
+        name_widget = self.layout.itemAtPosition(0, 1).widget()
+        name_widget.setText(str(params["name"]["value"]))
+        self.set_sky_region(params["sky_region"]["value"])
+        self.set_sky_exclusion(params["sky_exclusion"]["value"])
+        self.set_sky_nightly_bounds(params["sky_nightly_bounds"]["value"])
+        self.set_sky_constraints(params["sky_constraints"]["value"])
+        self.set_scheduling(params["scheduling"]["value"])
+        self.set_filters(params["filters"]["value"])
 
     def create_sky_region(self, glayout, params):
         """Set the information for the proposal sky region.
 
+        glayout : QtGui.QGridLayout
+            Instance of a grid layout.
         params : dict
             The configuration information for the sky region.
         """
         num_selections = len(params["selections"]["value"])
         if num_selections:
+            n = num_selections - 1
             for i in xrange(num_selections):
+                j = n - i
                 qualifier = "selections/{}".format(i)
                 self.create_widget("Str", "limit_type", qualifier=qualifier, layout=glayout,
-                                   rows=(num_selections + 0))
+                                   rows=(j + 0))
                 self.create_widget("Float", "minimum_limit", qualifier=qualifier, layout=glayout,
-                                   rows=(num_selections + 1))
+                                   rows=(j + 1))
                 self.create_widget("Float", "maximum_limit", qualifier=qualifier, layout=glayout,
-                                   rows=(num_selections + 2))
+                                   rows=(j + 2))
                 self.create_widget("Float", "bounds_limit", qualifier=qualifier, layout=glayout,
-                                   rows=(num_selections + 3))
+                                   rows=(j + 3))
             self.group_box_rows.append(num_selections * 4)
 
-    def create_sky_exclusions(self, glayout, params):
+    def create_sky_exclusion(self, glayout, params):
         self.create_widget("Float", "dec_window", layout=glayout, rows=0)
         num_selections = len(params["selections"]["value"])
         if num_selections:
@@ -125,17 +130,17 @@ class ProposalWidget(ConfigurationTab):
     def create_scheduling(self, glayout, params):
         self.create_widget("Int", "max_num_targets", layout=glayout, rows=0)
         self.create_widget("Bool", "accept_serendipity", layout=glayout, rows=1)
-        self.create_widget("Bool", "accept_consecutive_obs", layout=glayout, rows=2)
+        self.create_widget("Bool", "accept_consecutive_visits", layout=glayout, rows=2)
         self.group_box_rows.append(3)
 
     def create_filters(self, glayout, params):
         num_filters = len(params)
         if num_filters:
             filter_order = "u g r i z y".split()
-            filter_index = {v["name"]["value"]: k for k, v in params.items()}
+            self.filter_index = {v["name"]["value"]: k for k, v in params.items()}
             n = num_filters - 1
             for i, band_filter in enumerate(filter_order):
-                x = filter_index.get(band_filter, None)
+                x = self.filter_index.get(band_filter, None)
                 if i is not None:
                     j = n * i
                     qualifier = "filter/{}".format(x)
@@ -153,3 +158,75 @@ class ProposalWidget(ConfigurationTab):
                 else:
                     continue
         self.group_box_rows.append(num_filters * 5)
+
+    def set_sky_region(self, params):
+        group_box = self.layout.itemAtPosition(1, 0).widget()
+        glayout = group_box.layout()
+        num_selections = len(params["selections"]["value"])
+        if num_selections:
+            for v in params["selections"]["value"].values():
+                for i in xrange(self.group_box_rows[0]):
+                    label = glayout.itemAtPosition(i, 0).widget()
+                    widget = glayout.itemAtPosition(i, 1).widget()
+                    # print(label.text(), v[str(label.text())])
+                    widget.setText(str(v[str(label.text())]["value"]))
+
+    def set_sky_exclusion(self, params):
+        group_box = self.layout.itemAtPosition(2, 0).widget()
+        glayout = group_box.layout()
+        label = glayout.itemAtPosition(0, 0).widget()
+        widget = glayout.itemAtPosition(0, 1).widget()
+        # print(label.text(), params[str(label.text())])
+        widget.setText(str(params[str(label.text())]["value"]))
+        num_selections = len(params["selections"]["value"])
+        # print("K:", num_selections, params["selections"]["value"])
+        if num_selections:
+            for v in params["selections"]["value"].values():
+                for i in xrange(self.group_box_rows[1] - 1):
+                    label = glayout.itemAtPosition(i + 1, 0).widget()
+                    widget = glayout.itemAtPosition(i + 1, 1).widget()
+                    # print(label.text(), v[str(label.text())])
+                    widget.setText(str(v[str(label.text())]["value"]))
+
+    def set_sky_nightly_bounds(self, params):
+        group_box = self.layout.itemAtPosition(3, 0).widget()
+        glayout = group_box.layout()
+        for i in xrange(self.group_box_rows[2]):
+            label = glayout.itemAtPosition(i, 0).widget()
+            widget = glayout.itemAtPosition(i, 1).widget()
+            # print(label.text(), params[str(label.text())])
+            widget.setText(str(params[str(label.text())]["value"]))
+
+    def set_sky_constraints(self, params):
+        group_box = self.layout.itemAtPosition(4, 0).widget()
+        glayout = group_box.layout()
+        for i in xrange(self.group_box_rows[3]):
+            label = glayout.itemAtPosition(i, 0).widget()
+            widget = glayout.itemAtPosition(i, 1).widget()
+            # print(label.text(), params[str(label.text())])
+            widget.setText(str(params[str(label.text())]["value"]))
+
+    def set_scheduling(self, params):
+        group_box = self.layout.itemAtPosition(5, 0).widget()
+        glayout = group_box.layout()
+        for i in xrange(self.group_box_rows[4]):
+            label = glayout.itemAtPosition(i, 0).widget()
+            widget = glayout.itemAtPosition(i, 1).widget()
+            # print(label.text(), params[str(label.text())])
+            widget.setText(str(params[str(label.text())]["value"]))
+
+    def set_filters(self, params):
+        group_box = self.layout.itemAtPosition(6, 0).widget()
+        glayout = group_box.layout()
+        # print("F:", params)
+        num_filters = len(params)
+        if num_filters:
+            for i in xrange(self.group_box_rows[5]):
+                label = glayout.itemAtPosition(i, 0).widget()
+                widget = glayout.itemAtPosition(i, 1).widget()
+                filter_name = str(label.text()).split('_')[0]
+                data_label = "_".join(str(label.text()).split('_')[1:])
+                index = self.filter_index[filter_name]
+                # print("G:", index, data_label, filter_name)
+                # print("Z:", label.text(), params[index][data_label])
+                widget.setText(str(params[index][data_label]["value"]))

@@ -13,3 +13,7 @@ class ScienceModelTest(unittest.TestCase):
         self.assertEqual(len(ad_params), self.num_proposals)
         self.assertEqual(len(ad_params[ad_params.keys()[0]]), 7)
         self.assertEqual(len(self.model.get_proposal_names()), self.num_proposals)
+
+        for k, v in self.model.ad_params.items():
+            if k == "SouthCelestialPole":
+                self.assertIsNotNone(v["sky_exclusion"])
