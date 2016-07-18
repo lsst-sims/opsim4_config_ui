@@ -21,7 +21,7 @@ class ProposalWidget(ConfigurationTab):
         self.num_group_boxes = 0
         self.setup = params
 
-        ConfigurationTab.__init__(self, name, parent)
+        ConfigurationTab.__init__(self, name, self.property_changed, parent)
         del self.setup
 
     def create_form(self):
@@ -143,7 +143,7 @@ class ProposalWidget(ConfigurationTab):
                 x = self.filter_index.get(band_filter, None)
                 if i is not None:
                     j = n * i
-                    qualifier = "filter/{}".format(x)
+                    qualifier = "filters/{}".format(x)
                     filter_name = params[x]["name"]["value"]
                     self.create_widget("Int", "{}_num_visits".format(filter_name), qualifier=qualifier,
                                        layout=glayout, rows=(j + 0))
@@ -158,6 +158,14 @@ class ProposalWidget(ConfigurationTab):
                 else:
                     continue
         self.group_box_rows.append(num_filters * 5)
+
+    def property_changed(self, pwidget):
+        print("Howdy!")
+        pos = self.layout.indexOf(pwidget)
+        if pos == -1:
+            pass
+        else:
+            ConfigurationTab.property_changed(self, pwidget)
 
     def set_sky_region(self, params):
         group_box = self.layout.itemAtPosition(1, 0).widget()

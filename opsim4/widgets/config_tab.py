@@ -15,7 +15,7 @@ class ConfigurationTab(QtGui.QWidget):
     getProperty = QtCore.pyqtSignal('QString', int)
     saveConfiguration = QtCore.pyqtSignal('QString', 'QString', list)
 
-    def __init__(self, name, parent=None):
+    def __init__(self, name, mapping=None, parent=None):
         """Initialize the class.
 
         Parameters
@@ -31,7 +31,11 @@ class ConfigurationTab(QtGui.QWidget):
         self.layout = QtGui.QGridLayout()
         self.layout.setSizeConstraint
         self.signal_mapper = QtCore.QSignalMapper(self)
-        self.signal_mapper.mapped[QtGui.QWidget].connect(self.property_changed)
+        if mapping is not None:
+            func = mapping
+        else:
+            func = self.property_changed
+        self.signal_mapper.mapped[QtGui.QWidget].connect(func)
         self.rows = 0
 
         self.create_form()
@@ -45,7 +49,7 @@ class ConfigurationTab(QtGui.QWidget):
         main_layout.addWidget(self.scrollable)
         self.setLayout(main_layout)
 
-    def create_widget(self, wtype, name, qualifier=None, layout=None, rows=None):
+    def create_widget(self, wtype, name, qualifier=None, layout=None, rows=None, mapping=None):
         """Create a parameter widget.
 
         Parameters
@@ -176,9 +180,13 @@ class ConfigurationTab(QtGui.QWidget):
         pwidget : QWidget
             The parameter widget that has possibly changed.
         """
+        print("HI")
         pos = self.layout.indexOf(pwidget)
+        print("HI2", pos)
         plabel = self.layout.itemAt(pos - 1).widget()
+        print("HI3")
         pname = plabel.text()
+        print("HI4")
         if pname.endsWith(self.CHANGED_PARAMETER):
             return
         try:
