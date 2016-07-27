@@ -46,7 +46,6 @@ class ProposalWidget(ConfigurationTab):
         try:
             params = self.setup[name]["value"]
         except TypeError:
-            print("Oops!")
             return
         self.num_group_boxes += 1
         group_box = QtGui.QGroupBox(name)
@@ -143,7 +142,7 @@ class ProposalWidget(ConfigurationTab):
                 x = self.filter_index.get(band_filter, None)
                 if i is not None:
                     j = n * i
-                    qualifier = "filters/{}".format(x)
+                    qualifier = "{}".format(x)
                     filter_name = params[x]["name"]["value"]
                     self.create_widget("Int", "{}_num_visits".format(filter_name), qualifier=qualifier,
                                        layout=glayout, rows=(j + 0))
@@ -159,11 +158,47 @@ class ProposalWidget(ConfigurationTab):
                     continue
         self.group_box_rows.append(num_filters * 5)
 
+    def is_changed(self, position, is_changed):
+        """Mark a parameter widget as changed.
+
+        Parameters
+        ----------
+        position : int
+            The position (usually row) of the widget.
+        is_changed : bool
+            Flag set to True if the parameter has changed from baseline, false if not.
+        """
+        if len(position) > 1:
+            group_box = self.layout.itemAtPosition(position[0], 0).widget()
+            glayout = group_box.layout()
+            ConfigurationTab.is_changed(self, position, is_changed, layout=glayout)
+        else:
+            ConfigurationTab.is_changed(self, position, is_changed)
+
     def property_changed(self, pwidget):
+        """Get information from a possibly changed parameter.
+
+        Parameters
+        ----------
+        pwidget : QWidget
+            The parameter widget that has possibly changed.
+
+        """
         print("Howdy!")
         pos = self.layout.indexOf(pwidget)
+        print(pos)
         if pos == -1:
-            pass
+            for i in xrange(1, self.layout.count() - 1):
+                print("F:", i)
+                group_box = self.layout.itemAtPosition(i, 0).widget()
+                glayout = group_box.layout()
+                pos = glayout.indexOf(pwidget)
+                print("D:", pos)
+                if pos != -1:
+                    qualifier = "{}/{}".format(self.name, group_box.title())
+                    ConfigurationTab.property_changed(self, pwidget, layout=glayout,
+                                                      qualifier=qualifier, position=i)
+                    break
         else:
             ConfigurationTab.property_changed(self, pwidget)
 

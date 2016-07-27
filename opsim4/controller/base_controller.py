@@ -19,7 +19,7 @@ class BaseController(QtCore.QObject):
         self.model = None
         self.widget = None
 
-    @QtCore.pyqtSlot('QString', 'QString', int)
+    @QtCore.pyqtSlot('QString', 'QString', list)
     def check_property(self, param_name, param_value, position):
         """Check the stored value of the parameter name against input.
 
@@ -29,10 +29,10 @@ class BaseController(QtCore.QObject):
             The parameter name to retrieve the stored value of.
         param_value : any
             The value of the parameter to check against the stored one.
-        position : int
+        position : list[int]
             The widget position that requested this check.
         """
-        print("Help!")
+        print("Help!", position)
         is_changed = self.model.check_parameter(str(param_name), param_value)
         print("A:", param_name, param_value, is_changed)
         self.widget.is_changed(position, is_changed)

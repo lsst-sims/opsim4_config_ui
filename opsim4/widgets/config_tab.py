@@ -11,7 +11,7 @@ class ConfigurationTab(QtGui.QWidget):
     """
     CHANGED_PARAMETER = '*'
 
-    checkProperty = QtCore.pyqtSignal('QString', 'QString', int)
+    checkProperty = QtCore.pyqtSignal('QString', 'QString', list)
     getProperty = QtCore.pyqtSignal('QString', int)
     saveConfiguration = QtCore.pyqtSignal('QString', 'QString', list)
 
@@ -75,7 +75,7 @@ class ConfigurationTab(QtGui.QWidget):
         parameter_widget.setObjectName(full_name)
         parameter_units = QtGui.QLabel()
 
-        print("G:", full_name)
+        #print("G:", full_name)
         signal = getattr(parameter_widget, change_signal)
         signal.connect(self.signal_mapper.map)
         self.signal_mapper.setMapping(parameter_widget, parameter_widget)
@@ -172,33 +172,47 @@ class ConfigurationTab(QtGui.QWidget):
                     unit_widget = self.layout.itemAtPosition(i, 2).widget()
                     unit_widget.setText(info["units"])
 
-    def property_changed(self, pwidget):
+    def property_changed(self, pwidget, layout=None, qualifier=None, position=None):
         """Get information from a possibly changed parameter.
 
         Parameters
         ----------
         pwidget : QWidget
             The parameter widget that has possibly changed.
+        layout : QLayout, optional
+            An alternative layout to check.
+        qualifier : str, optional
+            A string tp prepend to the parameter name.
+        position : int, optional
+            A position from another layout. Used when layout is not None.
         """
+        location = []
+        if layout is None:
+            layout = self.layout
         print("HI")
-        pos = self.layout.indexOf(pwidget)
+        pos = layout.indexOf(pwidget)
         print("HI2", pos)
-        plabel = self.layout.itemAt(pos - 1).widget()
+        plabel = layout.itemAt(pos - 1).widget()
         print("HI3")
-        pname = plabel.text()
+        pname = pwidget.objectName()
+        if qualifier is not None:
+            pname = "{}/{}".format(qualifier, pname)
         print("HI4")
-        if pname.endsWith(self.CHANGED_PARAMETER):
+        if plabel.text().endsWith(self.CHANGED_PARAMETER):
             return
         try:
             pvalue = QtCore.QString(pwidget.checkState())
         except AttributeError:
             pvalue = pwidget.text()
 
-        self.checkProperty.emit(pname, pvalue, pos)
+        if position is not None:
+            location.append(position)
+        location.append(pos)
+
+        self.checkProperty.emit(pname, pvalue, location)
         print("Done")
 
-    @QtCore.pyqtSlot(int, bool)
-    def is_changed(self, position, is_changed):
+    def is_changed(self, position, is_changed, layout=None):
         """Mark a parameter widget as changed.
 
         Parameters
@@ -207,11 +221,15 @@ class ConfigurationTab(QtGui.QWidget):
             The position (usually row) of the widget.
         is_changed : bool
             Flag set to True if the parameter has changed from baseline, false if not.
+        layout : QLayout, optional
+            An alternative layout to check.
         """
         print("is changed")
         if not is_changed:
             return
-        plabel = self.layout.itemAt(position - 1).widget()
+        if layout is None:
+            layout = self.layout
+        plabel = layout.itemAt(position[-1] - 1).widget()
         pname = str(plabel.text())
         changed_label = "{}{}".format(pname, self.CHANGED_PARAMETER)
         plabel.setText(changed_label)

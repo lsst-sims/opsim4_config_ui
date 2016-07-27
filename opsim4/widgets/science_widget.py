@@ -32,6 +32,13 @@ class ScienceWidget(QtGui.QTabWidget):
             tab = ProposalWidget(name, values)
             self.addTab(tab, name)
 
+    def is_changed(self, position, is_changed, home_tab=None):
+        for i in xrange(self.count()):
+            name = self.tabText(i)
+            if name == home_tab:
+                tab = self.widget(i)
+                tab.is_changed(position, is_changed)
+
     def set_information(self, param_dict):
         """Set information for the configuration tabs.
 
