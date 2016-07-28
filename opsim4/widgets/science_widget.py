@@ -41,6 +41,25 @@ class ScienceWidget(QtGui.QTabWidget):
             tab = ProposalWidget(name, values)
             self.addTab(tab, name)
 
+    def get_diff(self):
+        """Get the changed parameters.
+
+        Parameters
+        ----------
+        parent_name : str, optional
+            The name of a parent tab.
+
+        Returns
+        -------
+        dict{str: str}
+            The set of changed parameters.
+        """
+        ddict = {}
+        for i in xrange(self.count()):
+            tab = self.widget(i)
+            ddict.update(tab.get_diff())
+        return ddict
+
     def is_changed(self, position, is_changed, home_tab=None):
         for i in xrange(self.count()):
             name = self.tabText(i)

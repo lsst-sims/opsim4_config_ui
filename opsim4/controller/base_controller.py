@@ -61,9 +61,14 @@ class BaseController(QtCore.QObject):
             Set of changed parameters and their associated defaults.
         """
         diff_dict = self.widget.get_diff()
-        for prop in diff_dict.values():
+        for top_prop, prop in diff_dict.items():
             for prop_name in prop:
-                default_value = self.model.get_parameter(prop_name)
+                if "/" in top_prop:
+                    property_name = "{}/{}".format(top_prop, prop_name)
+                else:
+                    property_name = prop_name
+                print("BB:", property_name)
+                default_value = self.model.get_parameter(property_name)
                 if isinstance(default_value, list):
                     default_value = ",".join([str(x) for x in default_value])
                 else:

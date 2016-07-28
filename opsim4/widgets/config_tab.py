@@ -104,7 +104,7 @@ class ConfigurationTab(QtGui.QWidget):
         """
         raise NotImplementedError("Classes must override this!")
 
-    def get_diff(self, parent_name=None):
+    def get_diff(self, layout=None, parent_name=None):
         """Get the changed parameters.
 
         Parameters
@@ -117,34 +117,44 @@ class ConfigurationTab(QtGui.QWidget):
         dict{str: str}
             The set of changed parameters.
         """
+        if layout is None:
+            layout = self.layout
         ddict = collections.defaultdict(dict)
-        for i in range(self.layout.rowCount()):
-            property_label = self.layout.itemAtPosition(i, 0).widget()
-            property_name_mod = str(property_label.text())
-            if property_name_mod.endswith('*'):
-                property_name = property_name_mod.strip('*')
-                #print(property_name)
-                property_widget = self.layout.itemAtPosition(i, 1).widget()
-                try:
-                    property_value = str(property_widget.isChecked())
-                except AttributeError:
+        for i in range(layout.rowCount()):
+            #property_label = layout.itemAtPosition(i, 0).widget()
+            widget = layout.itemAtPosition(i, 0).widget()
+            if isinstance(widget, QtGui.QGroupBox):
+                gb_name = str(widget.title())
+                glayout = widget.layout()
+                ddict.update(self.get_diff(layout=glayout, parent_name=gb_name))
+            else:
+                property_label = widget
+                property_name_mod = str(property_label.text())
+                if property_name_mod.endswith('*'):
+                    property_widget = layout.itemAtPosition(i, 1).widget()
+                    property_name = str(property_widget.objectName())
+                    #property_name = property_name_mod.strip('*')
+                    #print(property_name)
                     try:
-                        property_text = property_widget.text()
-                        if "," in property_text:
-                            values = property_text.split(',')
-                            try:
-                                property_value = str([float(x) for x in values])
-                            except ValueError:
-                                property_value = str([str(x) for x in values])
-                        else:
-                            property_value = float(property_text)
-                    except ValueError:
-                        property_value = str(property_widget.text())
+                        property_value = str(property_widget.isChecked())
+                    except AttributeError:
+                        try:
+                            property_text = property_widget.text()
+                            if "," in property_text:
+                                values = property_text.split(',')
+                                try:
+                                    property_value = str([float(x) for x in values])
+                                except ValueError:
+                                    property_value = str([str(x) for x in values])
+                            else:
+                                property_value = float(property_text)
+                        except ValueError:
+                            property_value = str(property_widget.text())
 
-                if parent_name is not None:
-                    ddict[parent_name + "/" + self.name][property_name] = [str(property_value)]
-                else:
-                    ddict[self.name][property_name] = [str(property_value)]
+                    if parent_name is not None:
+                        ddict[self.name + "/" + parent_name][property_name] = [str(property_value)]
+                    else:
+                        ddict[self.name][property_name] = [str(property_value)]
         return ddict
 
     def set_information(self, key, info):

@@ -49,7 +49,7 @@ class ReportDialog(QtGui.QDialog):
             else:
                 row_color = "#FFFFFF"
             self.report.append("<tr bgcolor=\"{}\">".format(row_color))
-            self.report.append("<td>{}</td>".format(k))
+            self.report.append("<td>{}</td>".format(k.split('/')[-1]))
             self.report.append("<td>{}</td>".format(i[1]))
             self.report.append("<td>{}</td>".format(i[0]))
             self.report.append("</tr>")
@@ -64,6 +64,7 @@ class ReportDialog(QtGui.QDialog):
 
     def make_report(self, ddict):
         headings = collections.defaultdict(list)
+        print("Z:", ddict)
         for name in ddict.keys():
             if "/" in name:
                 h1, h2 = name.split('/')
@@ -77,7 +78,7 @@ class ReportDialog(QtGui.QDialog):
         self._make_css()
 
         for heading, sub_headings in headings.iteritems():
-            self._make_heading(title(heading))
+            self._make_heading(title(heading) if heading.islower() else heading)
             if len(sub_headings) == 0:
                 self._make_table(ddict[heading])
             else:
