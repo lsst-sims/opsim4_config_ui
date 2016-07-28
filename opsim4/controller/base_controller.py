@@ -37,7 +37,7 @@ class BaseController(QtCore.QObject):
         print("A:", param_name, param_value, is_changed)
         self.widget.is_changed(position, is_changed)
 
-    @QtCore.pyqtSlot('QString', int)
+    @QtCore.pyqtSlot('QString', list)
     def get_property(self, param_name, position):
         """Get the property value for the requested name.
 
@@ -45,7 +45,7 @@ class BaseController(QtCore.QObject):
         ----------
         param_name : QtCore.QString
             The parameter name to retrieve the stored value of.
-        position : int
+        position : list[int]
             The widget position that requested this check.
         """
         pvalue = str(self.model.get_parameter(str(param_name)))

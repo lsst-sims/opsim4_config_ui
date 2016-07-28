@@ -19,6 +19,15 @@ class ScienceWidget(QtGui.QTabWidget):
         QtGui.QTabWidget.__init__(self, parent)
         self.tab_name = name
 
+    def active_tab(self):
+        """Return the active tab.
+
+        Returns
+        -------
+        :class:`.ProposalWidget`
+        """
+        return self.widget(self.currentIndex())
+
     def create_tabs(self, params):
         """Create the individual proposal tabs.
 
@@ -38,6 +47,42 @@ class ScienceWidget(QtGui.QTabWidget):
             if name == home_tab:
                 tab = self.widget(i)
                 tab.is_changed(position, is_changed)
+
+    def reset_active_tab(self):
+        """Reset the current tab.
+        """
+        tab = self.active_tab()
+        tab.reset_active_tab()
+
+    def reset_all(self):
+        """Reset all of the changed parameters.
+        """
+        for i in range(self.count()):
+            tab = self.widget(i)
+            tab.reset_all()
+
+    def reset_field(self, position, param_value, home_tab=None):
+        """Reset a specific parameter widget.
+
+        Parameters
+        ----------
+        position : list[int]
+            The position (usually row) of the widget to reset.
+        param_value : str
+            The string representation of the parameter value.
+        """
+        for i in xrange(self.count()):
+            name = self.tabText(i)
+            if name == home_tab:
+                tab = self.widget(i)
+                tab.reset_field(position, param_value)
+
+    def reset_active_field(self):
+        """Reset the active field.
+        """
+        tab = self.active_tab()
+        print("Z:", tab.name)
+        tab.reset_active_field()
 
     def set_information(self, param_dict):
         """Set information for the configuration tabs.

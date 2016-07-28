@@ -48,3 +48,19 @@ class ScienceController(BaseController):
         print("AA:", param_name, param_value, is_changed)
         home_tab = str(param_name).split('/')[0]
         self.widget.is_changed(position, is_changed, home_tab=home_tab)
+
+    @QtCore.pyqtSlot('QString', list)
+    def get_property(self, param_name, position):
+        """Get the property value for the requested name.
+
+        Parameters
+        ----------
+        param_name : QtCore.QString
+            The parameter name to retrieve the stored value of.
+        position : list[int]
+            The widget position that requested this check.
+        """
+        pvalue = str(self.model.get_parameter(str(param_name)))
+        print("Resetting:", param_name, pvalue)
+        home_tab = str(param_name).split('/')[0]
+        self.widget.reset_field(position, pvalue, home_tab=home_tab)

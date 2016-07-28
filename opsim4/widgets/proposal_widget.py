@@ -202,6 +202,54 @@ class ProposalWidget(ConfigurationTab):
         else:
             ConfigurationTab.property_changed(self, pwidget)
 
+    def reset_active_field(self):
+        for i in xrange(self.layout.rowCount()):
+            widget = self.layout.itemAtPosition(i, 0).widget()
+            if isinstance(widget, QtGui.QGroupBox):
+                glayout = widget.layout()
+                qualifier = "{}/{}".format(self.name, widget.title())
+                ConfigurationTab.reset_active_field(self, layout=glayout, qualifier=qualifier, position=i)
+            else:
+                property_name = str(widget.text())
+                if property_name.endswith(self.CHANGED_PARAMETER):
+                    self.getProperty.emit(property_name.strip(self.CHANGED_PARAMETER), i)
+
+    def reset_active_tab(self):
+        """Reset the current tab.
+        """
+        self.reset_all()
+
+    def reset_all(self):
+        """Reset all of the changed parameters.
+        """
+        for i in xrange(self.layout.rowCount()):
+            widget = self.layout.itemAtPosition(i, 0).widget()
+            if isinstance(widget, QtGui.QGroupBox):
+                glayout = widget.layout()
+                qualifier = "{}/{}".format(self.name, widget.title())
+                ConfigurationTab.reset_all(self, layout=glayout, qualifier=qualifier, position=i)
+            else:
+                property_name = str(widget.text())
+                if property_name.endswith(self.CHANGED_PARAMETER):
+                    self.getProperty.emit(property_name.strip(self.CHANGED_PARAMETER), i)
+
+    def reset_field(self, position, param_value):
+        """Mark a parameter widget as changed.
+
+        Parameters
+        ----------
+        position : list[int]
+            The position (usually row) of the widget.
+        param_value : str
+            The string representation of the parameter value.
+        """
+        if len(position) > 1:
+            group_box = self.layout.itemAtPosition(position[0], 0).widget()
+            glayout = group_box.layout()
+            ConfigurationTab.reset_field(self, position, param_value, layout=glayout)
+        else:
+            ConfigurationTab.reset_field(self, position, param_value)
+
     def set_sky_region(self, params):
         group_box = self.layout.itemAtPosition(1, 0).widget()
         glayout = group_box.layout()
@@ -213,6 +261,7 @@ class ProposalWidget(ConfigurationTab):
                     widget = glayout.itemAtPosition(i, 1).widget()
                     # print(label.text(), v[str(label.text())])
                     widget.setText(str(v[str(label.text())]["value"]))
+                    widget.setToolTip(v[str(label.text())]["doc"])
 
     def set_sky_exclusion(self, params):
         group_box = self.layout.itemAtPosition(2, 0).widget()
@@ -230,6 +279,7 @@ class ProposalWidget(ConfigurationTab):
                     widget = glayout.itemAtPosition(i + 1, 1).widget()
                     # print(label.text(), v[str(label.text())])
                     widget.setText(str(v[str(label.text())]["value"]))
+                    widget.setToolTip(v[str(label.text())]["doc"])
 
     def set_sky_nightly_bounds(self, params):
         group_box = self.layout.itemAtPosition(3, 0).widget()
@@ -239,6 +289,7 @@ class ProposalWidget(ConfigurationTab):
             widget = glayout.itemAtPosition(i, 1).widget()
             # print(label.text(), params[str(label.text())])
             widget.setText(str(params[str(label.text())]["value"]))
+            widget.setToolTip(params[str(label.text())]["doc"])
 
     def set_sky_constraints(self, params):
         group_box = self.layout.itemAtPosition(4, 0).widget()
@@ -248,6 +299,7 @@ class ProposalWidget(ConfigurationTab):
             widget = glayout.itemAtPosition(i, 1).widget()
             # print(label.text(), params[str(label.text())])
             widget.setText(str(params[str(label.text())]["value"]))
+            widget.setToolTip(params[str(label.text())]["doc"])
 
     def set_scheduling(self, params):
         group_box = self.layout.itemAtPosition(5, 0).widget()
@@ -256,7 +308,9 @@ class ProposalWidget(ConfigurationTab):
             label = glayout.itemAtPosition(i, 0).widget()
             widget = glayout.itemAtPosition(i, 1).widget()
             # print(label.text(), params[str(label.text())])
-            widget.setText(str(params[str(label.text())]["value"]))
+            if not isinstance(widget, QtGui.QCheckBox):
+                widget.setText(str(params[str(label.text())]["value"]))
+            widget.setToolTip(params[str(label.text())]["doc"])
 
     def set_filters(self, params):
         group_box = self.layout.itemAtPosition(6, 0).widget()
@@ -273,3 +327,4 @@ class ProposalWidget(ConfigurationTab):
                 # print("G:", index, data_label, filter_name)
                 # print("Z:", label.text(), params[index][data_label])
                 widget.setText(str(params[index][data_label]["value"]))
+                widget.setToolTip(params[index][data_label]["doc"])

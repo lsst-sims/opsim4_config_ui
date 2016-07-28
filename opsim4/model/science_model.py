@@ -48,13 +48,30 @@ class ScienceModel(object):
         bool
             True if value is different from stored, false if same.
         """
+        dict_value = str(self.get_parameter(parameter_name))
+        print("YY:", value_to_check, dict_value)
+        return value_to_check != dict_value
+
+    def get_parameter(self, parameter_name):
+        """Get a value for the given parameter.
+
+        Parameters
+        ----------
+        parameter_name : str
+            The name of the parameter to fetch the value of.
+
+        Returns
+        -------
+        any
+            The associated parameter value.
+        """
         pnames = parameter_name.split('/')
         print("H:", pnames)
 
         prop_name = pnames.pop(0)
+        pvalue = None
         if prop_name in self.ad_params:
             prop_params = self.ad_params[prop_name]
-            pvalue = None
             while len(pnames):
                 name = pnames.pop(0)
                 print("X:", name)
@@ -76,6 +93,6 @@ class ScienceModel(object):
                         # print("Q:", pvalue)
                         name = "_".join(name.split('_')[1:])
                         pvalue = pvalue[name]["value"]
-                # print("F:", pvalue)
-        # print("J:", value_to_check, pvalue)
-        return value_to_check != str(pvalue)
+
+        print("CC:", pvalue)
+        return pvalue

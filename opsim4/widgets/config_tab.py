@@ -12,7 +12,7 @@ class ConfigurationTab(QtGui.QWidget):
     CHANGED_PARAMETER = '*'
 
     checkProperty = QtCore.pyqtSignal('QString', 'QString', list)
-    getProperty = QtCore.pyqtSignal('QString', int)
+    getProperty = QtCore.pyqtSignal('QString', list)
     saveConfiguration = QtCore.pyqtSignal('QString', 'QString', list)
 
     def __init__(self, name, mapping=None, parent=None):
@@ -201,7 +201,13 @@ class ConfigurationTab(QtGui.QWidget):
         if plabel.text().endsWith(self.CHANGED_PARAMETER):
             return
         try:
-            pvalue = QtCore.QString(pwidget.checkState())
+            pstate = pwidget.checkState()
+            if pstate == 0:
+                pbool = "False"
+            if pstate == 2:
+                pbool = "True"
+            pvalue = QtCore.QString(pbool)
+            print("YYYY:", pvalue)
         except AttributeError:
             pvalue = pwidget.text()
 
@@ -249,48 +255,69 @@ class ConfigurationTab(QtGui.QWidget):
         palette.setColor(label.foregroundRole(), color)
         label.setPalette(palette)
 
-    def reset_active_field(self):
+    def reset_active_field(self, layout=None, qualifier=None, position=None):
         """Reset the active (has focus) parameter widget.
         """
-        for i in xrange(self.layout.rowCount()):
-            property_label = self.layout.itemAtPosition(i, 0).widget()
+        location = []
+        if layout is None:
+            layout = self.layout
+        for i in xrange(layout.rowCount()):
+            property_label = layout.itemAtPosition(i, 0).widget()
             property_name = str(property_label.text())
             if property_name.endswith(self.CHANGED_PARAMETER):
-                property_widget = self.layout.itemAtPosition(i, 1).widget()
+                property_widget = layout.itemAtPosition(i, 1).widget()
                 if property_widget.hasFocus():
-                    self.getProperty.emit(property_name.strip(self.CHANGED_PARAMETER), i)
+                    pname = property_widget.objectName()
+                    if qualifier is not None:
+                        pname = "{}/{}".format(qualifier, pname)
+                    if position is not None:
+                        location.append(position)
+                    location.append(i)
+                    self.getProperty.emit(pname, location)
 
     def reset_active_tab(self):
         """Reset the current tab.
         """
         self.reset_all()
 
-    def reset_all(self):
+    def reset_all(self, layout=None, qualifier=None, position=None):
         """Reset all of the changed parameters.
         """
-        for i in xrange(self.layout.rowCount()):
-            property_label = self.layout.itemAtPosition(i, 0).widget()
+        location = []
+        if layout is None:
+            layout = self.layout
+        for i in xrange(layout.rowCount()):
+            property_label = layout.itemAtPosition(i, 0).widget()
             property_name = str(property_label.text())
             if property_name.endswith(self.CHANGED_PARAMETER):
-                self.getProperty.emit(property_name.strip(self.CHANGED_PARAMETER), i)
+                property_widget = layout.itemAtPosition(i, 1).widget()
+                pname = property_widget.objectName()
+                if qualifier is not None:
+                    pname = "{}/{}".format(qualifier, pname)
+                if position is not None:
+                    location.append(position)
+                location.append(i)
+                self.getProperty.emit(pname, location)
 
-    @QtCore.pyqtSlot(int, str)
-    def reset_field(self, position, param_value):
+    def reset_field(self, position, param_value, layout=None):
         """Reset a specific parameter widget.
 
         Parameters
         ----------
-        position : int
+        position : list[int]
             The position (usually row) of the widget to reset.
         param_value : str
             The string representation of the parameter value.
         """
-        plabel = self.layout.itemAtPosition(position, 0).widget()
+        if layout is None:
+            layout = self.layout
+        plabel = layout.itemAtPosition(position[-1], 0).widget()
         pname = str(plabel.text())
         plabel.setText(pname.strip(self.CHANGED_PARAMETER))
-        pwidget = self.layout.itemAtPosition(position, 1).widget()
+        pwidget = layout.itemAtPosition(position[-1], 1).widget()
         try:
-            pwidget.setChecked(bool(param_value))
+            print("DD:", param_value)
+            pwidget.setChecked(param_value == "True")
         except AttributeError:
             pwidget.setText(param_value)
         self.change_label_color(plabel, QtCore.Qt.black)

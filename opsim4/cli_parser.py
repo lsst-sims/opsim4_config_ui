@@ -2,7 +2,7 @@ import argparse
 
 def create_parser():
 
-    description = ["A GUI for makeing changes to the OpSim version 4 confiiguration system."]
+    description = ["A GUI for making changes to the OpSim version 4 confiiguration system."]
 
     parser = argparse.ArgumentParser(usage="opsim4_config_ui [options]",
                                      description=" ".join(description),
