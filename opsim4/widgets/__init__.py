@@ -2,6 +2,7 @@
 """
 from .helpers import *
 from .config_tab import *
+from .downtime_widget import *
 from .observing_site_widget import *
 from .parameter_widget import *
 from .proposal_widget import *
