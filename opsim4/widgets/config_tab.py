@@ -29,7 +29,7 @@ class ConfigurationTab(QtGui.QWidget):
 
         self.name = name
         self.layout = QtGui.QGridLayout()
-        self.layout.setSizeConstraint
+        #self.layout.setSizeConstraint
         self.signal_mapper = QtCore.QSignalMapper(self)
         if mapping is not None:
             func = mapping

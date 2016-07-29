@@ -21,7 +21,6 @@ class SurveyWidget(ConfigurationTab):
     def create_form(self):
         """Create the UI form for the Survey widget.
         """
-        print("in create form")
         self.create_widget("Float", "duration")
         self.create_widget("Str", "start_date")
         self.create_widget("Float", "idle_delay")

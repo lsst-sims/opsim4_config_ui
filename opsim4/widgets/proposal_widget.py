@@ -306,6 +306,8 @@ class ProposalWidget(ConfigurationTab):
                     # print(label.text(), v[str(label.text())])
                     widget.setText(str(v[str(label.text())]["value"]))
                     widget.setToolTip(v[str(label.text())]["doc"])
+                    units = glayout.itemAtPosition(i, 2).widget()
+                    self.set_unit_labels(units, v[str(label.text())])
 
     def set_sky_exclusion(self, params):
         """Set information in the sky exclusion parameters group box.
@@ -321,6 +323,9 @@ class ProposalWidget(ConfigurationTab):
         widget = glayout.itemAtPosition(0, 1).widget()
         # print(label.text(), params[str(label.text())])
         widget.setText(str(params[str(label.text())]["value"]))
+        widget.setToolTip(str(params[str(label.text())]["doc"]))
+        units = glayout.itemAtPosition(0, 2).widget()
+        self.set_unit_labels(units, params[str(label.text())])
         num_selections = len(params["selections"]["value"])
         # print("K:", num_selections, params["selections"]["value"])
         if num_selections:
@@ -331,6 +336,8 @@ class ProposalWidget(ConfigurationTab):
                     # print(label.text(), v[str(label.text())])
                     widget.setText(str(v[str(label.text())]["value"]))
                     widget.setToolTip(v[str(label.text())]["doc"])
+                    units = glayout.itemAtPosition(i + 1, 2).widget()
+                    self.set_unit_labels(units, v[str(label.text())])
 
     def set_sky_nightly_bounds(self, params):
         """Set information in the sky nightly bounds parameters group box.
@@ -348,6 +355,8 @@ class ProposalWidget(ConfigurationTab):
             # print(label.text(), params[str(label.text())])
             widget.setText(str(params[str(label.text())]["value"]))
             widget.setToolTip(params[str(label.text())]["doc"])
+            units = glayout.itemAtPosition(i, 2).widget()
+            self.set_unit_labels(units, params[str(label.text())])
 
     def set_sky_constraints(self, params):
         """Set information in the sky constraints group box.
@@ -365,6 +374,8 @@ class ProposalWidget(ConfigurationTab):
             # print(label.text(), params[str(label.text())])
             widget.setText(str(params[str(label.text())]["value"]))
             widget.setToolTip(params[str(label.text())]["doc"])
+            units = glayout.itemAtPosition(i, 2).widget()
+            self.set_unit_labels(units, params[str(label.text())])
 
     def set_scheduling(self, params):
         """Set information in the scheduling parameters group box.
@@ -383,6 +394,8 @@ class ProposalWidget(ConfigurationTab):
             if not isinstance(widget, QtGui.QCheckBox):
                 widget.setText(str(params[str(label.text())]["value"]))
             widget.setToolTip(params[str(label.text())]["doc"])
+            units = glayout.itemAtPosition(i, 2).widget()
+            self.set_unit_labels(units, params[str(label.text())])
 
     def set_filters(self, params):
         """Set information in the filters parameters group box.
@@ -407,3 +420,19 @@ class ProposalWidget(ConfigurationTab):
                 # print("Z:", label.text(), params[index][data_label])
                 widget.setText(str(params[index][data_label]["value"]))
                 widget.setToolTip(params[index][data_label]["doc"])
+                units = glayout.itemAtPosition(i, 2).widget()
+                self.set_unit_labels(units, params[index][data_label])
+
+    def set_unit_labels(self, widget, params):
+        """Set the unit labels if necessary.
+
+        Parameters
+        ----------
+        widget : QtGui.QLabel
+            The label for the units.
+        params : dict
+            The instance containing the unit information.
+        """
+        value = str(params["units"])
+        if value != "None":
+            widget.setText(value)
