@@ -29,7 +29,6 @@ class ConfigurationTab(QtGui.QWidget):
 
         self.name = name
         self.layout = QtGui.QGridLayout()
-        #self.layout.setSizeConstraint
         self.signal_mapper = QtCore.QSignalMapper(self)
         if mapping is not None:
             func = mapping
@@ -39,11 +38,18 @@ class ConfigurationTab(QtGui.QWidget):
         self.rows = 0
 
         self.create_form()
+        grid_widget = QtGui.QWidget()
+        grid_widget.setLayout(self.layout)
 
-        temp_widget = QtGui.QWidget()
-        temp_widget.setLayout(self.layout)
+        scroll_area_widget = QtGui.QWidget()
+        scroll_area_widget_layout = QtGui.QVBoxLayout()
+        scroll_area_widget_layout.addWidget(grid_widget)
+        scroll_area_widget_layout.addStretch(10)
+        scroll_area_widget.setLayout(scroll_area_widget_layout)
+
         self.scrollable = QtGui.QScrollArea()
-        self.scrollable.setWidget(temp_widget)
+        self.scrollable.setWidgetResizable(True)
+        self.scrollable.setWidget(scroll_area_widget)
 
         main_layout = QtGui.QVBoxLayout(self)
         main_layout.addWidget(self.scrollable)
