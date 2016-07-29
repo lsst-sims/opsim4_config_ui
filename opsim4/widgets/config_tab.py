@@ -49,6 +49,20 @@ class ConfigurationTab(QtGui.QWidget):
         main_layout.addWidget(self.scrollable)
         self.setLayout(main_layout)
 
+    def change_label_color(self, label, color):
+        """Change a label's text color.
+
+        Parameters
+        ----------
+        label : QLabel
+            The label that needs text color change.
+        color : QColor
+            The color for the text change.
+        """
+        palette = label.palette()
+        palette.setColor(label.foregroundRole(), color)
+        label.setPalette(palette)
+
     def create_widget(self, wtype, name, qualifier=None, layout=None, rows=None, mapping=None):
         """Create a parameter widget.
 
@@ -104,11 +118,46 @@ class ConfigurationTab(QtGui.QWidget):
         """
         raise NotImplementedError("Classes must override this!")
 
+    def get_changed_parameters(self, layout=None, parent_name=None):
+        """Find the changed parameters.
+
+        Parameters
+        ----------
+        layout : QtGui.QLayout, optional
+            An alternative layout to check.
+        parent_name : str, optional
+            The name of a parent tab.
+
+        Returns
+        -------
+        list((str, str))
+                    A list of 2-tuples of the changed property name and the property value.
+        """
+        if layout is None:
+            layout = self.layout
+        changed_values = []
+        for i in xrange(layout.rowCount()):
+            property_label = layout.itemAtPosition(i, 0).widget()
+            property_name = str(property_label.text())
+            if property_name.endswith(self.CHANGED_PARAMETER):
+                property_widget = layout.itemAtPosition(i, 1).widget()
+                try:
+                    property_value = str(property_widget.isChecked())
+                except AttributeError:
+                    property_value = property_widget.text()
+                    pname = str(property_widget.objectName())
+                    if parent_name is not None:
+                        pname = "{}/{}".format(parent_name, pname)
+                changed_values.append((pname, property_value))
+        return changed_values
+
     def get_diff(self, layout=None, parent_name=None):
         """Get the changed parameters.
 
         Parameters
         ----------
+        layout : QtGui.QLayout, optional
+            An alternative layout to check.
         parent_name : str, optional
             The name of a parent tab.
 
@@ -157,30 +206,28 @@ class ConfigurationTab(QtGui.QWidget):
                         ddict[self.name][property_name] = [str(property_value)]
         return ddict
 
-    def set_information(self, key, info):
-        """Set information in a particular parameter widget.
+    def is_changed(self, position, is_changed, layout=None):
+        """Mark a parameter widget as changed.
 
         Parameters
         ----------
-        key : str
-            The name of the parameter.
-        info : dict
-            The set of information that describes this parameter.
+        position : int
+            The position (usually row) of the widget.
+        is_changed : bool
+            Flag set to True if the parameter has changed from baseline, false if not.
+        layout : QLayout, optional
+            An alternative layout to check.
         """
-        for i in xrange(self.layout.rowCount()):
-            widget = self.layout.itemAtPosition(i, 1).widget()
-            if str(widget.objectName()) == key:
-                value = info["value"]
-                try:
-                    widget.setText(str(value))
-                except AttributeError:
-                    widget.setChecked(value)
-                widget.setToolTip(info["doc"])
-                if info["format"] is not None:
-                    widget.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp(info["format"])))
-                if info["units"] is not None:
-                    unit_widget = self.layout.itemAtPosition(i, 2).widget()
-                    unit_widget.setText(info["units"])
+        print("is changed")
+        if not is_changed:
+            return
+        if layout is None:
+            layout = self.layout
+        plabel = layout.itemAt(position[-1] - 1).widget()
+        pname = str(plabel.text())
+        changed_label = "{}{}".format(pname, self.CHANGED_PARAMETER)
+        plabel.setText(changed_label)
+        self.change_label_color(plabel, QtCore.Qt.red)
 
     def property_changed(self, pwidget, layout=None, qualifier=None, position=None):
         """Get information from a possibly changed parameter.
@@ -227,43 +274,6 @@ class ConfigurationTab(QtGui.QWidget):
 
         self.checkProperty.emit(pname, pvalue, location)
         print("Done")
-
-    def is_changed(self, position, is_changed, layout=None):
-        """Mark a parameter widget as changed.
-
-        Parameters
-        ----------
-        position : int
-            The position (usually row) of the widget.
-        is_changed : bool
-            Flag set to True if the parameter has changed from baseline, false if not.
-        layout : QLayout, optional
-            An alternative layout to check.
-        """
-        print("is changed")
-        if not is_changed:
-            return
-        if layout is None:
-            layout = self.layout
-        plabel = layout.itemAt(position[-1] - 1).widget()
-        pname = str(plabel.text())
-        changed_label = "{}{}".format(pname, self.CHANGED_PARAMETER)
-        plabel.setText(changed_label)
-        self.change_label_color(plabel, QtCore.Qt.red)
-
-    def change_label_color(self, label, color):
-        """Change a label's text color.
-
-        Parameters
-        ----------
-        label : QLabel
-            The label that needs text color change.
-        color : QColor
-            The color for the text change.
-        """
-        palette = label.palette()
-        palette.setColor(label.foregroundRole(), color)
-        label.setPalette(palette)
 
     def reset_active_field(self, layout=None, qualifier=None, position=None):
         """Reset the active (has focus) parameter widget.
@@ -342,17 +352,48 @@ class ConfigurationTab(QtGui.QWidget):
         """
         changed_values = []
         for i in xrange(self.layout.rowCount()):
-            property_label = self.layout.itemAtPosition(i, 0).widget()
-            property_name = str(property_label.text())
-            if property_name.endswith(self.CHANGED_PARAMETER):
-                property_widget = self.layout.itemAtPosition(i, 1).widget()
-                try:
-                    property_value = str(property_widget.isChecked())
-                except AttributeError:
-                    property_value = property_widget.text()
-                changed_values.append((property_name.strip(self.CHANGED_PARAMETER),
-                                      property_value))
+            widget = self.layout.itemAtPosition(i, 0).widget()
+            if isinstance(widget, QtGui.QGroupBox):
+                gb_name = str(widget.title())
+                glayout = widget.layout()
+                changed_values.extend(self.get_changed_parameters(layout=glayout, parent_name=gb_name))
+            else:
+                property_label = widget
+                property_name = str(property_label.text())
+                if property_name.endswith(self.CHANGED_PARAMETER):
+                    property_widget = self.layout.itemAtPosition(i, 1).widget()
+                    try:
+                        property_value = str(property_widget.isChecked())
+                    except AttributeError:
+                        property_value = property_widget.text()
+                    changed_values.append((str(property_widget.objectName()),
+                                          property_value))
 
         if len(changed_values):
+            #print("R:", self.name)
             self.saveConfiguration.emit(QtCore.QString(save_dir), self.name, changed_values)
 
+    def set_information(self, key, info):
+        """Set information in a particular parameter widget.
+
+        Parameters
+        ----------
+        key : str
+            The name of the parameter.
+        info : dict
+            The set of information that describes this parameter.
+        """
+        for i in xrange(self.layout.rowCount()):
+            widget = self.layout.itemAtPosition(i, 1).widget()
+            if str(widget.objectName()) == key:
+                value = info["value"]
+                try:
+                    widget.setText(str(value))
+                except AttributeError:
+                    widget.setChecked(value)
+                widget.setToolTip(info["doc"])
+                if info["format"] is not None:
+                    widget.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp(info["format"])))
+                if info["units"] is not None:
+                    unit_widget = self.layout.itemAtPosition(i, 2).widget()
+                    unit_widget.setText(info["units"])

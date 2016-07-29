@@ -81,8 +81,8 @@ class BaseController(QtCore.QObject):
         """
         return self.widget
 
-    @QtCore.pyqtSlot('QString', str, list)
+    @QtCore.pyqtSlot('QString', 'QString', list)
     def save_configuration(self, save_dir, name, changed_params):
         """Delegate configuration saving to model.
         """
-        self.model.save_configuration(str(save_dir), name, changed_params)
+        self.model.save_configuration(str(save_dir), str(name), changed_params)

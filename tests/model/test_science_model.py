@@ -17,3 +17,7 @@ class ScienceModelTest(unittest.TestCase):
         for k, v in self.model.ad_params.items():
             if k == "SouthCelestialPole":
                 self.assertIsNotNone(v["sky_exclusion"])
+
+        for k, v in self.model.ad_modules.items():
+            if k == "SouthCelestialPole":
+                self.assertEqual(v, "lsst.sims.ocs.configuration.science.south_celestial_pole")

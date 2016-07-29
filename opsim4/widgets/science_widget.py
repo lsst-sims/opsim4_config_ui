@@ -100,8 +100,20 @@ class ScienceWidget(QtGui.QTabWidget):
         """Reset the active field.
         """
         tab = self.active_tab()
-        print("Z:", tab.name)
+        #print("Z:", tab.name)
         tab.reset_active_field()
+
+    def save(self, save_dir):
+        """Get the changed parameters for saving.
+
+        Parameters
+        ----------
+        save_dir : str
+            The directory for saving the configuration in.
+        """
+        for i in xrange(self.count()):
+            tab = self.widget(i)
+            tab.save(save_dir)
 
     def set_information(self, param_dict):
         """Set information for the configuration tabs.

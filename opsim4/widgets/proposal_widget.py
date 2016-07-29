@@ -58,23 +58,6 @@ class ProposalWidget(ConfigurationTab):
         self.layout.addWidget(group_box, self.rows, 0, 1, 3)
         self.rows += 1
 
-    def set_information(self, params):
-        """Set the information for the configuration.
-
-        Parameters
-        ----------
-        params : dict
-            The configuration information.
-        """
-        name_widget = self.layout.itemAtPosition(0, 1).widget()
-        name_widget.setText(str(params["name"]["value"]))
-        self.set_sky_region(params["sky_region"]["value"])
-        self.set_sky_exclusion(params["sky_exclusion"]["value"])
-        self.set_sky_nightly_bounds(params["sky_nightly_bounds"]["value"])
-        self.set_sky_constraints(params["sky_constraints"]["value"])
-        self.set_scheduling(params["scheduling"]["value"])
-        self.set_filters(params["filters"]["value"])
-
     def create_sky_region(self, glayout, params):
         """Set the information for the proposal sky region.
 
@@ -100,6 +83,13 @@ class ProposalWidget(ConfigurationTab):
             self.group_box_rows.append(num_selections * 4)
 
     def create_sky_exclusion(self, glayout, params):
+        """Set the information for the proposal sky exclusion.
+
+        glayout : QtGui.QGridLayout
+            Instance of a grid layout.
+        params : dict
+            The configuration information for the sky exclusion.
+        """
         self.create_widget("Float", "dec_window", layout=glayout, rows=0)
         num_selections = len(params["selections"]["value"])
         if num_selections:
@@ -118,21 +108,49 @@ class ProposalWidget(ConfigurationTab):
         self.group_box_rows.append(1 + (num_selections * 4))
 
     def create_sky_nightly_bounds(self, glayout, params):
+        """Set the information for the proposal sky nightly bounds.
+
+        glayout : QtGui.QGridLayout
+            Instance of a grid layout.
+        params : dict
+            The configuration information for the sky nightly bounds.
+        """
         self.create_widget("Float", "twilight_boundary", layout=glayout, rows=0)
         self.create_widget("Float", "delta_lst", layout=glayout, rows=1)
         self.group_box_rows.append(2)
 
     def create_sky_constraints(self, glayout, params):
+        """Set the information for the proposal sky constraints.
+
+        glayout : QtGui.QGridLayout
+            Instance of a grid layout.
+        params : dict
+            The configuration information for the sky constraints.
+        """
         self.create_widget("Float", "max_airmass", layout=glayout, rows=0)
         self.group_box_rows.append(1)
 
     def create_scheduling(self, glayout, params):
+        """Set the information for the proposal scheduling.
+
+        glayout : QtGui.QGridLayout
+            Instance of a grid layout.
+        params : dict
+            The configuration information for the scheduling.
+        """
         self.create_widget("Int", "max_num_targets", layout=glayout, rows=0)
         self.create_widget("Bool", "accept_serendipity", layout=glayout, rows=1)
         self.create_widget("Bool", "accept_consecutive_visits", layout=glayout, rows=2)
         self.group_box_rows.append(3)
 
     def create_filters(self, glayout, params):
+        """Set the information for the proposal filters.
+
+        glayout : QtGui.QGridLayout
+            Instance of a grid layout.
+        params : dict
+            The configuration information for the filters.
+        """
         num_filters = len(params)
         if num_filters:
             filter_order = "u g r i z y".split()
@@ -189,11 +207,11 @@ class ProposalWidget(ConfigurationTab):
         print(pos)
         if pos == -1:
             for i in xrange(1, self.layout.count() - 1):
-                print("F:", i)
+                #print("F:", i)
                 group_box = self.layout.itemAtPosition(i, 0).widget()
                 glayout = group_box.layout()
                 pos = glayout.indexOf(pwidget)
-                print("D:", pos)
+                #print("D:", pos)
                 if pos != -1:
                     qualifier = "{}/{}".format(self.name, group_box.title())
                     ConfigurationTab.property_changed(self, pwidget, layout=glayout,
@@ -203,6 +221,8 @@ class ProposalWidget(ConfigurationTab):
             ConfigurationTab.property_changed(self, pwidget)
 
     def reset_active_field(self):
+        """Reset the active (has focus) parameter widget.
+        """
         for i in xrange(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 0).widget()
             if isinstance(widget, QtGui.QGroupBox):
@@ -250,7 +270,31 @@ class ProposalWidget(ConfigurationTab):
         else:
             ConfigurationTab.reset_field(self, position, param_value)
 
+    def set_information(self, params):
+        """Set the information for the configuration.
+
+        Parameters
+        ----------
+        params : dict
+            The configuration information.
+        """
+        name_widget = self.layout.itemAtPosition(0, 1).widget()
+        name_widget.setText(str(params["name"]["value"]))
+        self.set_sky_region(params["sky_region"]["value"])
+        self.set_sky_exclusion(params["sky_exclusion"]["value"])
+        self.set_sky_nightly_bounds(params["sky_nightly_bounds"]["value"])
+        self.set_sky_constraints(params["sky_constraints"]["value"])
+        self.set_scheduling(params["scheduling"]["value"])
+        self.set_filters(params["filters"]["value"])
+
     def set_sky_region(self, params):
+        """Set information in the sky region parameters group box.
+
+        Parameters
+        ----------
+        params : dict
+            The set of parameters for the sky region information.
+        """
         group_box = self.layout.itemAtPosition(1, 0).widget()
         glayout = group_box.layout()
         num_selections = len(params["selections"]["value"])
@@ -264,6 +308,13 @@ class ProposalWidget(ConfigurationTab):
                     widget.setToolTip(v[str(label.text())]["doc"])
 
     def set_sky_exclusion(self, params):
+        """Set information in the sky exclusion parameters group box.
+
+        Parameters
+        ----------
+        params : dict
+            The set of parameters for the sky exclusion information.
+        """
         group_box = self.layout.itemAtPosition(2, 0).widget()
         glayout = group_box.layout()
         label = glayout.itemAtPosition(0, 0).widget()
@@ -282,6 +333,13 @@ class ProposalWidget(ConfigurationTab):
                     widget.setToolTip(v[str(label.text())]["doc"])
 
     def set_sky_nightly_bounds(self, params):
+        """Set information in the sky nightly bounds parameters group box.
+
+        Parameters
+        ----------
+        params : dict
+            The set of parameters for the sky nightly bounds information.
+        """
         group_box = self.layout.itemAtPosition(3, 0).widget()
         glayout = group_box.layout()
         for i in xrange(self.group_box_rows[2]):
@@ -292,6 +350,13 @@ class ProposalWidget(ConfigurationTab):
             widget.setToolTip(params[str(label.text())]["doc"])
 
     def set_sky_constraints(self, params):
+        """Set information in the sky constraints group box.
+
+        Parameters
+        ----------
+        params : dict
+            The set of parameters for the sky constraints information.
+        """
         group_box = self.layout.itemAtPosition(4, 0).widget()
         glayout = group_box.layout()
         for i in xrange(self.group_box_rows[3]):
@@ -302,6 +367,13 @@ class ProposalWidget(ConfigurationTab):
             widget.setToolTip(params[str(label.text())]["doc"])
 
     def set_scheduling(self, params):
+        """Set information in the scheduling parameters group box.
+
+        Parameters
+        ----------
+        params : dict
+            The set of parameters for the scheduling information.
+        """
         group_box = self.layout.itemAtPosition(5, 0).widget()
         glayout = group_box.layout()
         for i in xrange(self.group_box_rows[4]):
@@ -313,6 +385,13 @@ class ProposalWidget(ConfigurationTab):
             widget.setToolTip(params[str(label.text())]["doc"])
 
     def set_filters(self, params):
+        """Set information in the filters parameters group box.
+
+        Parameters
+        ----------
+        params : dict
+            The set of parameters for the filters information.
+        """
         group_box = self.layout.itemAtPosition(6, 0).widget()
         glayout = group_box.layout()
         # print("F:", params)
