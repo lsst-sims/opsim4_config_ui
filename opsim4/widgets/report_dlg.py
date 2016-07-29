@@ -9,7 +9,7 @@ __all__ = ["ReportDialog"]
 
 class ReportDialog(QtGui.QDialog):
     def __init__(self, parent=None):
-        super(ReportDialog, self).__init__(parent)
+        QtGui.QDialog.__init__(self, parent)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setWindowTitle("Difference Report")
         self.setMinimumSize(400, 300)

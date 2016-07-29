@@ -4,9 +4,9 @@ from PyQt4 import QtCore, QtGui
 
 from lsst.sims.ocs.utilities.file_helpers import expand_path
 from opsim4.controller import MainController
-from .report_dlg import ReportDialog
-from .utilities import title
-from . import version
+from opsim4.widgets import ReportDialog
+from opsim4.utilities import title
+from opsim4.version import version
 
 class OpsimConfig(QtGui.QMainWindow):
     """Top-level UI.
@@ -17,7 +17,7 @@ class OpsimConfig(QtGui.QMainWindow):
     def __init__(self, parent=None):
         """Initialize the class.
         """
-        super(OpsimConfig, self).__init__(parent)
+        QtGui.QMainWindow.__init__(self, parent)
         self.save_directory = None
 
         self.create_file_menu()
