@@ -1,11 +1,11 @@
 from opsim4.controller import BaseController
-from opsim4.model import SurveyModel
-from opsim4.widgets import SurveyWidget
+from opsim4.model import ObservingSiteModel
+from opsim4.widgets import ObservingSiteWidget
 
-__all__ = ["SurveyController"]
+__all__ = ["ObservingSiteController"]
 
-class SurveyController(BaseController):
-    """The controller for the survey configuration.
+class ObservingSiteController(BaseController):
+    """The controller for the observing site configuration.
     """
 
     def __init__(self, name):
@@ -16,13 +16,12 @@ class SurveyController(BaseController):
         name : str
             The tab name for the configuration view.
         """
-        super(SurveyController, self).__init__(name)
-        self.model = SurveyModel()
-        self.widget = SurveyWidget(name)
+        super(ObservingSiteController, self).__init__(name)
+        self.model = ObservingSiteModel()
+        self.widget = ObservingSiteWidget(name)
 
         for key, value in self.model.params.items():
             self.widget.set_information(key, value)
-        print("L:", self.widget.signal_mapper.mapping(0))
         self.widget.checkProperty.connect(self.check_property)
         self.widget.getProperty.connect(self.get_property)
         self.widget.saveConfiguration.connect(self.save_configuration)
