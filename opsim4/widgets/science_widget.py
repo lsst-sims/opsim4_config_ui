@@ -1,4 +1,4 @@
-from opsim4.widgets import ConfigurationTabWidget
+from opsim4.widgets import ConfigurationTabWidget, ProposalWidget
 
 __all__ = ["ScienceWidget"]
 
@@ -14,7 +14,7 @@ class ScienceWidget(ConfigurationTabWidget):
         parent : QWidget
             The parent widget of this one.
         """
-        ConfigurationTabWidget.__init__(self, parent)
+        ConfigurationTabWidget.__init__(self, name, parent)
 
     def create_tabs(self, params):
         """Create the individual proposal tabs.
@@ -24,4 +24,6 @@ class ScienceWidget(ConfigurationTabWidget):
         params : dict{str : params}
             Set of configuration information.
         """
-        ConfigurationTabWidget.create_tabs(self, "ProposalWidget", params)
+        for name, values in params.items():
+            tab = ProposalWidget(name, values)
+            self.addTab(tab, name)
