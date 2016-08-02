@@ -1,5 +1,3 @@
-import importlib
-
 from PyQt4 import QtGui
 
 __all__ = ["ConfigurationTabWidget"]
@@ -28,21 +26,15 @@ class ConfigurationTabWidget(QtGui.QTabWidget):
         """
         return self.widget(self.currentIndex())
 
-    def create_tabs(self, class_name, params):
+    def create_tabs(self, params):
         """Create the individual proposal tabs.
 
         Parameters
         ----------
-        class_name : str
-            The derived QWidget to use.
         params : dict{str : params}
             Set of configuration information.
         """
-        module = importlib.import_module("opsim4.widgets")
-        tab_widget = getattr(module, class_name)
-        for name, values in params.items():
-            tab = tab_widget(name, values)
-            self.addTab(tab, name)
+        raise NotImplementedError("Classes must override this!")
 
     def get_diff(self):
         """Get the changed parameters.

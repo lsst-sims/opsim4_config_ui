@@ -10,7 +10,8 @@ class MainController(object):
     def __init__(self):
         """Initialize the class.
         """
-        self.tab_order = ["survey", "science", "observing_site", "scheduler_driver", "downtime"]
+        self.tab_order = ["survey", "science", "observatory", "observing_site",
+                          "scheduler_driver", "downtime"]
         for tab in self.tab_order:
             setattr(self, tab + "_controller",
                     getattr(opsim4.controller, title(tab, spacer="") + "Controller")(tab))
