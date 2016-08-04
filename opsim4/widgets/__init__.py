@@ -4,6 +4,14 @@ from .helpers import *
 from .config_tab import *
 from .config_tab_widget import *
 from .downtime_widget import *
+from .camera_widget import *
+from .dome_widget import *
+from .obs_variation_widget import *
+from .optics_loop_corr_widget import *
+from .park_widget import *
+from .rotator_widget import *
+from .slew_widget import *
+from .telescope_widget import *
 from .observatory_widget import *
 from .observing_site_widget import *
 from .parameter_widget import *

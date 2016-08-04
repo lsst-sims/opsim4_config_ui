@@ -24,6 +24,7 @@ class ScienceModel(object):
             ad_model = AreaDistributionPropModel(ad_obj)
             params = ad_model.make_parameter_dictionary()
             prop_name = params["name"]["value"]
+            #print(params)
             self.ad_params[prop_name] = params
             self.ad_modules[prop_name] = ad_module
 

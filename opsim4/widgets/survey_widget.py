@@ -16,7 +16,7 @@ class SurveyWidget(ConfigurationTab):
         parent : QWidget
             The parent widget of this one.
         """
-        ConfigurationTab.__init__(self, name, parent)
+        ConfigurationTab.__init__(self, name, parent=parent)
 
     def create_form(self):
         """Create the UI form for the Survey widget.

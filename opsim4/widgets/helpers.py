@@ -21,6 +21,7 @@ def get_widget_by_type(widget_type):
         'Str': lineedit_widget,
         'StringList': lineedit_widget,
         'Float': float_widget,
+        'FloatList': lineedit_widget,
         'Int': int_widget,
         'Bool': bool_widget
     }

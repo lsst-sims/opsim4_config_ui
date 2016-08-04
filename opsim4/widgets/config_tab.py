@@ -224,7 +224,7 @@ class ConfigurationTab(QtGui.QWidget):
         layout : QLayout, optional
             An alternative layout to check.
         """
-        print("is changed")
+        #print("is changed")
         if not is_changed:
             return
         if layout is None:
@@ -252,15 +252,15 @@ class ConfigurationTab(QtGui.QWidget):
         location = []
         if layout is None:
             layout = self.layout
-        print("HI")
+        #print("HI")
         pos = layout.indexOf(pwidget)
-        print("HI2", pos)
+        #print("HI2", pos)
         plabel = layout.itemAt(pos - 1).widget()
-        print("HI3")
+        #print("HI3")
         pname = pwidget.objectName()
         if qualifier is not None:
             pname = "{}/{}".format(qualifier, pname)
-        print("HI4")
+        #print("HI4")
         if plabel.text().endsWith(self.CHANGED_PARAMETER):
             return
         try:
@@ -270,7 +270,7 @@ class ConfigurationTab(QtGui.QWidget):
             if pstate == 2:
                 pbool = "True"
             pvalue = QtCore.QString(pbool)
-            print("YYYY:", pvalue)
+            #print("YYYY:", pvalue)
         except AttributeError:
             pvalue = pwidget.text()
 
@@ -279,7 +279,7 @@ class ConfigurationTab(QtGui.QWidget):
         location.append(pos)
 
         self.checkProperty.emit(pname, pvalue, location)
-        print("Done")
+        #print("Done")
 
     def reset_active_field(self, layout=None, qualifier=None, position=None):
         """Reset the active (has focus) parameter widget.
@@ -308,6 +308,15 @@ class ConfigurationTab(QtGui.QWidget):
 
     def reset_all(self, layout=None, qualifier=None, position=None):
         """Reset all of the changed parameters.
+
+        Parameters
+        ----------
+        layout ; QLayout, optional
+            An alternative layout to reset.
+        qualifier : str, optional
+            An identifier for the parameter.
+        position : int, optional
+            A possible parent widget location.
         """
         location = []
         if layout is None:
@@ -342,7 +351,6 @@ class ConfigurationTab(QtGui.QWidget):
         plabel.setText(pname.strip(self.CHANGED_PARAMETER))
         pwidget = layout.itemAtPosition(position[-1], 1).widget()
         try:
-            print("DD:", param_value)
             pwidget.setChecked(param_value == "True")
         except AttributeError:
             pwidget.setText(param_value)
@@ -376,7 +384,6 @@ class ConfigurationTab(QtGui.QWidget):
                                           property_value))
 
         if len(changed_values):
-            #print("R:", self.name)
             self.saveConfiguration.emit(QtCore.QString(save_dir), self.name, changed_values)
 
     def set_information(self, key, info):
@@ -391,12 +398,16 @@ class ConfigurationTab(QtGui.QWidget):
         """
         for i in xrange(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 1).widget()
-            if str(widget.objectName()) == key:
+            if key in str(widget.objectName()):
                 value = info["value"]
                 try:
-                    widget.setText(str(value))
-                except AttributeError:
                     widget.setChecked(value)
+                except AttributeError:
+                    widget.setText(str(value))
+                    try:
+                        widget.home(False)
+                    except AttributeError:
+                        pass
                 widget.setToolTip(info["doc"])
                 if info["format"] is not None:
                     widget.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp(info["format"])))

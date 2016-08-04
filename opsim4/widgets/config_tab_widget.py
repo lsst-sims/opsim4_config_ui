@@ -67,10 +67,13 @@ class ConfigurationTabWidget(QtGui.QTabWidget):
             The name of the tab to search.
         """
         for i in xrange(self.count()):
-            name = self.tabText(i)
-            if name == home_tab:
-                tab = self.widget(i)
+            tab = self.widget(i)
+            if home_tab == tab.name:
                 tab.is_changed(position, is_changed)
+            # name = self.tabText(i)
+            # if name == home_tab:
+            #     tab = self.widget(i)
+            #     tab.is_changed(position, is_changed)
 
     def reset_active_tab(self):
         """Reset the current tab.
@@ -98,10 +101,15 @@ class ConfigurationTabWidget(QtGui.QTabWidget):
             The name of the tab to search.
         """
         for i in xrange(self.count()):
-            name = self.tabText(i)
-            if name == home_tab:
-                tab = self.widget(i)
+            tab = self.widget(i)
+            if home_tab == tab.name:
                 tab.reset_field(position, param_value)
+            # name = self.tabText(i)
+            # print("K:", name)
+            # if name == home_tab:
+            #     print("J:", home_tab)
+            #     tab = self.widget(i)
+            #     tab.reset_field(position, param_value)
 
     def reset_active_field(self):
         """Reset the active field.
@@ -130,9 +138,14 @@ class ConfigurationTabWidget(QtGui.QTabWidget):
         param_dict : dict
             The set of information for the configuration
         """
-        for key, value in param_dict.items():
-            for i in xrange(self.count()):
-                name = self.tabText(i)
-                if name == key:
-                    tab = self.widget(i)
-                    tab.set_information(value)
+        # for key, value in param_dict.items():
+        #     for i in xrange(self.count()):
+        #         name = self.tabText(i)
+        #         print("H:" key, name)
+        #         if name == key:
+        #             print("G:", name, key, value)
+        #             tab = self.widget(i)
+        #             tab.set_information(value)
+        for i in xrange(self.count()):
+            tab = self.widget(i)
+            tab.set_information(param_dict[tab.name])
