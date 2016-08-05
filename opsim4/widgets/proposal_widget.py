@@ -289,6 +289,7 @@ class ProposalWidget(ConfigurationTab):
         """
         name_widget = self.layout.itemAtPosition(0, 1).widget()
         name_widget.setText(str(params["name"]["value"]))
+        name_widget.setToolTip(str(params["name"]["doc"]))
         self.set_sky_region(params["sky_region"]["value"])
         self.set_sky_exclusion(params["sky_exclusion"]["value"])
         self.set_sky_nightly_bounds(params["sky_nightly_bounds"]["value"])
