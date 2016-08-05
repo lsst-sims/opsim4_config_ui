@@ -1,8 +1,13 @@
 import argparse
 
 def create_parser():
+    """Instantiate the command-line parser.
 
-    description = ["A GUI for makeing changes to the OpSim version 4 confiiguration system."]
+    Returns
+    -------
+    ArgumentParser
+    """
+    description = ["A GUI for making changes to the OpSim version 4 confiiguration system."]
 
     parser = argparse.ArgumentParser(usage="opsim4_config_ui [options]",
                                      description=" ".join(description),
