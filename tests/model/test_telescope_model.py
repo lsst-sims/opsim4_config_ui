@@ -11,4 +11,3 @@ class TelescopeModelTest(unittest.TestCase):
     def test_basic_information_after_creation(self):
         self.assertTrue(isinstance(self.model.config_obj, Telescope))
         self.assertEqual(len(self.model.params), 11)
-        #print(self.model.params)

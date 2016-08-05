@@ -33,7 +33,7 @@ class ObservatoryWidget(ConfigurationTabWidget):
 
         Parameters
         ----------
-        params : dict{str : params}
+        params : dict(str: params)
             Set of configuration information.
         """
         module = importlib.import_module("opsim4.widgets")

@@ -9,4 +9,3 @@ class ObservatoryModelTest(unittest.TestCase):
 
     def test_basic_information_after_creation(self):
         self.assertEqual(len(self.model.params), 8)
-        #print(self.model.params)

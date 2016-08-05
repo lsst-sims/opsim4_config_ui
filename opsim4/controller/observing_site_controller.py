@@ -16,7 +16,7 @@ class ObservingSiteController(BaseController):
         name : str
             The tab name for the configuration view.
         """
-        super(ObservingSiteController, self).__init__(name)
+        BaseController.__init__(self, name)
         self.model = ObservingSiteModel()
         self.widget = ObservingSiteWidget(name)
 

@@ -22,6 +22,8 @@ class ConfigurationTab(QtGui.QWidget):
         ----------
         name : str
             The name for the tab title.
+        mapping : func, optional
+            A callback function to map
         parent : QWidget
             The parent widget of this one.
         """
@@ -80,7 +82,7 @@ class ConfigurationTab(QtGui.QWidget):
             The name of the parameter.
         qualifier : str, optional
             A prefix to the name for setting to the object name.
-        layout : QtGui.QGridLayout, optional
+        layout : QGridLayout, optional
             An alternate layout instance.
         rows : int, optional
             An alternate value for rows in a layout
@@ -95,7 +97,6 @@ class ConfigurationTab(QtGui.QWidget):
         parameter_widget.setObjectName(full_name)
         parameter_units = QtGui.QLabel()
 
-        #print("G:", full_name)
         signal = getattr(parameter_widget, change_signal)
         signal.connect(self.signal_mapper.map)
         self.signal_mapper.setMapping(parameter_widget, parameter_widget)
@@ -129,7 +130,7 @@ class ConfigurationTab(QtGui.QWidget):
 
         Parameters
         ----------
-        layout : QtGui.QLayout, optional
+        layout : QLayout, optional
             An alternative layout to check.
         parent_name : str, optional
             The name of a parent tab.
@@ -137,7 +138,7 @@ class ConfigurationTab(QtGui.QWidget):
         Returns
         -------
         list((str, str))
-                    A list of 2-tuples of the changed property name and the property value.
+            A list of 2-tuples of the changed property name and the property value.
         """
         if layout is None:
             layout = self.layout
@@ -162,7 +163,7 @@ class ConfigurationTab(QtGui.QWidget):
 
         Parameters
         ----------
-        layout : QtGui.QLayout, optional
+        layout : QLayout, optional
             An alternative layout to check.
         parent_name : str, optional
             The name of a parent tab.
@@ -176,7 +177,6 @@ class ConfigurationTab(QtGui.QWidget):
             layout = self.layout
         ddict = collections.defaultdict(dict)
         for i in range(layout.rowCount()):
-            #property_label = layout.itemAtPosition(i, 0).widget()
             widget = layout.itemAtPosition(i, 0).widget()
             if isinstance(widget, QtGui.QGroupBox):
                 gb_name = str(widget.title())
@@ -188,8 +188,6 @@ class ConfigurationTab(QtGui.QWidget):
                 if property_name_mod.endswith('*'):
                     property_widget = layout.itemAtPosition(i, 1).widget()
                     property_name = str(property_widget.objectName())
-                    #property_name = property_name_mod.strip('*')
-                    #print(property_name)
                     try:
                         property_value = str(property_widget.isChecked())
                     except AttributeError:
@@ -224,7 +222,6 @@ class ConfigurationTab(QtGui.QWidget):
         layout : QLayout, optional
             An alternative layout to check.
         """
-        #print("is changed")
         if not is_changed:
             return
         if layout is None:
@@ -252,15 +249,13 @@ class ConfigurationTab(QtGui.QWidget):
         location = []
         if layout is None:
             layout = self.layout
-        #print("HI")
+
         pos = layout.indexOf(pwidget)
-        #print("HI2", pos)
         plabel = layout.itemAt(pos - 1).widget()
-        #print("HI3")
         pname = pwidget.objectName()
         if qualifier is not None:
             pname = "{}/{}".format(qualifier, pname)
-        #print("HI4")
+
         if plabel.text().endsWith(self.CHANGED_PARAMETER):
             return
         try:
@@ -270,7 +265,6 @@ class ConfigurationTab(QtGui.QWidget):
             if pstate == 2:
                 pbool = "True"
             pvalue = QtCore.QString(pbool)
-            #print("YYYY:", pvalue)
         except AttributeError:
             pvalue = pwidget.text()
 
@@ -279,10 +273,18 @@ class ConfigurationTab(QtGui.QWidget):
         location.append(pos)
 
         self.checkProperty.emit(pname, pvalue, location)
-        #print("Done")
 
     def reset_active_field(self, layout=None, qualifier=None, position=None):
         """Reset the active (has focus) parameter widget.
+
+        Parameters
+        ----------
+        layout : QLayout, optional
+            An alternative layout to check.
+        qualifier : str, optional
+            A string t0 prepend to the parameter name.
+        position : int, optional
+            A position from another layout. Used when layout is not None.
         """
         location = []
         if layout is None:
@@ -311,12 +313,12 @@ class ConfigurationTab(QtGui.QWidget):
 
         Parameters
         ----------
-        layout ; QLayout, optional
-            An alternative layout to reset.
+        layout : QLayout, optional
+            An alternative layout to check.
         qualifier : str, optional
-            An identifier for the parameter.
+            A string to prepend to the parameter name.
         position : int, optional
-            A possible parent widget location.
+            A position from another layout. Used when layout is not None.
         """
         location = []
         if layout is None:
@@ -339,10 +341,12 @@ class ConfigurationTab(QtGui.QWidget):
 
         Parameters
         ----------
-        position : list[int]
+        position : list(int)
             The position (usually row) of the widget to reset.
         param_value : str
             The string representation of the parameter value.
+        layout : QLayout, optional
+            An alternative layout to check.
         """
         if layout is None:
             layout = self.layout

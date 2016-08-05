@@ -25,16 +25,14 @@ class BaseController(QtCore.QObject):
 
         Parameters
         ----------
-        param_name : QtCore.QString
+        param_name : QString
             The parameter name to retrieve the stored value of.
         param_value : any
             The value of the parameter to check against the stored one.
-        position : list[int]
+        position : list(int)
             The widget position that requested this check.
         """
-        print("Help!", position)
         is_changed = self.model.check_parameter(str(param_name), param_value)
-        print("A:", param_name, param_value, is_changed)
         self.widget.is_changed(position, is_changed)
 
     @QtCore.pyqtSlot('QString', list)
@@ -43,13 +41,12 @@ class BaseController(QtCore.QObject):
 
         Parameters
         ----------
-        param_name : QtCore.QString
+        param_name : QString
             The parameter name to retrieve the stored value of.
-        position : list[int]
+        position : list(int)
             The widget position that requested this check.
         """
         pvalue = str(self.model.get_parameter(str(param_name)))
-        print("Resetting:", param_name, pvalue)
         self.widget.reset_field(position, pvalue)
 
     def get_diff(self):
@@ -67,7 +64,6 @@ class BaseController(QtCore.QObject):
                     property_name = "{}/{}".format(top_prop, prop_name)
                 else:
                     property_name = prop_name
-                print("BB:", property_name)
                 default_value = self.model.get_parameter(property_name)
                 if isinstance(default_value, list):
                     default_value = ",".join([str(x) for x in default_value])
@@ -78,11 +74,24 @@ class BaseController(QtCore.QObject):
 
     def get_tab(self):
         """Return the view controller's widget.
+
+        Returns
+        -------
+        QWidget
         """
         return self.widget
 
     @QtCore.pyqtSlot('QString', 'QString', list)
     def save_configuration(self, save_dir, name, changed_params):
         """Delegate configuration saving to model.
+
+        Parameters
+        ----------
+        save_dir : QString
+            The directory to save the configuration information to.
+        name : QString
+
+        changed_params : dict
+            The set of changed information.
         """
         self.model.save_configuration(str(save_dir), str(name), changed_params)

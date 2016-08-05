@@ -7,6 +7,8 @@ from opsim4.widgets import ObservatoryWidget
 __all__ = ["ObservatoryController"]
 
 class ObservatoryController(BaseController):
+    """The controller for the observatory configuration.
+    """
 
     def __init__(self, name):
         """Initialize the class.
@@ -39,7 +41,7 @@ class ObservatoryController(BaseController):
             The parameter name to retrieve the stored value of.
         param_value : any
             The value of the parameter to check against the stored one.
-        position : list[int]
+        position : list(int)
             The widget position that requested this check.
         """
         is_changed = self.model.check_parameter(str(param_name), param_value)
@@ -54,7 +56,7 @@ class ObservatoryController(BaseController):
         ----------
         param_name : QtCore.QString
             The parameter name to retrieve the stored value of.
-        position : list[int]
+        position : list(int)
             The widget position that requested this check.
         """
         pvalue = str(self.model.get_parameter(str(param_name)))

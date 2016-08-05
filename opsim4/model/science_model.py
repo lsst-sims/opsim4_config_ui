@@ -8,6 +8,8 @@ from opsim4.utilities import load_class
 __all__ = ["ScienceModel"]
 
 class ScienceModel(object):
+    """Model class for the science proposal configuration.
+    """
 
     def __init__(self):
         """Initialize the class.
@@ -24,18 +26,15 @@ class ScienceModel(object):
             ad_model = AreaDistributionPropModel(ad_obj)
             params = ad_model.make_parameter_dictionary()
             prop_name = params["name"]["value"]
-            #print(params)
             self.ad_params[prop_name] = params
             self.ad_modules[prop_name] = ad_module
-
-        #print(self.ad_params)
 
     def get_proposal_names(self):
         """Return names of stored proposals.
 
         Returns
         -------
-        list[str]
+        list(str)
         """
         proposal_names = self.ad_params.keys()
         return proposal_names
@@ -56,7 +55,6 @@ class ScienceModel(object):
             True if value is different from stored, false if same.
         """
         dict_value = str(self.get_parameter(parameter_name))
-        print("YY:", value_to_check, dict_value)
         return value_to_check != dict_value
 
     def get_parameter(self, parameter_name):
@@ -73,7 +71,6 @@ class ScienceModel(object):
             The associated parameter value.
         """
         pnames = parameter_name.split('/')
-        print("H:", pnames)
 
         prop_name = pnames.pop(0)
         pvalue = None
@@ -81,7 +78,6 @@ class ScienceModel(object):
             prop_params = self.ad_params[prop_name]
             while len(pnames):
                 name = pnames.pop(0)
-                print("X:", name)
                 try:
                     # Need to handle integer indexed dictionaries
                     name = int(name)
@@ -97,11 +93,9 @@ class ScienceModel(object):
                     except KeyError:
                         # This is a filter parameter, so it needs to be
                         # handled differently
-                        # print("Q:", pvalue)
                         name = "_".join(name.split('_')[1:])
                         pvalue = pvalue[name]["value"]
 
-        print("CC:", pvalue)
         return pvalue
 
     def save_configuration(self, save_dir, name, changed_params):
@@ -116,8 +110,6 @@ class ScienceModel(object):
         changed_params : list((str, str))
             The list of changed parameters.
         """
-        #print("RR:", name)
-        #print("RRR:", changed_params)
         if name in self.ad_modules:
             modules = self.ad_modules
 

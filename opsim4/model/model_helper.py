@@ -10,8 +10,17 @@ from opsim4.utilities import load_class
 __all__ = ["ModelHelper"]
 
 class ModelHelper(object):
+    """The base class for the configuration models.
+    """
 
     def __init__(self, config_obj=None):
+        """Initialize the class.
+
+        Parameters
+        ----------
+        config_obj : instance, optional
+            An instance of a configuration object.
+        """
         self.config_obj = config_obj
         self.config_cls = load_class(self.config_obj) if config_obj is not None else None
         self.paren_match = re.compile(r'\(([^\)]+)\)')
@@ -34,8 +43,6 @@ class ModelHelper(object):
         """
         if self.params is not None:
             srep = str(self.params[parameter_name]["value"])
-
-            # print("D:", parameter_name, value_to_check, srep)
             return value_to_check != srep
         else:
             return False
@@ -49,7 +56,7 @@ class ModelHelper(object):
             The parameter name.
         is_list : bool
             A flag to invoke special processing if parameter is a list.
-        obj : configuation instance
+        obj : configuation instance, optional
             An alternate configuration instance to use.
 
         Returns
@@ -133,9 +140,12 @@ class ModelHelper(object):
 
         Parameters
         ----------
-        fields : dict
-            (Optional) The dictionary of configuration information to parse.
-
+        fields : dict, optional
+            The dictionary of configuration information to parse.
+        obj : instance, optional
+            An alternate instance of a configuration object.
+        pd : dict, optional
+            AN alternative parameter dictionary to use.
         Returns
         -------
         dict

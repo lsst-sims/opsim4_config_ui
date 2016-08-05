@@ -14,6 +14,8 @@ class ProposalWidget(ConfigurationTab):
         ----------
         name : str
             The name for the tab title.
+        params : dict
+            A set of parameters to help dynamically create the widgets.
         parent : QWidget
             The parent widget of this one.
         """
@@ -61,7 +63,9 @@ class ProposalWidget(ConfigurationTab):
     def create_sky_region(self, glayout, params):
         """Set the information for the proposal sky region.
 
-        glayout : QtGui.QGridLayout
+        Parameters
+        ----------
+        glayout : QGridLayout
             Instance of a grid layout.
         params : dict
             The configuration information for the sky region.
@@ -85,7 +89,9 @@ class ProposalWidget(ConfigurationTab):
     def create_sky_exclusion(self, glayout, params):
         """Set the information for the proposal sky exclusion.
 
-        glayout : QtGui.QGridLayout
+        Parameters
+        ----------
+        glayout : QGridLayout
             Instance of a grid layout.
         params : dict
             The configuration information for the sky exclusion.
@@ -110,7 +116,9 @@ class ProposalWidget(ConfigurationTab):
     def create_sky_nightly_bounds(self, glayout, params):
         """Set the information for the proposal sky nightly bounds.
 
-        glayout : QtGui.QGridLayout
+        Parameters
+        ----------
+        glayout : QGridLayout
             Instance of a grid layout.
         params : dict
             The configuration information for the sky nightly bounds.
@@ -122,7 +130,9 @@ class ProposalWidget(ConfigurationTab):
     def create_sky_constraints(self, glayout, params):
         """Set the information for the proposal sky constraints.
 
-        glayout : QtGui.QGridLayout
+        Parameters
+        ----------
+        glayout : QGridLayout
             Instance of a grid layout.
         params : dict
             The configuration information for the sky constraints.
@@ -133,7 +143,9 @@ class ProposalWidget(ConfigurationTab):
     def create_scheduling(self, glayout, params):
         """Set the information for the proposal scheduling.
 
-        glayout : QtGui.QGridLayout
+        Parameters
+        ----------
+        glayout : QGridLayout
             Instance of a grid layout.
         params : dict
             The configuration information for the scheduling.
@@ -146,7 +158,9 @@ class ProposalWidget(ConfigurationTab):
     def create_filters(self, glayout, params):
         """Set the information for the proposal filters.
 
-        glayout : QtGui.QGridLayout
+        Parameters
+        ----------
+        glayout : QGridLayout
             Instance of a grid layout.
         params : dict
             The configuration information for the filters.
@@ -200,18 +214,13 @@ class ProposalWidget(ConfigurationTab):
         ----------
         pwidget : QWidget
             The parameter widget that has possibly changed.
-
         """
-        print("Howdy!")
         pos = self.layout.indexOf(pwidget)
-        print(pos)
         if pos == -1:
             for i in xrange(1, self.layout.count() - 1):
-                #print("F:", i)
                 group_box = self.layout.itemAtPosition(i, 0).widget()
                 glayout = group_box.layout()
                 pos = glayout.indexOf(pwidget)
-                #print("D:", pos)
                 if pos != -1:
                     qualifier = "{}/{}".format(self.name, group_box.title())
                     ConfigurationTab.property_changed(self, pwidget, layout=glayout,
@@ -258,7 +267,7 @@ class ProposalWidget(ConfigurationTab):
 
         Parameters
         ----------
-        position : list[int]
+        position : list(int)
             The position (usually row) of the widget.
         param_value : str
             The string representation of the parameter value.
@@ -303,7 +312,6 @@ class ProposalWidget(ConfigurationTab):
                 for i in xrange(self.group_box_rows[0]):
                     label = glayout.itemAtPosition(i, 0).widget()
                     widget = glayout.itemAtPosition(i, 1).widget()
-                    # print(label.text(), v[str(label.text())])
                     widget.setText(str(v[str(label.text())]["value"]))
                     widget.setToolTip(v[str(label.text())]["doc"])
                     units = glayout.itemAtPosition(i, 2).widget()
@@ -321,19 +329,17 @@ class ProposalWidget(ConfigurationTab):
         glayout = group_box.layout()
         label = glayout.itemAtPosition(0, 0).widget()
         widget = glayout.itemAtPosition(0, 1).widget()
-        # print(label.text(), params[str(label.text())])
         widget.setText(str(params[str(label.text())]["value"]))
         widget.setToolTip(str(params[str(label.text())]["doc"]))
         units = glayout.itemAtPosition(0, 2).widget()
         self.set_unit_labels(units, params[str(label.text())])
         num_selections = len(params["selections"]["value"])
-        # print("K:", num_selections, params["selections"]["value"])
+
         if num_selections:
             for v in params["selections"]["value"].values():
                 for i in xrange(self.group_box_rows[1] - 1):
                     label = glayout.itemAtPosition(i + 1, 0).widget()
                     widget = glayout.itemAtPosition(i + 1, 1).widget()
-                    # print(label.text(), v[str(label.text())])
                     widget.setText(str(v[str(label.text())]["value"]))
                     widget.setToolTip(v[str(label.text())]["doc"])
                     units = glayout.itemAtPosition(i + 1, 2).widget()
@@ -352,7 +358,6 @@ class ProposalWidget(ConfigurationTab):
         for i in xrange(self.group_box_rows[2]):
             label = glayout.itemAtPosition(i, 0).widget()
             widget = glayout.itemAtPosition(i, 1).widget()
-            # print(label.text(), params[str(label.text())])
             widget.setText(str(params[str(label.text())]["value"]))
             widget.setToolTip(params[str(label.text())]["doc"])
             units = glayout.itemAtPosition(i, 2).widget()
@@ -371,7 +376,6 @@ class ProposalWidget(ConfigurationTab):
         for i in xrange(self.group_box_rows[3]):
             label = glayout.itemAtPosition(i, 0).widget()
             widget = glayout.itemAtPosition(i, 1).widget()
-            # print(label.text(), params[str(label.text())])
             widget.setText(str(params[str(label.text())]["value"]))
             widget.setToolTip(params[str(label.text())]["doc"])
             units = glayout.itemAtPosition(i, 2).widget()
@@ -390,7 +394,6 @@ class ProposalWidget(ConfigurationTab):
         for i in xrange(self.group_box_rows[4]):
             label = glayout.itemAtPosition(i, 0).widget()
             widget = glayout.itemAtPosition(i, 1).widget()
-            # print(label.text(), params[str(label.text())])
             if not isinstance(widget, QtGui.QCheckBox):
                 widget.setText(str(params[str(label.text())]["value"]))
             widget.setToolTip(params[str(label.text())]["doc"])
@@ -407,8 +410,8 @@ class ProposalWidget(ConfigurationTab):
         """
         group_box = self.layout.itemAtPosition(6, 0).widget()
         glayout = group_box.layout()
-        # print("F:", params)
         num_filters = len(params)
+
         if num_filters:
             for i in xrange(self.group_box_rows[5]):
                 label = glayout.itemAtPosition(i, 0).widget()
@@ -416,8 +419,6 @@ class ProposalWidget(ConfigurationTab):
                 filter_name = str(label.text()).split('_')[0]
                 data_label = "_".join(str(label.text()).split('_')[1:])
                 index = self.filter_index[filter_name]
-                # print("G:", index, data_label, filter_name)
-                # print("Z:", label.text(), params[index][data_label])
                 widget.setText(str(params[index][data_label]["value"]))
                 widget.setToolTip(params[index][data_label]["doc"])
                 units = glayout.itemAtPosition(i, 2).widget()

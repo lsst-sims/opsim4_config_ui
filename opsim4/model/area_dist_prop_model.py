@@ -47,9 +47,7 @@ class AreaDistributionPropModel(ModelHelper):
                         continue
                     if iparams1[k2]["dtype"] is None:
                         iparams1[k2]["dtype"] = "GroupBox"
-                        # print(k2)
                         sub_obj2 = getattr(sub_obj, k2)
-                        # print(sub_obj2)
                         try:
                             sub_cls2 = load_class(sub_obj2)
                         except ValueError:

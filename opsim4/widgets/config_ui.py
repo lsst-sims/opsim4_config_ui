@@ -16,6 +16,11 @@ class OpsimConfig(QtGui.QMainWindow):
 
     def __init__(self, parent=None):
         """Initialize the class.
+
+        Parameters
+        ----------
+        parent : QWidget
+            The parent widget of this one.
         """
         QtGui.QMainWindow.__init__(self, parent)
         self.save_directory = None
@@ -87,6 +92,25 @@ class OpsimConfig(QtGui.QMainWindow):
 
     def create_action(self, text, slot=None, shortcut=None, icon=None, tip=None, checkable=False,
                       signal="triggered()"):
+        """Create menu actions.
+
+        Parameters
+        ----------
+        text : str
+            A label for the action.
+        slot : QtCore.pyqtSlot, optional
+            A callback function for the action.
+        shortcut : str, optional
+            A keyboard shortcut for the action.
+        icon : str, optional
+            An icon path for the action.
+        tip : str, optional
+            A tooltip string for the action.
+        checkable : bool, optional
+            Is the action checkable?
+        signal : str, optional
+            The signal associated with the action. Default: triggered()
+        """
         action = QtGui.QAction(text, self)
         if icon is not None:
             action.setIcon(QtGui.QIcon(":/{}.png".format(icon)))
@@ -102,6 +126,15 @@ class OpsimConfig(QtGui.QMainWindow):
         return action
 
     def add_actions(self, target, actions):
+        """Add menu actions.
+
+        Prameters
+        ---------
+        target : QMenuItem
+            The menu item to add the action to.
+        actions : list(QAction)
+            THe set of actions to apply.
+        """
         for action in actions:
             if action is None:
                 target.addSeparator()
@@ -117,6 +150,8 @@ class OpsimConfig(QtGui.QMainWindow):
 
     @QtCore.pyqtSlot()
     def save_configurations(self):
+        """Save the current differences to configuration files.
+        """
         if self.save_directory is None:
                 self.save_directory = os.curdir
         for i in range(self.tab_widget.count()):
@@ -125,22 +160,38 @@ class OpsimConfig(QtGui.QMainWindow):
         self.statusBar().showMessage("Finished saving configuration.", self.STATUS_BAR_TIMEOUT)
 
     def reset_tabs(self):
+        """Reset all fields in all tabs.
+        """
         for i in range(self.tab_widget.count()):
             tab = self.tab_widget.widget(i)
             tab.reset_all()
         self.statusBar().showMessage("Reset complete.", self.STATUS_BAR_TIMEOUT)
 
     def reset_active_tab(self):
+        """Reser all fields in the active tab.
+        """
         tab = self.tab_widget.widget(self.tab_widget.currentIndex())
         tab.reset_active_tab()
         self.statusBar().showMessage("Reset complete.", self.STATUS_BAR_TIMEOUT)
 
     def reset_active_field(self):
+        """Reset the active field in the current tab.
+        """
         tab = self.tab_widget.widget(self.tab_widget.currentIndex())
         tab.reset_active_field()
         self.statusBar().showMessage("Reset complete.", self.STATUS_BAR_TIMEOUT)
 
     def closeEvent(self, event):
+        """Handle close events.
+
+        This function mainly saves out the current settings before the program
+        is shutdown.
+
+        Parameters
+        ----------
+        event : QEvent
+            The event to process.
+        """
         if self.ok_to_continue():
             settings = QtCore.QSettings()
             save_directory = QtCore.QVariant(QtCore.QString(self.save_directory)) \
@@ -153,19 +204,19 @@ class OpsimConfig(QtGui.QMainWindow):
             event.ignore()
 
     def update_file_menu(self):
-        #print("Update menu")
+        """Add a new saved directory into the File menu list.
+        """
         self.file_menu.clear()
         self.add_actions(self.file_menu, self.file_menu_actions[:-2])
         current = QtCore.QString(self.save_directory) if self.save_directory is not None else None
-        #print(current)
+
         recent_directories = []
         if current is not None:
             self.file_menu.addAction(QtGui.QAction("Current:", self))
             self.file_menu.addAction(QtGui.QAction(str(current), self))
         self.file_menu.addSeparator()
-        #print("C:", self.recent_directories.count())
+
         for rdir in self.recent_directories:
-            #print("A:", rdir)
             if rdir != current and QtCore.QDir.exists(QtCore.QDir(rdir)):
                 recent_directories.append(rdir)
         if len(recent_directories) != 0:
@@ -180,6 +231,8 @@ class OpsimConfig(QtGui.QMainWindow):
         self.add_actions(self.file_menu, self.file_menu_actions[-2:])
 
     def ok_to_continue(self):
+        """Placeholder function until events can be processed correctly.
+        """
         return True
 
     def set_internal_save_directory(self):
@@ -189,32 +242,36 @@ class OpsimConfig(QtGui.QMainWindow):
             self.update_file_menu()
 
     def set_save_directory(self):
+        """Add a save directory to the internals of the program.
+        """
         self.save_directory = QtGui.QFileDialog.getExistingDirectory(self, "Set Save Directory",
                                                                      os.path.expanduser("~/"))
 
         if self.save_directory not in self.recent_directories:
-            #print("Not here")
             self.recent_directories.prepend(self.save_directory)
-            #print(self.recent_directories.count())
             while self.recent_directories.count() > self.RECENT_DIRECTORIES_TO_LIST:
                 self.recent_directories.takeLast()
         self.update_file_menu()
 
     def get_diff_dict(self):
-        # diff_dict = {}
-        # for i in range(self.tab_widget.count()):
-        #     tab = self.tab_widget.widget(i)
-        #     rd = tab.get_diff()
-        #     diff_dict.update(rd)
-        # return diff_dict
+        """Get the dictionary of current differences.
+
+        Returns
+        -------
+        dict
+        """
         return self.main_controller.get_diff()
 
     def diff_report(self):
+        """Show the current difference report.
+        """
         dlg = ReportDialog()
         dlg.make_report(self.get_diff_dict())
         dlg.exec_()
 
     def about(self):
+        """Show information about the program.
+        """
         QtGui.QMessageBox.about(self, "About OpSim Configuration UI",
                                 """
                                 <b>Operations Simulator Configuration UI</b> v{}
@@ -226,6 +283,13 @@ class OpsimConfig(QtGui.QMainWindow):
                                 """.format(version.version))
 
 def run(opts):
+    """Run the program.
+
+    Parameters
+    ----------
+    opts : Namespace
+        Command-line options.
+    """
     import sys
     app = QtGui.QApplication(sys.argv)
     app.setOrganizationName("LSST-Simulations")

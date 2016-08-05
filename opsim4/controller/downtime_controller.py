@@ -16,7 +16,7 @@ class DowntimeController(BaseController):
         name : str
             The tab name for the configuration view.
         """
-        super(DowntimeController, self).__init__(name)
+        BaseController.__init__(self, name)
         self.model = DowntimeModel()
         self.widget = DowntimeWidget(name)
 

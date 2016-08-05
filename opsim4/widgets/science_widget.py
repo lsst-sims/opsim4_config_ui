@@ -3,6 +3,8 @@ from opsim4.widgets import ConfigurationTabWidget, ProposalWidget
 __all__ = ["ScienceWidget"]
 
 class ScienceWidget(ConfigurationTabWidget):
+    """Widget containing the widgets for science proposal configuration.
+    """
 
     def __init__(self, name, parent=None):
         """Initialize the class.
@@ -21,7 +23,7 @@ class ScienceWidget(ConfigurationTabWidget):
 
         Parameters
         ----------
-        params : dict{str : params}
+        params : dict(str: params)
             Set of configuration information.
         """
         for name, values in params.items():

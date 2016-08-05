@@ -3,6 +3,8 @@ from PyQt4 import QtGui
 __all__ = ["ConfigurationTabWidget"]
 
 class ConfigurationTabWidget(QtGui.QTabWidget):
+    """Configuration widget that holds configuration sub-tabs.
+    """
 
     def __init__(self, name, parent=None):
         """Initialize the class.
@@ -59,7 +61,7 @@ class ConfigurationTabWidget(QtGui.QTabWidget):
 
         Parameters
         ----------
-        position : list[int]
+        position : list(int)
             The position (usually row) of the widget to reset.
         is_changed : bool
             Flag to declaring value at position has changed.
@@ -70,10 +72,6 @@ class ConfigurationTabWidget(QtGui.QTabWidget):
             tab = self.widget(i)
             if home_tab == tab.name:
                 tab.is_changed(position, is_changed)
-            # name = self.tabText(i)
-            # if name == home_tab:
-            #     tab = self.widget(i)
-            #     tab.is_changed(position, is_changed)
 
     def reset_active_tab(self):
         """Reset the current tab.
@@ -93,7 +91,7 @@ class ConfigurationTabWidget(QtGui.QTabWidget):
 
         Parameters
         ----------
-        position : list[int]
+        position : list(int)
             The position (usually row) of the widget to reset.
         param_value : str
             The string representation of the parameter value.
@@ -104,18 +102,11 @@ class ConfigurationTabWidget(QtGui.QTabWidget):
             tab = self.widget(i)
             if home_tab == tab.name:
                 tab.reset_field(position, param_value)
-            # name = self.tabText(i)
-            # print("K:", name)
-            # if name == home_tab:
-            #     print("J:", home_tab)
-            #     tab = self.widget(i)
-            #     tab.reset_field(position, param_value)
 
     def reset_active_field(self):
         """Reset the active field.
         """
         tab = self.active_tab()
-        #print("Z:", tab.name)
         tab.reset_active_field()
 
     def save(self, save_dir):
@@ -138,14 +129,6 @@ class ConfigurationTabWidget(QtGui.QTabWidget):
         param_dict : dict
             The set of information for the configuration
         """
-        # for key, value in param_dict.items():
-        #     for i in xrange(self.count()):
-        #         name = self.tabText(i)
-        #         print("H:" key, name)
-        #         if name == key:
-        #             print("G:", name, key, value)
-        #             tab = self.widget(i)
-        #             tab.set_information(value)
         for i in xrange(self.count()):
             tab = self.widget(i)
             tab.set_information(param_dict[tab.name])

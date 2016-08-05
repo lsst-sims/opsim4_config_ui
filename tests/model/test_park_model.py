@@ -11,4 +11,3 @@ class ParkModelTest(unittest.TestCase):
     def test_basic_information_after_creation(self):
         self.assertTrue(isinstance(self.model.config_obj, Park))
         self.assertEqual(len(self.model.params), 6)
-        #print(self.model.params)

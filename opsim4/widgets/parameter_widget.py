@@ -5,7 +5,7 @@ from opsim4.widgets import get_widget_by_type
 class ParameterWidget(QtGui.QWidget):
 
     def __init__(self, widget_type, parameter_path, parent=None):
-        super(QtGui.QWidget, self).__init__(parent)
+        QtGui.QWidget.__init__(self, parent)
         self.widget_type = widget_type
 
         self.layout = QtGui.QHBoxLayout()

@@ -16,7 +16,7 @@ class SurveyController(BaseController):
         name : str
             The tab name for the configuration view.
         """
-        super(SurveyController, self).__init__(name)
+        BaseController.__init__(self, name)
         self.model = SurveyModel()
         self.widget = SurveyWidget(name)
 

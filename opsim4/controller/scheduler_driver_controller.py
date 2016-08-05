@@ -16,7 +16,7 @@ class SchedulerDriverController(BaseController):
         name : str
             The tab name for the configuration view.
         """
-        super(SchedulerDriverController, self).__init__(name)
+        BaseController.__init__(self, name)
         self.model = SchedulerDriverModel()
         self.widget = SchedulerDriverWidget(name)
 

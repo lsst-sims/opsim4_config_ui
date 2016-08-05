@@ -6,6 +6,11 @@ from opsim4.utilities import title
 __all__ = ["MainController"]
 
 class MainController(object):
+    """Main class for widget-model interactions.
+
+    This class is responsible for setting up and handling interactions
+    between the various widgets and their corresponding models.
+    """
 
     def __init__(self):
         """Initialize the class.
