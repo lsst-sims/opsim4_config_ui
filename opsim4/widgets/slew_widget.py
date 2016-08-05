@@ -37,4 +37,4 @@ class SlewWidget(ConfigurationTab):
         self.create_widget("StringList", "prereq_adc", qualifier=self.name)
         self.create_widget("StringList", "prereq_ins_optics", qualifier=self.name)
         self.create_widget("StringList", "prereq_guider_pos", qualifier=self.name)
-        self.create_widget("StringList", "prereqguider_adq", qualifier=self.name)
+        self.create_widget("StringList", "prereq_guider_adq", qualifier=self.name)
