@@ -1,6 +1,6 @@
 import os
 
-from lsst.sims.ocs.configuration import ScienceProposals
+from lsst.sims.ocs.configuration import ScienceProposals, Survey
 
 from opsim4.model import AreaDistributionPropModel
 from opsim4.utilities import load_class
@@ -15,7 +15,8 @@ class ScienceModel(object):
         """Initialize the class.
         """
         sci_props = ScienceProposals()
-        sci_props.load_proposals()
+        survey = Survey()
+        sci_props.load_proposals({"AD": survey.ad_proposals})
 
         self.ad_params = {}
         self.ad_modules = {}
