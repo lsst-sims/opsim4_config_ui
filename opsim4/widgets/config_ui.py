@@ -5,6 +5,7 @@ from PyQt4 import QtCore, QtGui
 from lsst.sims.ocs.utilities.file_helpers import expand_path
 from opsim4.controller import MainController
 from opsim4.widgets import ReportDialog
+from opsim4.widgets.wizard import ProposalCreationWizard
 from opsim4.utilities import title
 from opsim4.version import version
 
@@ -77,9 +78,11 @@ class OpsimConfig(QtGui.QMainWindow):
         """
         diff_report = self.create_action("Diff Report", self.diff_report, "Ctrl+Alt+R", None,
                                          "Generate a difference report.")
+        proposal_wizard = self.create_action("Proposal Creation", self.proposal_creation, "Ctrl+Alt+P", None,
+                                             "Create a new proposal.")
 
         create_menu = self.menuBar().addMenu("Create")
-        self.add_actions(create_menu, (diff_report,))
+        self.add_actions(create_menu, (diff_report, proposal_wizard))
 
     def create_help_menu(self):
         """Create the help menu for the UI.
@@ -268,6 +271,13 @@ class OpsimConfig(QtGui.QMainWindow):
         dlg = ReportDialog()
         dlg.make_report(self.get_diff_dict())
         dlg.exec_()
+
+    def proposal_creation(self):
+        """Show the proposal creation wizard.
+        """
+        wizard = ProposalCreationWizard()
+        wizard.set_save_directory(self.save_directory)
+        wizard.exec_()
 
     def about(self):
         """Show information about the program.
