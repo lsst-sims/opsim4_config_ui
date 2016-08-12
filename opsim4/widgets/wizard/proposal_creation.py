@@ -3,7 +3,7 @@ import re
 
 from PyQt4 import QtGui
 
-from opsim4.widgets.wizard import ProposalTypePage, SkyRegionPage
+from opsim4.widgets.wizard import ProposalTypePage, SkyExclusionPage, SkyRegionPage
 
 __all__ = ["ProposalCreationWizard"]
 
@@ -25,6 +25,7 @@ class ProposalCreationWizard(QtGui.QWizard):
 
         self.addPage(ProposalTypePage())
         self.addPage(SkyRegionPage())
+        self.addPage(SkyExclusionPage())
 
     def set_save_directory(self, save_dir):
         """Set the save directory to the wizard.
@@ -115,6 +116,35 @@ class ProposalCreationWizard(QtGui.QWizard):
         if sky_region_combiners != "":
             prop_file_lines.append("\tself.sky_region.combiners = "
                                    "{}".format(sky_region_combiners.split(',')))
+            prop_file_lines.append(os.linesep)
+
+        prop_file_lines.append("\t# ----------------------------")
+        prop_file_lines.append(os.linesep)
+        prop_file_lines.append("\t# Sky Exclusion specifications")
+        prop_file_lines.append(os.linesep)
+        prop_file_lines.append("\t# ----------------------------")
+        prop_file_lines.append(os.linesep)
+
+        prop_file_lines.append("\tself.sky_exclusion.dec_window "
+                               "= {}".format(str(self.field("sky_exclusions_dec_window").toString())))
+        prop_file_lines.append(os.linesep)
+
+        sky_exclusion_selections = str(self.field("sky_exclusion_selections").toString()).strip()
+        if sky_exclusion_selections != "":
+            selection_obj = "excl0"
+            parts = sky_exclusion_selections.split(',')
+            prop_file_lines.append("\t{} = Selection()".format(selection_obj))
+            prop_file_lines.append(os.linesep)
+            prop_file_lines.append("\t{}.limit_type = \"{}\"".format(selection_obj, parts[0]))
+            prop_file_lines.append(os.linesep)
+            prop_file_lines.append("\t{}.minimum_limit = {}".format(selection_obj, float(parts[1])))
+            prop_file_lines.append(os.linesep)
+            prop_file_lines.append("\t{}.maximum_limit = {}".format(selection_obj, float(parts[2])))
+            prop_file_lines.append(os.linesep)
+            prop_file_lines.append("\t{}.bounds_limit = {}".format(selection_obj, float(parts[3])))
+            prop_file_lines.append(os.linesep)
+            prop_file_lines.append("\tself.sky_exclusion.selections = {}0: {}{}".format("{", selection_obj,
+                                                                                        "}"))
             prop_file_lines.append(os.linesep)
 
         with open(os.path.join(prop_save_dir, prop_file_name), 'w') as ofile:
