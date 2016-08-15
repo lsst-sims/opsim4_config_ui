@@ -3,7 +3,7 @@ import re
 
 from PyQt4 import QtGui
 
-from opsim4.widgets.wizard import ProposalTypePage, SkyConstraintsPage, SkyExclusionPage
+from opsim4.widgets.wizard import ProposalTypePage, SchedulingPage, SkyConstraintsPage, SkyExclusionPage
 from opsim4.widgets.wizard import SkyNightlyBoundsPage, SkyRegionPage
 
 __all__ = ["ProposalCreationWizard"]
@@ -29,6 +29,7 @@ class ProposalCreationWizard(QtGui.QWizard):
         self.addPage(SkyExclusionPage())
         self.addPage(SkyNightlyBoundsPage())
         self.addPage(SkyConstraintsPage())
+        self.addPage(SchedulingPage())
 
     def set_save_directory(self, save_dir):
         """Set the save directory to the wizard.
@@ -174,6 +175,26 @@ class ProposalCreationWizard(QtGui.QWizard):
 
         prop_file_lines.append("\tself.sky_constraints.max_airmass = {}"
                                .format(str(self.field("sky_constraints_max_airmass").toString())))
+        prop_file_lines.append(os.linesep)
+
+        prop_file_lines.append("\t# ----------------------")
+        prop_file_lines.append(os.linesep)
+        prop_file_lines.append("\t# Scheduling information")
+        prop_file_lines.append(os.linesep)
+        prop_file_lines.append("\t# ----------------------")
+        prop_file_lines.append(os.linesep)
+
+        max_num_targets = str(self.field("scheduling_max_num_targets").toString())
+        if max_num_targets == "":
+            max_num_targets = "100"
+        prop_file_lines.append("\tself.scheduling.max_num_targets "
+                               "= {}".format(max_num_targets))
+        prop_file_lines.append(os.linesep)
+        prop_file_lines.append("\tself.scheduling.accept_serendipity "
+                               "= {}".format(self.field("scheduling_accept_serendipity").toBool()))
+        prop_file_lines.append(os.linesep)
+        prop_file_lines.append("\tself.scheduling.accept_consecutive_visits "
+                               "= {}".format(self.field("scheduling_accept_consecutive_visits").toBool()))
         prop_file_lines.append(os.linesep)
 
         with open(os.path.join(prop_save_dir, prop_file_name), 'w') as ofile:
