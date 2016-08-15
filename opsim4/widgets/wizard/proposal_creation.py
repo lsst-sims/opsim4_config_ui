@@ -3,7 +3,8 @@ import re
 
 from PyQt4 import QtGui
 
-from opsim4.widgets.wizard import ProposalTypePage, SkyExclusionPage, SkyRegionPage
+from opsim4.widgets.wizard import ProposalTypePage, SkyConstraintsPage, SkyExclusionPage
+from opsim4.widgets.wizard import SkyNightlyBoundsPage, SkyRegionPage
 
 __all__ = ["ProposalCreationWizard"]
 
@@ -26,6 +27,8 @@ class ProposalCreationWizard(QtGui.QWizard):
         self.addPage(ProposalTypePage())
         self.addPage(SkyRegionPage())
         self.addPage(SkyExclusionPage())
+        self.addPage(SkyNightlyBoundsPage())
+        self.addPage(SkyConstraintsPage())
 
     def set_save_directory(self, save_dir):
         """Set the save directory to the wizard.
@@ -146,6 +149,32 @@ class ProposalCreationWizard(QtGui.QWizard):
             prop_file_lines.append("\tself.sky_exclusion.selections = {}0: {}{}".format("{", selection_obj,
                                                                                         "}"))
             prop_file_lines.append(os.linesep)
+
+        prop_file_lines.append("\t# ---------------------------------")
+        prop_file_lines.append(os.linesep)
+        prop_file_lines.append("\t# Sky Nightly Bounds specifications")
+        prop_file_lines.append(os.linesep)
+        prop_file_lines.append("\t# ---------------------------------")
+        prop_file_lines.append(os.linesep)
+
+        prop_file_lines.append("\tself.sky_nightly_bounds.twilight_boundary = {}"
+                               .format(str(self.field("sky_nightly_bounds_twilight_boundary").toString())))
+        prop_file_lines.append(os.linesep)
+
+        prop_file_lines.append("\tself.sky_nightly_bounds.delta_lst = {}"
+                               .format(str(self.field("sky_nightly_bounds_delta_lst").toString())))
+        prop_file_lines.append(os.linesep)
+
+        prop_file_lines.append("\t# ------------------------------")
+        prop_file_lines.append(os.linesep)
+        prop_file_lines.append("\t# Sky Constraints specifications")
+        prop_file_lines.append(os.linesep)
+        prop_file_lines.append("\t# ------------------------------")
+        prop_file_lines.append(os.linesep)
+
+        prop_file_lines.append("\tself.sky_constraints.max_airmass = {}"
+                               .format(str(self.field("sky_constraints_max_airmass").toString())))
+        prop_file_lines.append(os.linesep)
 
         with open(os.path.join(prop_save_dir, prop_file_name), 'w') as ofile:
             for prop_file_line in prop_file_lines:
