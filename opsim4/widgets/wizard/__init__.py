@@ -1,5 +1,6 @@
 """Module for classes dealing with the proposal creation wizard.
 """
+from .band_filters import *
 from .proposal_type import *
 from .scheduling import *
 from .sky_constraints import *

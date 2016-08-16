@@ -3,8 +3,8 @@ import re
 
 from PyQt4 import QtGui
 
-from opsim4.widgets.wizard import ProposalTypePage, SchedulingPage, SkyConstraintsPage, SkyExclusionPage
-from opsim4.widgets.wizard import SkyNightlyBoundsPage, SkyRegionPage
+from opsim4.widgets.wizard import BandFiltersPage, ProposalTypePage, SchedulingPage, SkyConstraintsPage
+from opsim4.widgets.wizard import SkyExclusionPage, SkyNightlyBoundsPage, SkyRegionPage
 
 __all__ = ["ProposalCreationWizard"]
 
@@ -30,6 +30,7 @@ class ProposalCreationWizard(QtGui.QWizard):
         self.addPage(SkyNightlyBoundsPage())
         self.addPage(SkyConstraintsPage())
         self.addPage(SchedulingPage())
+        self.addPage(BandFiltersPage())
 
     def set_save_directory(self, save_dir):
         """Set the save directory to the wizard.
@@ -196,6 +197,52 @@ class ProposalCreationWizard(QtGui.QWizard):
         prop_file_lines.append("\tself.scheduling.accept_consecutive_visits "
                                "= {}".format(self.field("scheduling_accept_consecutive_visits").toBool()))
         prop_file_lines.append(os.linesep)
+
+        prop_file_lines.append("\t# --------------------------")
+        prop_file_lines.append(os.linesep)
+        prop_file_lines.append("\t# Band Filter specifications")
+        prop_file_lines.append(os.linesep)
+        prop_file_lines.append("\t# --------------------------")
+        prop_file_lines.append(os.linesep)
+
+        used_filters = []
+        for band_filter in "u,g,r,i,z,y".split(','):
+            field_stem = "{}_filter".format(band_filter)
+            use_filter = self.field("{}_use".format(field_stem)).toBool()
+            if use_filter:
+                used_filters.append(("{}.name".format(field_stem), field_stem))
+                prop_file_lines.append("\t{} = BandFilter()".format(field_stem))
+                prop_file_lines.append(os.linesep)
+                prop_file_lines.append("\t{}.name = \'{}\'".format(field_stem, band_filter))
+                prop_file_lines.append(os.linesep)
+                prop_file_lines.append("\t{}.num_visits = {}".format(field_stem,
+                                       str(self.field("{}_num_visits".format(field_stem)).toString())))
+                prop_file_lines.append(os.linesep)
+                prop_file_lines.append("\t{}.bright_limit = {}".format(field_stem,
+                                       str(self.field("{}_bright_limit".format(field_stem)).toString())))
+                prop_file_lines.append(os.linesep)
+                prop_file_lines.append("\t{}.dark_limit = {}".format(field_stem,
+                                       str(self.field("{}_dark_limit".format(field_stem)).toString())))
+                prop_file_lines.append(os.linesep)
+                prop_file_lines.append("\t{}.max_seeing = {}".format(field_stem,
+                                       str(self.field("{}_max_seeing".format(field_stem)).toString())))
+                prop_file_lines.append(os.linesep)
+                prop_file_lines.append("\t{}.exposures = [{}]".format(field_stem,
+                                       str(self.field("{}_exposures".format(field_stem)).toString())))
+                prop_file_lines.append(os.linesep)
+
+        filters = []
+        for i, used_filter in enumerate(used_filters):
+            if i != 0:
+                line_padding = "\t\t\t"
+            else:
+                line_padding = ""
+            filters.append("{}{}: {},".format(line_padding, used_filter[0], used_filter[1]))
+
+        filters[-1] = filters[-1].strip(',')
+        filters_spec = os.linesep.join(filters)
+
+        prop_file_lines.append("\tself.filters = {}{}{}".format("{", filters_spec, "}"))
 
         with open(os.path.join(prop_save_dir, prop_file_name), 'w') as ofile:
             for prop_file_line in prop_file_lines:
