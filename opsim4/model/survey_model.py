@@ -11,4 +11,7 @@ class SurveyModel(ModelHelper):
     def __init__(self):
         """Initialize the class.
         """
-        ModelHelper.__init__(self, Survey())
+        survey = Survey()
+        ModelHelper.__init__(self, survey)
+
+        self.proposals = {"AD": survey.ad_proposals.split(',')}

@@ -11,3 +11,5 @@ class SurveyModelTest(unittest.TestCase):
     def test_basic_information_after_creation(self):
         self.assertIsInstance(self.model.config_obj, Survey)
         self.assertEqual(len(self.model.params), 5)
+        self.assertEqual(len(self.model.proposals), 1)
+        self.assertEqual(len(self.model.proposals["AD"]), 3)

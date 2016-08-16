@@ -6,13 +6,15 @@ class SurveyWidget(ConfigurationTab):
     """Widget for the survey configuration information.
     """
 
-    def __init__(self, name, parent=None):
+    def __init__(self, name, proposals, parent=None):
         """Initialize the class.
 
         Parameters
         ----------
         name : str
             The name for the tab title.
+        proposals : dict
+            The default set of proposals.
         parent : QWidget
             The parent widget of this one.
         """

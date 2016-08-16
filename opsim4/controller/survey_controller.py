@@ -18,7 +18,7 @@ class SurveyController(BaseController):
         """
         BaseController.__init__(self, name)
         self.model = SurveyModel()
-        self.widget = SurveyWidget(name)
+        self.widget = SurveyWidget(name, self.model.proposals)
 
         for key, value in self.model.params.items():
             self.widget.set_information(key, value)
