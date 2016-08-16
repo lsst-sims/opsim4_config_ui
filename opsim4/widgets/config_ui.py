@@ -277,6 +277,7 @@ class OpsimConfig(QtGui.QMainWindow):
         """
         wizard = ProposalCreationWizard()
         wizard.set_save_directory(self.save_directory)
+        wizard.resize(600, 500)
         wizard.exec_()
 
     def about(self):

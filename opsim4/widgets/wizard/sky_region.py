@@ -109,13 +109,12 @@ class SkyRegionPage(QtGui.QWizardPage):
 
         scroll_area_widget = QtGui.QWidget()
         scroll_area_widget_layout = QtGui.QVBoxLayout()
-        # scroll_area_widget_layout.addWidget(grid_widget)
         scroll_area_widget_layout.addWidget(label)
         scroll_area_widget_layout.addWidget(group_box)
         scroll_area_widget_layout.addWidget(self.show_selections)
         scroll_area_widget_layout.addWidget(comb_label)
         scroll_area_widget_layout.addWidget(combiners_le)
-        scroll_area_widget_layout.addStretch(10)
+        scroll_area_widget_layout.addStretch(1)
         scroll_area_widget.setLayout(scroll_area_widget_layout)
 
         scrollable = QtGui.QScrollArea()
