@@ -325,6 +325,8 @@ class ConfigurationTab(QtGui.QWidget):
             layout = self.layout
         for i in xrange(layout.rowCount()):
             property_label = layout.itemAtPosition(i, 0).widget()
+            if isinstance(property_label, QtGui.QGroupBox):
+                continue
             property_name = str(property_label.text())
             if property_name.endswith(self.CHANGED_PARAMETER):
                 property_widget = layout.itemAtPosition(i, 1).widget()
@@ -402,6 +404,8 @@ class ConfigurationTab(QtGui.QWidget):
         """
         for i in xrange(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 1).widget()
+            if isinstance(widget, QtGui.QGroupBox):
+                continue
             if key in str(widget.objectName()):
                 value = info["value"]
                 try:
