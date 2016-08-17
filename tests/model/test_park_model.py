@@ -9,5 +9,5 @@ class ParkModelTest(unittest.TestCase):
         self.model = ParkModel()
 
     def test_basic_information_after_creation(self):
-        self.assertTrue(isinstance(self.model.config_obj, Park))
+        self.assertIsInstance(self.model.config_obj, Park)
         self.assertEqual(len(self.model.params), 6)

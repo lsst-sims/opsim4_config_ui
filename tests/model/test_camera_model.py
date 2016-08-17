@@ -9,5 +9,5 @@ class CameraModelTest(unittest.TestCase):
         self.model = CameraModel()
 
     def test_basic_information_after_creation(self):
-        self.assertTrue(isinstance(self.model.config_obj, Camera))
+        self.assertIsInstance(self.model.config_obj, Camera)
         self.assertEqual(len(self.model.params), 8)

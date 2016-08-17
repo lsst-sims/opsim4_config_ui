@@ -9,5 +9,5 @@ class DomeModelTest(unittest.TestCase):
         self.model = DomeModel()
 
     def test_basic_information_after_creation(self):
-        self.assertTrue(isinstance(self.model.config_obj, Dome))
+        self.assertIsInstance(self.model.config_obj, Dome)
         self.assertEqual(len(self.model.params), 7)

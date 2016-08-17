@@ -9,5 +9,5 @@ class OpticsLoopCorrModelTest(unittest.TestCase):
         self.model = OpticsLoopCorrModel()
 
     def test_basic_information_after_creation(self):
-        self.assertTrue(isinstance(self.model.config_obj, OpticsLoopCorr))
+        self.assertIsInstance(self.model.config_obj, OpticsLoopCorr)
         self.assertEqual(len(self.model.params), 3)

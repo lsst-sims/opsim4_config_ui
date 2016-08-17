@@ -9,5 +9,5 @@ class SurveyModelTest(unittest.TestCase):
         self.model = SurveyModel()
 
     def test_basic_information_after_creation(self):
-        self.assertTrue(isinstance(self.model.config_obj, Survey))
+        self.assertIsInstance(self.model.config_obj, Survey)
         self.assertEqual(len(self.model.params), 5)

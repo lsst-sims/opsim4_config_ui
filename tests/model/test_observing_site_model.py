@@ -9,5 +9,5 @@ class SurveyModelTest(unittest.TestCase):
         self.model = ObservingSiteModel()
 
     def test_basic_information_after_creation(self):
-        self.assertTrue(isinstance(self.model.config_obj, ObservingSite))
+        self.assertIsInstance(self.model.config_obj, ObservingSite)
         self.assertEqual(len(self.model.params), 7)

@@ -9,5 +9,5 @@ class SlewModelTest(unittest.TestCase):
         self.model = SlewModel()
 
     def test_basic_information_after_creation(self):
-        self.assertTrue(isinstance(self.model.config_obj, Slew))
+        self.assertIsInstance(self.model.config_obj, Slew)
         self.assertEqual(len(self.model.params), 16)

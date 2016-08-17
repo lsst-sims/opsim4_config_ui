@@ -9,5 +9,5 @@ class TelescopeModelTest(unittest.TestCase):
         self.model = TelescopeModel()
 
     def test_basic_information_after_creation(self):
-        self.assertTrue(isinstance(self.model.config_obj, Telescope))
+        self.assertIsInstance(self.model.config_obj, Telescope)
         self.assertEqual(len(self.model.params), 11)

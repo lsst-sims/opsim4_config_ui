@@ -9,5 +9,5 @@ class DowntimeModelTest(unittest.TestCase):
         self.model = DowntimeModel()
 
     def test_basic_information_after_creation(self):
-        self.assertTrue(isinstance(self.model.config_obj, Downtime))
+        self.assertIsInstance(self.model.config_obj, Downtime)
         self.assertEqual(len(self.model.params), 3)

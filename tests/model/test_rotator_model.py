@@ -9,5 +9,5 @@ class RotatorModelTest(unittest.TestCase):
         self.model = RotatorModel()
 
     def test_basic_information_after_creation(self):
-        self.assertTrue(isinstance(self.model.config_obj, Rotator))
+        self.assertIsInstance(self.model.config_obj, Rotator)
         self.assertEqual(len(self.model.params), 8)
