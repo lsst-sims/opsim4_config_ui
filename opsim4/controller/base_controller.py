@@ -59,16 +59,19 @@ class BaseController(QtCore.QObject):
         """
         diff_dict = self.widget.get_diff()
         for top_prop, prop in diff_dict.items():
+            print("V:", top_prop, prop)
             for prop_name in prop:
                 if "/" in top_prop:
                     property_name = "{}/{}".format(top_prop, prop_name)
                 else:
                     property_name = prop_name
                 default_value = self.model.get_parameter(property_name)
+                print("A:", property_name, default_value)
                 if isinstance(default_value, list):
                     default_value = ",".join([str(x) for x in default_value])
                 else:
                     default_value = str(default_value)
+                print("B:", prop_name, default_value)
                 prop[prop_name].append(default_value)
         return diff_dict
 

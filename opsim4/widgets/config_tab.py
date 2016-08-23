@@ -152,9 +152,9 @@ class ConfigurationTab(QtGui.QWidget):
                     property_value = str(property_widget.isChecked())
                 except AttributeError:
                     property_value = property_widget.text()
-                    pname = str(property_widget.objectName())
-                    if parent_name is not None:
-                        pname = "{}/{}".format(parent_name, pname)
+                pname = str(property_widget.objectName())
+                if parent_name is not None:
+                    pname = "{}/{}".format(parent_name, pname)
                 changed_values.append((pname, property_value))
         return changed_values
 

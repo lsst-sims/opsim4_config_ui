@@ -31,37 +31,143 @@ class SurveyWidget(ConfigurationTab):
         self.create_widget("Str", "start_date")
         self.create_widget("Float", "idle_delay")
 
-        ad_group_box = QtGui.QGroupBox("Area Distribution Proposals")
+        ad_group_box = QtGui.QGroupBox("ad_proposals")
         ad_group_box.setStyleSheet(CSS_GROUPBOX)
+        ad_group_box.setObjectName("ad_proposals")
         glayout = QtGui.QGridLayout()
 
         for i, prop_name in enumerate(self.proposals["AD"]):
             self.create_widget("Bool", prop_name, layout=glayout, rows=i)
-            # prop_label = QtGui.QLabel(prop_name)
-            # check_box = QtGui.QCheckBox()
-            # prop_label.setBuddy(check_box)
-            # check_box.setChecked(True)
-            # check_box.stateChanged.connect(self.check_prop)
-            # glayout.addWidget(prop_label, i, 0)
-            # glayout.addWidget(check_box, i, 1)
 
         ad_group_box.setLayout(glayout)
 
         self.layout.addWidget(ad_group_box, 3, 0, 1, 3)
 
-    # def check_prop(self, state):
-    #     """Check state changes from the proposal checkboxes.
+    def get_changed_parameters(self, layout=None, parent_name=None):
+        """Find the changed parameters.
+
+        Parameters
+        ----------
+        layout : QLayout, optional
+            An alternative layout to check.
+        parent_name : str, optional
+            The name of a parent tab.
+
+        Returns
+        -------
+        list((str, str))
+            A list of 2-tuples of the changed property name and the property value.
+        """
+        changed_values = ConfigurationTab.get_changed_parameters(self, layout=layout, parent_name=parent_name)
+        ad_props_changed = False
+        for changed_value in changed_values:
+            if "ad_proposals" in changed_value[0]:
+                ad_props_changed = True
+                changed_values.remove(changed_value)
+        if ad_props_changed:
+            ad_prop_gb = self.layout.itemAtPosition(3, 0).widget()
+            ad_prop_gb_layout = ad_prop_gb.layout()
+            ad_proposals = []
+            for i in xrange(ad_prop_gb_layout.rowCount()):
+                cb = ad_prop_gb_layout.itemAtPosition(i, 1).widget()
+                if not cb.isChecked():
+                    ad_proposals.append(str(ad_prop_gb_layout.itemAtPosition(i, 0).widget().text()))
+            changed_values.append(("ad_proposals", ",".join(ad_proposals)))
+
+        return changed_values
+
+    def get_diff(self, layout=None, parent_name=None):
+        """Get the changed parameters.
+
+        Parameters
+        ----------
+        layout : QLayout, optional
+            An alternative layout to check.
+        parent_name : str, optional
+            The name of a parent tab.
+
+        Returns
+        -------
+        dict{str: str}
+            The set of changed parameters.
+        """
+        diff = ConfigurationTab.get_diff(self, layout=layout, parent_name=parent_name)
+        print("G:", diff)
+        ad_props_changed = False
+        for key in diff:
+            if "ad_proposals" in key:
+                ad_props_changed = True
+        if ad_props_changed:
+            del diff["survey/ad_proposals"]
+            ad_prop_gb = self.layout.itemAtPosition(3, 0).widget()
+            ad_prop_gb_layout = ad_prop_gb.layout()
+            ad_proposals = []
+            for i in xrange(ad_prop_gb_layout.rowCount()):
+                cb = ad_prop_gb_layout.itemAtPosition(i, 1).widget()
+                if not cb.isChecked():
+                    ad_proposals.append(str(ad_prop_gb_layout.itemAtPosition(i, 0).widget().text()))
+            diff["survey/ad_proposals"] = ",".join(ad_proposals)
+
+        return diff
+
+    def is_changed(self, position, is_changed):
+        """Mark a parameter widget as changed.
+
+        Parameters
+        ----------
+        position : int
+            The position (usually row) of the widget.
+        is_changed : bool
+            Flag set to True if the parameter has changed from baseline, false if not.
+        """
+        if len(position) > 1:
+            group_box = self.layout.itemAtPosition(position[0], 0).widget()
+            glayout = group_box.layout()
+            ConfigurationTab.is_changed(self, position, is_changed, layout=glayout)
+        else:
+            ConfigurationTab.is_changed(self, position, is_changed)
+
+    def property_changed(self, pwidget):
+        """Get information from a possibly changed parameter.
+
+        Parameters
+        ----------
+        pwidget : QWidget
+            The parameter widget that has possibly changed.
+        """
+        pos = self.layout.indexOf(pwidget)
+        if pos == -1:
+            for i in xrange(3, self.layout.count() - 1):
+                group_box = self.layout.itemAtPosition(i, 0).widget()
+                glayout = group_box.layout()
+                pos = glayout.indexOf(pwidget)
+                print("H:", pos)
+                if pos != -1:
+                    qualifier = "{}/{}".format(self.name, group_box.objectName())
+                    ConfigurationTab.property_changed(self, pwidget, layout=glayout,
+                                                      qualifier=qualifier, position=i)
+                    break
+        else:
+            ConfigurationTab.property_changed(self, pwidget)
+
+    # def set_information(self, key, info):
+    #     """Set information in a particular parameter widget.
 
     #     Parameters
     #     ----------
-    #     state : int
-    #         The current state of the proposal checkbox.
+    #     key : str
+    #         The name of the parameter.
+    #     info : dict
+    #         The set of information that describes this parameter.
     #     """
-    #     cb = self.sender()
-    #     if state == QtCore.Qt.Unchecked:
-    #         cb.setText(str(cb.text()) + self.CHANGED_PARAMETER)
-    #         self.change_label_color(cb, QtCore.Qt.red)
-    #     if state == QtCore.Qt.Checked:
-    #         cb.setText(str(cb.text()).strip(self.CHANGED_PARAMETER))
-    #         self.change_label_color(cb, QtCore.Qt.black)
-
+    #     if key == "ad_proposals":
+    #         proposals = info["value"].split(',')
+    #         ad_gb = self.layout.itemAtPosition(3, 0).widget()
+    #         glayout = ad_gb.layout()
+    #         for i in xrange(glayout.rowCount()):
+    #             plabel = glayout.itemAtPosition(i, 0).widget()
+    #             if str(plabel.text()) in proposals:
+    #                 pcb = glayout.itemAtPosition(i, 1).widget()
+    #                 pcb.setChecked(True)
+    #     else:
+    #         ConfigurationTab.set_information(self, key, info)
