@@ -152,24 +152,47 @@ class SurveyWidget(ConfigurationTab):
         else:
             ConfigurationTab.property_changed(self, pwidget)
 
-    # def set_information(self, key, info):
-    #     """Set information in a particular parameter widget.
+    def reset_active_field(self):
+        """Reset the active (has focus) parameter widget.
+        """
+        for i in xrange(self.layout.rowCount()):
+            widget = self.layout.itemAtPosition(i, 0).widget()
+            if isinstance(widget, QtGui.QGroupBox):
+                glayout = widget.layout()
+                qualifier = "{}/{}".format(self.name, widget.title())
+                ConfigurationTab.reset_active_field(self, layout=glayout, qualifier=qualifier, position=i)
+            else:
+                property_name = str(widget.text())
+                if property_name.endswith(self.CHANGED_PARAMETER):
+                    self.getProperty.emit(property_name.strip(self.CHANGED_PARAMETER), i)
 
-    #     Parameters
-    #     ----------
-    #     key : str
-    #         The name of the parameter.
-    #     info : dict
-    #         The set of information that describes this parameter.
-    #     """
-    #     if key == "ad_proposals":
-    #         proposals = info["value"].split(',')
-    #         ad_gb = self.layout.itemAtPosition(3, 0).widget()
-    #         glayout = ad_gb.layout()
-    #         for i in xrange(glayout.rowCount()):
-    #             plabel = glayout.itemAtPosition(i, 0).widget()
-    #             if str(plabel.text()) in proposals:
-    #                 pcb = glayout.itemAtPosition(i, 1).widget()
-    #                 pcb.setChecked(True)
-    #     else:
-    #         ConfigurationTab.set_information(self, key, info)
+    def reset_all(self):
+        """Reset all of the changed parameters.
+        """
+        for i in xrange(self.layout.rowCount()):
+            widget = self.layout.itemAtPosition(i, 0).widget()
+            if isinstance(widget, QtGui.QGroupBox):
+                glayout = widget.layout()
+                qualifier = "{}/{}".format(self.name, widget.title())
+                ConfigurationTab.reset_all(self, layout=glayout, qualifier=qualifier, position=i)
+            else:
+                property_name = str(widget.text())
+                if property_name.endswith(self.CHANGED_PARAMETER):
+                    self.getProperty.emit(property_name.strip(self.CHANGED_PARAMETER), [i])
+
+    def reset_field(self, position, param_value):
+        """Mark a parameter widget as changed.
+
+        Parameters
+        ----------
+        position : list(int)
+            The position (usually row) of the widget.
+        param_value : str
+            The string representation of the parameter value.
+        """
+        if len(position) > 1:
+            group_box = self.layout.itemAtPosition(position[0], 0).widget()
+            glayout = group_box.layout()
+            ConfigurationTab.reset_field(self, position, param_value, layout=glayout)
+        else:
+            ConfigurationTab.reset_field(self, position, param_value)

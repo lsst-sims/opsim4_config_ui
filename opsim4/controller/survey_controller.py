@@ -64,7 +64,7 @@ class SurveyController(BaseController):
         pname = str(param_name)
         if "ad_proposals" in pname:
             prop_name = pname.split('/')[-1]
-            print("Help")
-            pass
+            is_active = not self.model.is_proposal_active(prop_name)
+            self.widget.reset_field(position, str(is_active))
         else:
             BaseController.get_property(self, param_name, position)
