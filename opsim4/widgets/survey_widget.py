@@ -34,6 +34,7 @@ class SurveyWidget(ConfigurationTab):
         ad_group_box = QtGui.QGroupBox("ad_proposals")
         ad_group_box.setStyleSheet(CSS_GROUPBOX)
         ad_group_box.setObjectName("ad_proposals")
+        ad_group_box.setToolTip("Use the checkboxes to select which area distribution proposals NOT to run.")
         glayout = QtGui.QGridLayout()
 
         for i, prop_name in enumerate(self.proposals["AD"]):
