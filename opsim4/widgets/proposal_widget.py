@@ -248,7 +248,7 @@ class ProposalWidget(ConfigurationTab):
         """
         self.reset_all()
 
-    def reset_all(self):
+    def reset_all(self, layout=None, qualifier=None, positions=None):
         """Reset all of the changed parameters.
         """
         for i in xrange(self.layout.rowCount()):
@@ -260,7 +260,7 @@ class ProposalWidget(ConfigurationTab):
             else:
                 property_name = str(widget.text())
                 if property_name.endswith(self.CHANGED_PARAMETER):
-                    self.getProperty.emit(property_name.strip(self.CHANGED_PARAMETER), i)
+                    self.getProperty.emit(property_name.strip(self.CHANGED_PARAMETER), [i])
 
     def reset_field(self, position, param_value):
         """Mark a parameter widget as changed.

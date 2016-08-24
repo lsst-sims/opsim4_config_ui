@@ -152,9 +152,9 @@ class ConfigurationTab(QtGui.QWidget):
                     property_value = str(property_widget.isChecked())
                 except AttributeError:
                     property_value = property_widget.text()
-                    pname = str(property_widget.objectName())
-                    if parent_name is not None:
-                        pname = "{}/{}".format(parent_name, pname)
+                pname = str(property_widget.objectName())
+                if parent_name is not None:
+                    pname = "{}/{}".format(parent_name, pname)
                 changed_values.append((pname, property_value))
         return changed_values
 
@@ -325,6 +325,8 @@ class ConfigurationTab(QtGui.QWidget):
             layout = self.layout
         for i in xrange(layout.rowCount()):
             property_label = layout.itemAtPosition(i, 0).widget()
+            if isinstance(property_label, QtGui.QGroupBox):
+                continue
             property_name = str(property_label.text())
             if property_name.endswith(self.CHANGED_PARAMETER):
                 property_widget = layout.itemAtPosition(i, 1).widget()
@@ -402,6 +404,8 @@ class ConfigurationTab(QtGui.QWidget):
         """
         for i in xrange(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 1).widget()
+            if isinstance(widget, QtGui.QGroupBox):
+                continue
             if key in str(widget.objectName()):
                 value = info["value"]
                 try:

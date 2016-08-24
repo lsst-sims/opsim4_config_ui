@@ -145,7 +145,7 @@ class ModelHelper(object):
         obj : instance, optional
             An alternate instance of a configuration object.
         pd : dict, optional
-            AN alternative parameter dictionary to use.
+            An alternative parameter dictionary to use.
         Returns
         -------
         dict
