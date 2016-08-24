@@ -64,6 +64,7 @@ class SurveyController(BaseController):
         pname = str(param_name)
         if "ad_proposals" in pname:
             prop_name = pname.split('/')[-1]
+            print("Help")
             pass
         else:
             BaseController.get_property(self, param_name, position)

@@ -1,4 +1,4 @@
-from PyQt4 import QtCore, QtGui
+from PyQt4 import QtGui
 
 from opsim4.widgets import ConfigurationTab
 from opsim4.widgets.constants import CSS_GROUPBOX
@@ -91,8 +91,11 @@ class SurveyWidget(ConfigurationTab):
         dict{str: str}
             The set of changed parameters.
         """
-        diff = ConfigurationTab.get_diff(self, layout=layout, parent_name=parent_name)
-        print("G:", diff)
+        if layout is None:
+            diff = ConfigurationTab.get_diff(self, layout=layout, parent_name=parent_name)
+        else:
+            # Parent class calls this function with another layout, so just return the results.
+            return ConfigurationTab.get_diff(self, layout=layout, parent_name=parent_name)
         ad_props_changed = False
         for key in diff:
             if "ad_proposals" in key:
@@ -106,7 +109,7 @@ class SurveyWidget(ConfigurationTab):
                 cb = ad_prop_gb_layout.itemAtPosition(i, 1).widget()
                 if not cb.isChecked():
                     ad_proposals.append(str(ad_prop_gb_layout.itemAtPosition(i, 0).widget().text()))
-            diff["survey/ad_proposals"] = ",".join(ad_proposals)
+            diff["survey"]["ad_proposals"] = [",".join(ad_proposals)]
 
         return diff
 
@@ -141,7 +144,6 @@ class SurveyWidget(ConfigurationTab):
                 group_box = self.layout.itemAtPosition(i, 0).widget()
                 glayout = group_box.layout()
                 pos = glayout.indexOf(pwidget)
-                print("H:", pos)
                 if pos != -1:
                     qualifier = "{}/{}".format(self.name, group_box.objectName())
                     ConfigurationTab.property_changed(self, pwidget, layout=glayout,
