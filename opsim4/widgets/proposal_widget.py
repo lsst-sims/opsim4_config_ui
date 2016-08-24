@@ -30,6 +30,7 @@ class ProposalWidget(ConfigurationTab):
         """Create the form for the proposal widget.
         """
         self.create_widget("Str", "name")
+        self.layout.itemAtPosition(0, 1).widget().setReadOnly(True)
         self.create_group_box("sky_region")
         self.create_group_box("sky_exclusion")
         self.create_group_box("sky_nightly_bounds")
