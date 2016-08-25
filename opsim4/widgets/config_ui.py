@@ -47,6 +47,9 @@ class OpsimConfig(QtGui.QMainWindow):
         """
         file_set_save_dir = self.create_action("Save Directory", self.set_save_directory, "Ctrl+D", None,
                                                "Set the directory where the configurations will be saved.")
+        file_clear_recent = self.create_action("Clear Recent List", self.clear_recent_list, "Ctrl+Alt+C",
+                                               None, "Clear the list of recent directories.")
+
         file_save_configs = self.create_action("&Save Configuration", self.save_configurations,
                                                QtGui.QKeySequence.Save,
                                                None, "Save the configuration to files.")
@@ -54,7 +57,8 @@ class OpsimConfig(QtGui.QMainWindow):
                                               "Close the application,.")
 
         self.file_menu = self.menuBar().addMenu("&File")
-        self.file_menu_actions = (file_set_save_dir, None, file_save_configs, file_quit_action)
+        self.file_menu_actions = (file_set_save_dir, file_clear_recent, None,
+                                  file_save_configs, file_quit_action)
         self.file_menu.aboutToShow.connect(self.update_file_menu)
 
     def create_reset_menu(self):
@@ -143,6 +147,12 @@ class OpsimConfig(QtGui.QMainWindow):
                 target.addSeparator()
             else:
                 target.addAction(action)
+
+    def clear_recent_list(self):
+        """Clear out the list of recent directories.
+        """
+        self.recent_directories.clear()
+        self.update_file_menu()
 
     def create_tabs(self):
         """Create all the configuration tabs.
@@ -247,11 +257,16 @@ class OpsimConfig(QtGui.QMainWindow):
     def set_save_directory(self):
         """Add a save directory to the internals of the program.
         """
+        old_save_directory = self.save_directory
         self.save_directory = QtGui.QFileDialog.getExistingDirectory(self, "Set Save Directory",
                                                                      os.path.expanduser("~/"))
 
-        if self.save_directory not in self.recent_directories:
-            self.recent_directories.prepend(self.save_directory)
+        if self.save_directory == "":
+            self.save_directory = old_save_directory
+            return
+
+        if old_save_directory not in self.recent_directories:
+            self.recent_directories.prepend(old_save_directory)
             while self.recent_directories.count() > self.RECENT_DIRECTORIES_TO_LIST:
                 self.recent_directories.takeLast()
         self.update_file_menu()
