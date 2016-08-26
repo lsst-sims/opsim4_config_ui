@@ -237,6 +237,8 @@ class ModelHelper(object):
                             pvalue = str([float(x) for x in items])
                         except ValueError:
                             pvalue = str([str(x) for x in items])
+                    elif isinstance(value, list):
+                        pvalue = str(value)
                     else:
                         pvalue = float(value)
                 except ValueError:

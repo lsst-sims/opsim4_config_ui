@@ -64,8 +64,11 @@ class SurveyWidget(ConfigurationTab):
         for changed_value in changed_values:
             if "ad_proposals" in changed_value[0]:
                 ad_props_changed = True
-                changed_values.remove(changed_value)
+        corrected_changed_values = []
         if ad_props_changed:
+            for changed_value in changed_values:
+                if "ad_proposals" not in changed_value[0]:
+                    corrected_changed_values.append(changed_value)
             ad_prop_gb = self.layout.itemAtPosition(3, 0).widget()
             ad_prop_gb_layout = ad_prop_gb.layout()
             ad_proposals = []
@@ -73,9 +76,11 @@ class SurveyWidget(ConfigurationTab):
                 cb = ad_prop_gb_layout.itemAtPosition(i, 1).widget()
                 if not cb.isChecked():
                     ad_proposals.append(str(ad_prop_gb_layout.itemAtPosition(i, 0).widget().text()))
-            changed_values.append(("ad_proposals", ",".join(ad_proposals)))
+            corrected_changed_values.append(("ad_proposals", ad_proposals))
+        else:
+            corrected_changed_values = changed_values
 
-        return changed_values
+        return corrected_changed_values
 
     def get_diff(self, layout=None, parent_name=None):
         """Get the changed parameters.

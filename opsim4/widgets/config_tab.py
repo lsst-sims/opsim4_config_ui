@@ -254,7 +254,6 @@ class ConfigurationTab(QtGui.QWidget):
         if layout is None:
             layout = self.layout
 
-        print(self.name, type(pwidget))
         if isinstance(pwidget, QtGui.QPushButton):
             # These are reserved for file dialogs
             file_text = QtGui.QFileDialog.getOpenFileName(self, "Set New File",
