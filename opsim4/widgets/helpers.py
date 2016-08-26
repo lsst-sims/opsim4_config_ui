@@ -23,7 +23,8 @@ def get_widget_by_type(widget_type):
         'Float': float_widget,
         'FloatList': lineedit_widget,
         'Int': int_widget,
-        'Bool': bool_widget
+        'Bool': bool_widget,
+        'File': file_widget
     }
 
     func = switcher.get(widget_type, default_widget)
@@ -48,3 +49,8 @@ def int_widget():
 def bool_widget():
     widget = QtGui.QCheckBox()
     return (widget, "stateChanged")
+
+def file_widget():
+    widget = QtGui.QPushButton()
+    widget.setCheckable(False)
+    return (widget, "clicked")

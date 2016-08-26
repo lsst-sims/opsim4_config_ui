@@ -21,6 +21,6 @@ class DowntimeWidget(ConfigurationTab):
     def create_form(self):
         """Create the UI form for the Downtime widget.
         """
-        self.create_widget("Str", "scheduled_downtime_db")
+        self.create_widget("File", "scheduled_downtime_db")
         self.create_widget("Bool", "unscheduled_downtime_use_random_seed")
         self.create_widget("Int", "unscheduled_downtime_random_seed")

@@ -1,4 +1,5 @@
 import collections
+import os
 
 from PyQt4 import QtCore, QtGui
 
@@ -189,7 +190,10 @@ class ConfigurationTab(QtGui.QWidget):
                     property_widget = layout.itemAtPosition(i, 1).widget()
                     property_name = str(property_widget.objectName())
                     try:
-                        property_value = str(property_widget.isChecked())
+                        if isinstance(property_widget, QtGui.QPushButton):
+                            property_value = str(property_widget.text())
+                        else:
+                            property_value = str(property_widget.isChecked())
                     except AttributeError:
                         try:
                             property_text = property_widget.text()
@@ -250,6 +254,12 @@ class ConfigurationTab(QtGui.QWidget):
         if layout is None:
             layout = self.layout
 
+        print(self.name, type(pwidget))
+        if isinstance(pwidget, QtGui.QPushButton):
+            # These are reserved for file dialogs
+            file_text = QtGui.QFileDialog.getOpenFileName(self, "Set New File",
+                                                          os.path.expanduser("~/"))
+            pwidget.setText(file_text)
         pos = layout.indexOf(pwidget)
         plabel = layout.itemAt(pos - 1).widget()
         pname = pwidget.objectName()
@@ -357,7 +367,10 @@ class ConfigurationTab(QtGui.QWidget):
         plabel.setText(pname.strip(self.CHANGED_PARAMETER))
         pwidget = layout.itemAtPosition(position[-1], 1).widget()
         try:
-            pwidget.setChecked(param_value == "True")
+            if isinstance(pwidget, QtGui.QPushButton):
+                pwidget.setText(param_value)
+            else:
+                pwidget.setChecked(param_value == "True")
         except AttributeError:
             pwidget.setText(param_value)
         self.change_label_color(plabel, QtCore.Qt.black)
@@ -383,7 +396,10 @@ class ConfigurationTab(QtGui.QWidget):
                 if property_name.endswith(self.CHANGED_PARAMETER):
                     property_widget = self.layout.itemAtPosition(i, 1).widget()
                     try:
-                        property_value = str(property_widget.isChecked())
+                        if isinstance(property_widget, QtGui.QPushButton):
+                            property_value = str(property_widget.text())
+                        else:
+                            property_value = str(property_widget.isChecked())
                     except AttributeError:
                         property_value = property_widget.text()
                     changed_values.append((str(property_widget.objectName()),
@@ -410,7 +426,7 @@ class ConfigurationTab(QtGui.QWidget):
                 value = info["value"]
                 try:
                     widget.setChecked(value)
-                except AttributeError:
+                except (AttributeError, TypeError):
                     widget.setText(str(value))
                     try:
                         widget.home(False)
