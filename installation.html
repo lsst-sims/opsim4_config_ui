@@ -1,0 +1,245 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation &mdash; OpSim4 Configuration UI 0.8.0 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="OpSim4 Configuration UI 0.8.0 documentation" href="index.html"/>
+        <link rel="next" title="History" href="history.html"/>
+        <link rel="prev" title="Operations Simulator Version 4 Configuration User Interface" href="index.html"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> OpSim4 Configuration UI
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.8.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#general-installation-notes">General Installation Notes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisite-installation">Prerequisite Installation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#installation-and-setup">Installation and Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#start-the-program">Start the Program</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="history.html">History</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="index.html">OpSim4 Configuration UI</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+ 
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+      
+    <li>Installation</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/installation.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h1>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The current installation requires multiple repositories and a mixture of environments. It also only works on a Linux environment. It has been tested on a RHEL 7 type environment.</p>
+</div>
+<div class="section" id="general-installation-notes">
+<h2>General Installation Notes<a class="headerlink" href="#general-installation-notes" title="Permalink to this headline">¶</a></h2>
+<p>Due to the heavy use of repositories for this installation, the instructions will assume you have created a <code class="docutils literal"><span class="pre">git</span></code> directory in your <code class="docutils literal"><span class="pre">$HOME</span></code> directory. This will be referenced as <code class="docutils literal"><span class="pre">gitdir</span></code>. The individual repository installation instructions will give further advice on directory names. This is intended to make the usage &#8220;easier&#8221;. Also, all instructions are based around using the code, not developing it.</p>
+</div>
+<div class="section" id="prerequisite-installation">
+<h2>Prerequisite Installation<a class="headerlink" href="#prerequisite-installation" title="Permalink to this headline">¶</a></h2>
+<p>The configuration UI requires the Simulated OCS (SOCS) package as it contains the configuration for the reference survey. The setup instructions can be found <a class="reference external" href="https://lsst-sims.github.io/sims_ocs/installation.html">here</a>.</p>
+</div>
+<div class="section" id="installation-and-setup">
+<h2>Installation and Setup<a class="headerlink" href="#installation-and-setup" title="Permalink to this headline">¶</a></h2>
+<p>Once the above is complete, go to <code class="docutils literal"><span class="pre">gitdir/lsst-sims</span></code> and run the following:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">lsst</span><span class="o">-</span><span class="n">sims</span><span class="o">/</span><span class="n">opsim4_config_ui</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
+<p>Using the conda environment that was created during the prerequisite installation process, activate that environment and then run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>cd opsim4_config_ui
+source eups-setups.sh
+eups declare opsim4_config_ui -r . -c -t $USER
+setup opsim4_config_ui
+python setup.py develop
+</pre></div>
+</div>
+<p>This last step is important as it creates the version information for the program.</p>
+</div>
+<div class="section" id="start-the-program">
+<h2>Start the Program<a class="headerlink" href="#start-the-program" title="Permalink to this headline">¶</a></h2>
+<p>To bring up the configuration UI, run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">opsim4_config_ui</span>
+</pre></div>
+</div>
+<p>The next section will detail use of the program.</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="history.html" class="btn btn-neutral float-right" title="History" accesskey="n">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Operations Simulator Version 4 Configuration User Interface" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, LSST Systems Engineering.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.8.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>
