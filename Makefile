@@ -1,4 +1,4 @@
-GH_PAGES_SOURCES = Makefile docs setup.py opsim4 README.rst HISTORY.rst scripts
+GH_PAGES_SOURCES = Makefile docs setup.py lsst README.rst HISTORY.rst scripts
 
 .PHONY: clean-pyc clean-build docs clean
 
