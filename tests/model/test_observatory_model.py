@@ -1,6 +1,6 @@
 import unittest
 
-from opsim4.model import ObservatoryModel
+from lsst.sims.opsim4.model import ObservatoryModel
 
 class ObservatoryModelTest(unittest.TestCase):
 

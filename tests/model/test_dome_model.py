@@ -1,7 +1,8 @@
 import unittest
 
 from lsst.sims.ocs.configuration.instrument import Dome
-from opsim4.model import DomeModel
+
+from lsst.sims.opsim4.model import DomeModel
 
 class DomeModelTest(unittest.TestCase):
 

@@ -1,7 +1,8 @@
 import unittest
 
 from lsst.sims.ocs.configuration import SchedulerDriver
-from opsim4.model import SchedulerDriverModel
+
+from lsst.sims.opsim4.model import SchedulerDriverModel
 
 class SchedulerDriverModelTest(unittest.TestCase):
 
@@ -10,4 +11,4 @@ class SchedulerDriverModelTest(unittest.TestCase):
 
     def test_basic_information_after_creation(self):
         self.assertIsInstance(self.model.config_obj, SchedulerDriver)
-        self.assertEqual(len(self.model.params), 5)
+        self.assertEqual(len(self.model.params), 6)

@@ -7,7 +7,7 @@ import sys
 
 from PyQt4 import QtGui
 
-from opsim4.controller import ScienceController
+from lsst.sims.opsim4.controller import ScienceController
 
 class ScienceControllerTest(unittest.TestCase):
 

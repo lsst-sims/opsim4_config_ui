@@ -2,7 +2,7 @@ import unittest
 
 from lsst.sims.ocs.configuration.proposal import AreaDistribution
 
-from opsim4.model import AreaDistributionPropModel
+from lsst.sims.opsim4.model import AreaDistributionPropModel
 
 class AreaDistributionModelTest(unittest.TestCase):
 

@@ -1,7 +1,8 @@
 import unittest
 
 from lsst.sims.ocs.configuration.instrument import Camera
-from opsim4.model import CameraModel
+
+from lsst.sims.opsim4.model import CameraModel
 
 class CameraModelTest(unittest.TestCase):
 
@@ -10,4 +11,4 @@ class CameraModelTest(unittest.TestCase):
 
     def test_basic_information_after_creation(self):
         self.assertIsInstance(self.model.config_obj, Camera)
-        self.assertEqual(len(self.model.params), 8)
+        self.assertEqual(len(self.model.params), 12)

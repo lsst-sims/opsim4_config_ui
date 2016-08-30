@@ -1,7 +1,8 @@
 import unittest
 
 from lsst.sims.ocs.configuration import Survey
-from opsim4.model import SurveyModel
+
+from lsst.sims.opsim4.model import SurveyModel
 
 class SurveyModelTest(unittest.TestCase):
 

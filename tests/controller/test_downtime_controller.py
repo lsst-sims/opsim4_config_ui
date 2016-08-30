@@ -7,7 +7,7 @@ import sys
 
 from PyQt4 import QtGui
 
-from opsim4.controller import DowntimeController
+from lsst.sims.opsim4.controller import DowntimeController
 
 class DowntimeControllerTest(unittest.TestCase):
 

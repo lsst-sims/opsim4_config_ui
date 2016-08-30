@@ -4,7 +4,8 @@ import shutil
 import unittest
 
 from lsst.sims.ocs.configuration import ObservingSite
-from opsim4.model import ModelHelper
+
+from lsst.sims.opsim4.model import ModelHelper
 
 class ModelHelperTest(unittest.TestCase):
 

@@ -1,7 +1,8 @@
 import unittest
 
 from lsst.sims.ocs.configuration.instrument import Slew
-from opsim4.model import SlewModel
+
+from lsst.sims.opsim4.model import SlewModel
 
 class SlewModelTest(unittest.TestCase):
 

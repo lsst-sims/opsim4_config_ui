@@ -1,5 +1,5 @@
 # Package specfic 
-opsim4/version.py
+lsst/sims/opsim4/version.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

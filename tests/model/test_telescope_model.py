@@ -1,7 +1,8 @@
 import unittest
 
 from lsst.sims.ocs.configuration.instrument import Telescope
-from opsim4.model import TelescopeModel
+
+from lsst.sims.opsim4.model import TelescopeModel
 
 class TelescopeModelTest(unittest.TestCase):
 

@@ -14,7 +14,7 @@ Due to the heavy use of repositories for this installation, the instructions wil
 Prerequisite Installation
 -------------------------
 
-The configuration UI requires the Simulated OCS (SOCS) package as it contains the configuration for the reference survey. The setup instructions can be found `here <https://lsst-sims.github.io/sims_ocs/installation.html>`. 
+The configuration UI requires the Simulated OCS (SOCS) package as it contains the configuration for the reference survey. The setup instructions can be found `here <https://lsst-sims.github.io/sims_ocs/installation.html>`_. 
 
 Installation and Setup
 ----------------------

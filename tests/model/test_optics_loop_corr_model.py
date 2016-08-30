@@ -1,7 +1,8 @@
 import unittest
 
 from lsst.sims.ocs.configuration.instrument import OpticsLoopCorr
-from opsim4.model import OpticsLoopCorrModel
+
+from lsst.sims.opsim4.model import OpticsLoopCorrModel
 
 class OpticsLoopCorrModelTest(unittest.TestCase):
 

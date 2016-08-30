@@ -1,5 +1,5 @@
 setupRequired(python)
-setupRequired(sims_ocs)
+setupOptional(sims_ocs)
 
 envPrepend(PYTHONPATH, ${PRODUCT_DIR})
 envPrepend(PATH, ${PRODUCT_DIR}/scripts)

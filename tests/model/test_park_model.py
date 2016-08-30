@@ -1,7 +1,8 @@
 import unittest
 
 from lsst.sims.ocs.configuration.instrument import Park
-from opsim4.model import ParkModel
+
+from lsst.sims.opsim4.model import ParkModel
 
 class ParkModelTest(unittest.TestCase):
 

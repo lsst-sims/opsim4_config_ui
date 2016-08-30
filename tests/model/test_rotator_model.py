@@ -1,7 +1,8 @@
 import unittest
 
 from lsst.sims.ocs.configuration.instrument import Rotator
-from opsim4.model import RotatorModel
+
+from lsst.sims.opsim4.model import RotatorModel
 
 class RotatorModelTest(unittest.TestCase):
 

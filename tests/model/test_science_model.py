@@ -1,6 +1,6 @@
 import unittest
 
-from opsim4.model import ScienceModel
+from lsst.sims.opsim4.model import ScienceModel
 
 class ScienceModelTest(unittest.TestCase):
 

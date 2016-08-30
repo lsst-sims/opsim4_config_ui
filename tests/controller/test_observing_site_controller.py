@@ -7,7 +7,7 @@ import sys
 
 from PyQt4 import QtGui
 
-from opsim4.controller import ObservingSiteController
+from lsst.sims.opsim4.controller import ObservingSiteController
 
 class ObservingSiteControllerTest(unittest.TestCase):
 

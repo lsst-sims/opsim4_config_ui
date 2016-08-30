@@ -7,7 +7,7 @@ import sys
 
 from PyQt4 import QtGui
 
-from opsim4.controller import SurveyController
+from lsst.sims.opsim4.controller import SurveyController
 
 class SurveyControllerTest(unittest.TestCase):
 

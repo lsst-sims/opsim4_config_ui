@@ -1,7 +1,8 @@
 import unittest
 
 from lsst.sims.ocs.configuration import Downtime
-from opsim4.model import DowntimeModel
+
+from lsst.sims.opsim4.model import DowntimeModel
 
 class DowntimeModelTest(unittest.TestCase):
 
