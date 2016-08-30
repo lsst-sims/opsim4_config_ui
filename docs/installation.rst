@@ -16,7 +16,30 @@ Prerequisite Installation
 
 The configuration UI requires the Simulated OCS (SOCS) package as it contains the configuration for the reference survey. The setup instructions can be found `here <https://lsst-sims.github.io/sims_ocs/installation.html>`. 
 
+Installation and Setup
+----------------------
+
 Once the above is complete, go to ``gitdir/lsst-sims`` and run the following::
 
 	git clone https://github.com/lsst-sims/opsim4_config_ui.git
+
+Using the conda environment that was created during the prerequisite installation process, activate that environment and then run::
+
+	cd opsim4_config_ui
+	source eups-setups.sh
+	eups declare opsim4_config_ui -r . -c -t $USER
+	setup opsim4_config_ui
+	python setup.py develop
+
+This last step is important as it creates the version information for the program.
+
+Start the Program
+-----------------
+
+To bring up the configuration UI, run::
+
+	opsim4_config_ui
+
+The next section will detail use of the program.
+
 
