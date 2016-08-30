@@ -198,11 +198,7 @@ class ConfigurationTab(QtGui.QWidget):
                         try:
                             property_text = property_widget.text()
                             if "," in property_text:
-                                values = property_text.split(',')
-                                try:
-                                    property_value = str([float(x) for x in values])
-                                except ValueError:
-                                    property_value = str([str(x) for x in values])
+                                property_value = property_text
                             else:
                                 property_value = float(property_text)
                         except ValueError:
