@@ -64,7 +64,7 @@ gh-pages:
 	python setup.py develop
 	$(MAKE) docs
 	mv -fv docs/_build/html/* ./
-	rm -rf $(GH_PAGES_SOURCES) opsim4_config_ui.egg-info
+	rm -rf $(GH_PAGES_SOURCES) opsim4.egg-info
 
 release: clean
 	python setup.py sdist upload
