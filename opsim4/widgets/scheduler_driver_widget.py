@@ -22,6 +22,7 @@ class SchedulerDriverWidget(ConfigurationTab):
         """Create the UI form for the SchedulerDriver widget.
         """
         self.create_widget("Bool", "coadd_values")
+        self.create_widget("Bool", "time_balancing")
         self.create_widget("Float", "timebonus_tmax")
         self.create_widget("Float", "timebonus_bmax")
         self.create_widget("Float", "timebonus_slope")
