@@ -8,6 +8,7 @@ from lsst.sims.opsim4 import __version__ as version
 from lsst.sims.opsim4.controller import MainController
 from lsst.sims.opsim4.utilities import title
 from lsst.sims.opsim4.widgets import ReportDialog
+from lsst.sims.opsim4.widgets.constants import CSS
 from lsst.sims.opsim4.widgets.wizard import ProposalCreationWizard
 
 class OpsimConfig(QtGui.QMainWindow):
@@ -319,6 +320,7 @@ def run(opts):
     """
     import sys
     app = QtGui.QApplication(sys.argv)
+    app.setStyleSheet(CSS)
     app.setOrganizationName("LSST-Simulations")
     app.setOrganizationDomain("lsst.org")
     app.setApplicationName("Operations-Simulator-Configuration-UI")
