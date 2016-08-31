@@ -2,8 +2,6 @@ import os
 
 from PyQt4 import QtGui
 
-from lsst.sims.opsim4.widgets.constants import CSS_GROUPBOX
-
 __all__ = ["SkyExclusionPage"]
 
 class SkyExclusionPage(QtGui.QWizardPage):
@@ -22,7 +20,6 @@ class SkyExclusionPage(QtGui.QWizardPage):
         self.setTitle("Sky Exclusion Selection")
 
         dec_win_gb = QtGui.QGroupBox()
-        dec_win_gb.setStyleSheet(CSS_GROUPBOX)
 
         dec_win_note_label = QtGui.QLabel("The declination window is used to handle moving the observation "
                                           "site from current LSST location.")
@@ -48,7 +45,6 @@ class SkyExclusionPage(QtGui.QWizardPage):
         self.selection_text = []
 
         group_box = QtGui.QGroupBox("Add Exclusion")
-        group_box.setStyleSheet(CSS_GROUPBOX)
 
         self.selection_types = QtGui.QComboBox()
         self.selection_types.editable = False

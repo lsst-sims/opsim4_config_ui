@@ -1,7 +1,6 @@
 from PyQt4 import QtGui
 
 from lsst.sims.opsim4.widgets import ConfigurationTab
-from lsst.sims.opsim4.widgets.constants import CSS_GROUPBOX
 
 __all__ = ["SurveyWidget"]
 
@@ -32,7 +31,6 @@ class SurveyWidget(ConfigurationTab):
         self.create_widget("Float", "idle_delay")
 
         ad_group_box = QtGui.QGroupBox("ad_proposals")
-        ad_group_box.setStyleSheet(CSS_GROUPBOX)
         ad_group_box.setObjectName("ad_proposals")
         ad_group_box.setToolTip("Use the checkboxes to select which area distribution proposals NOT to run.")
         glayout = QtGui.QGridLayout()

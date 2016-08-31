@@ -1,10 +1,5 @@
-"""The CSS definition for UI GroupBoxes.
+"""The CSS definition for the application.
 """
-CSS_GROUPBOX = """.GroupBox {
-                    border: 3px solid black;
-                    margin-top: 0.5em;
-                }
-               """
 CSS = """
         QGroupBox {
             border: 1px solid gray;

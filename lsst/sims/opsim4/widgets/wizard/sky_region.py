@@ -4,8 +4,6 @@ from PyQt4 import QtGui
 
 from lsst.sims.ocs.configuration.proposal import SELECTION_LIMIT_TYPES
 
-from lsst.sims.opsim4.widgets.constants import CSS_GROUPBOX
-
 __all__ = ["SkyRegionPage"]
 
 class SkyRegionPage(QtGui.QWizardPage):
@@ -30,7 +28,6 @@ class SkyRegionPage(QtGui.QWizardPage):
         self.selection_text = []
 
         group_box = QtGui.QGroupBox("Select Regions")
-        group_box.setStyleSheet(CSS_GROUPBOX)
 
         self.selection_types = QtGui.QComboBox()
         self.selection_types.editable = False

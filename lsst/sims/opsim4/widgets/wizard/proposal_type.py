@@ -1,7 +1,5 @@
 from PyQt4 import QtGui
 
-from lsst.sims.opsim4.widgets.constants import CSS_GROUPBOX
-
 __all__ = ["ProposalTypePage"]
 
 class ProposalTypePage(QtGui.QWizardPage):
@@ -22,7 +20,6 @@ class ProposalTypePage(QtGui.QWizardPage):
         label = QtGui.QLabel("Choose a proposal type to create.")
 
         group_box = QtGui.QGroupBox("Proposal Type")
-        group_box.setStyleSheet(CSS_GROUPBOX)
 
         ad_radio = QtGui.QRadioButton("Area Distribution")
         td_radio = QtGui.QRadioButton("Time Dependent")

@@ -1,7 +1,5 @@
 from PyQt4 import QtCore, QtGui
 
-from lsst.sims.opsim4.widgets.constants import CSS_GROUPBOX
-
 __all__ = ["BandFiltersPage"]
 
 class BandFiltersPage(QtGui.QWizardPage):
@@ -62,7 +60,6 @@ class BandFiltersPage(QtGui.QWizardPage):
             The short name for the band filter.
         """
         group_box = QtGui.QGroupBox(band_filter + " Band Filter")
-        group_box.setStyleSheet(CSS_GROUPBOX)
         group_box.setCheckable(True)
         group_box.setChecked(False)
         self.registerField("{}_filter_use".format(band_filter), group_box, "checked", group_box.clicked)

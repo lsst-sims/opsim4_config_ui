@@ -1,7 +1,6 @@
 from PyQt4 import QtGui
 
 from lsst.sims.opsim4.widgets import ConfigurationTab
-from lsst.sims.opsim4.widgets.constants import CSS_GROUPBOX
 
 __all__ = ["ProposalWidget"]
 
@@ -52,7 +51,6 @@ class ProposalWidget(ConfigurationTab):
             return
         self.num_group_boxes += 1
         group_box = QtGui.QGroupBox(name)
-        group_box.setStyleSheet(CSS_GROUPBOX)
         grid_layout = QtGui.QGridLayout()
         func = getattr(self, "create_{}".format(name))
 
