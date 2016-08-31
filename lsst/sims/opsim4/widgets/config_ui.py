@@ -325,6 +325,6 @@ def run(opts):
     app.setOrganizationDomain("lsst.org")
     app.setApplicationName("Operations-Simulator-Configuration-UI")
     form = OpsimConfig()
-    form.resize(600, 500)
+    form.resize(800, 500)
     form.show()
     app.exec_()
