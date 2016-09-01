@@ -1,4 +1,4 @@
-from PyQt4 import QtGui
+from PyQt4 import QtCore, QtGui
 
 __all__ = ["ProposalTypePage"]
 
@@ -35,11 +35,12 @@ class ProposalTypePage(QtGui.QWizardPage):
 
         group_box.setLayout(gb_layout)
 
-        name_label = QtGui.QLabel("Provide a name for the proposal. Please do not use "
-                                  "spaces in the name.")
+        name_label = QtGui.QLabel("Provide a name for the proposal with a leading capital letter."
+                                  " Please do not use spaces in the name.")
         name_label.setWordWrap(True)
 
         name_le = QtGui.QLineEdit()
+        name_le.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp(r'[A-Z]\w+')))
         self.registerField("proposal_name*", name_le)
 
         layout = QtGui.QVBoxLayout()
