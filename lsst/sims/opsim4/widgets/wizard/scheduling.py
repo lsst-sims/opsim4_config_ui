@@ -23,6 +23,7 @@ class SchedulingPage(QtGui.QWizardPage):
 
         max_num_targets_la = QtGui.QLabel("Max Number of Targets:")
         max_num_targets_le = QtGui.QLineEdit("100")
+        max_num_targets_la.setBuddy(max_num_targets_le)
         int_validator = QtGui.QIntValidator()
         max_num_targets_le.setValidator(int_validator)
         self.registerField("scheduling_max_num_targets", max_num_targets_le)
@@ -34,6 +35,7 @@ class SchedulingPage(QtGui.QWizardPage):
 
         accept_serendipity_la = QtGui.QLabel("Accept Serendipity:")
         accept_serendipity_cb = QtGui.QCheckBox()
+        accept_serendipity_la.setBuddy(accept_serendipity_cb)
         self.registerField("scheduling_accept_serendipity", accept_serendipity_cb)
 
         label3 = QtGui.QLabel("Set the checkbox to accept back-to-back visits of the "
@@ -42,6 +44,7 @@ class SchedulingPage(QtGui.QWizardPage):
 
         accept_consecutive_visits_la = QtGui.QLabel("Accept Consecutive Visits:")
         accept_consecutive_visits_cb = QtGui.QCheckBox()
+        accept_consecutive_visits_la.setBuddy(accept_consecutive_visits_cb)
         self.registerField("scheduling_accept_consecutive_visits", accept_consecutive_visits_cb)
 
         layout = QtGui.QGridLayout()

@@ -25,6 +25,7 @@ class SkyConstraintsPage(QtGui.QWizardPage):
 
         max_airmass_la = QtGui.QLabel("Maximum Airmass:")
         max_airmass_le = QtGui.QLineEdit("2.5")
+        max_airmass_la.setBuddy(max_airmass_le)
         max_airmass_le.setValidator(validator)
         self.registerField("sky_constraints_max_airmass", max_airmass_le)
         max_airmass_un = QtGui.QLabel("degrees")

@@ -68,6 +68,7 @@ class BandFiltersPage(QtGui.QWizardPage):
 
         num_visits_la = QtGui.QLabel("Number of Visits:")
         num_visits_le = QtGui.QLineEdit()
+        num_visits_la.setBuddy(num_visits_le)
         int_validator = QtGui.QIntValidator()
         int_validator.setBottom(1)
         num_visits_le.setValidator(int_validator)
@@ -75,24 +76,28 @@ class BandFiltersPage(QtGui.QWizardPage):
 
         bright_limit_la = QtGui.QLabel("Bright Limit:")
         bright_limit_le = QtGui.QLineEdit()
+        bright_limit_la.setBuddy(bright_limit_le)
         dbl_validator1 = QtGui.QDoubleValidator()
         bright_limit_le.setValidator(dbl_validator1)
         self.registerField("{}_filter_bright_limit".format(band_filter), bright_limit_le)
 
         dark_limit_la = QtGui.QLabel("Dark Limit:")
         dark_limit_le = QtGui.QLineEdit()
+        dark_limit_la.setBuddy(dark_limit_le)
         dbl_validator2 = QtGui.QDoubleValidator()
         dark_limit_le.setValidator(dbl_validator2)
         self.registerField("{}_filter_dark_limit".format(band_filter), dark_limit_le)
 
         max_seeing_la = QtGui.QLabel("Maximum Seeing:")
         max_seeing_le = QtGui.QLineEdit()
+        max_seeing_la.setBuddy(max_seeing_le)
         dbl_validator3 = QtGui.QDoubleValidator()
         max_seeing_le.setValidator(dbl_validator3)
         self.registerField("{}_filter_max_seeing".format(band_filter), max_seeing_le)
 
         exposures_la = QtGui.QLabel("Exposures:")
         exposures_le = QtGui.QLineEdit()
+        exposures_la.setBuddy(exposures_le)
         exposures_un = QtGui.QLabel("seconds")
         self.registerField("{}_filter_exposures".format(band_filter), exposures_le)
 

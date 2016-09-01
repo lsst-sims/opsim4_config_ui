@@ -48,13 +48,13 @@ class SkyRegionPage(QtGui.QWizardPage):
         max_limit_la = QtGui.QLabel("Max Limit:")
         self.max_limit_le = QtGui.QLineEdit()
         self.max_limit_le.setValidator(validator)
-        max_limit_la.setBuddy(self.min_limit_le)
+        max_limit_la.setBuddy(self.max_limit_le)
 
         bounds_limit_la = QtGui.QLabel("Bounds Limit:")
         self.bounds_limit_le = QtGui.QLineEdit("")
         self.bounds_limit_le.setValidator(validator)
         self.bounds_limit_le.setReadOnly(True)
-        bounds_limit_la.setBuddy(self.min_limit_le)
+        bounds_limit_la.setBuddy(self.bounds_limit_le)
 
         gb_layout = QtGui.QGridLayout()
         gb_layout.addWidget(self.selection_types, 0, 0, 1, 4)

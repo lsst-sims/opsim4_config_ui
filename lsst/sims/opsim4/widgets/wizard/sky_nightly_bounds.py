@@ -25,6 +25,7 @@ class SkyNightlyBoundsPage(QtGui.QWizardPage):
 
         twilight_bound_la = QtGui.QLabel("Twilight Boundary:")
         twilight_bound_le = QtGui.QLineEdit("-12.0")
+        twilight_bound_la.setBuddy(twilight_bound_le)
         twilight_bound_le.setValidator(validator)
         self.registerField("sky_nightly_bounds_twilight_boundary", twilight_bound_le)
         twilight_bound_un = QtGui.QLabel("degrees")
@@ -36,6 +37,7 @@ class SkyNightlyBoundsPage(QtGui.QWizardPage):
 
         delta_lst_la = QtGui.QLabel("Delta LST:")
         delta_lst_le = QtGui.QLineEdit("60.0")
+        delta_lst_la.setBuddy(delta_lst_le)
         delta_lst_le.setValidator(validator)
         self.registerField("sky_nightly_bounds_delta_lst", delta_lst_le)
         delta_lst_un = QtGui.QLabel("degrees")
