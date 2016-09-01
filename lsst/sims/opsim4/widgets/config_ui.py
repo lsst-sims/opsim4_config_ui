@@ -41,7 +41,9 @@ class OpsimConfig(QtGui.QMainWindow):
 
         settings = QtCore.QSettings()
         self.recent_directories = settings.value("RecentDirectories").toStringList()
-        self.save_directory = str(settings.value("LastDirectory").toString())
+        setting_save_dir = str(settings.value("LastDirectory").toString())
+        if setting_save_dir != "":
+            self.save_directory = setting_save_dir
         self.update_file_menu()
 
     def create_file_menu(self):
@@ -253,7 +255,11 @@ class OpsimConfig(QtGui.QMainWindow):
     def set_internal_save_directory(self):
         action = self.sender()
         if isinstance(action, QtGui.QAction):
+            old_save_directory = self.save_directory
             self.save_directory = action.data().toString()
+            if self.save_directory in self.recent_directories:
+                self.recent_directories.removeAll(self.save_directory)
+            self.recent_directories.prepend(old_save_directory)
             self.update_file_menu()
 
     def set_save_directory(self):
@@ -265,6 +271,9 @@ class OpsimConfig(QtGui.QMainWindow):
 
         if self.save_directory == "":
             self.save_directory = old_save_directory
+            return
+
+        if old_save_directory is None:
             return
 
         if old_save_directory not in self.recent_directories:
