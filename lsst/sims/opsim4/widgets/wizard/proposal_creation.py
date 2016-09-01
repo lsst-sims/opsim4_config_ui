@@ -41,6 +41,8 @@ class ProposalCreationWizard(QtGui.QWizard):
         save_dir : str
             The location to add the new proposal to.
         """
+        if save_dir is None:
+            save_dir = os.curdir
         self.save_directory = save_dir
 
     def accept(self):
