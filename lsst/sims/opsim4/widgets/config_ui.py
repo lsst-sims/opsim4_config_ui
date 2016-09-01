@@ -169,12 +169,18 @@ class OpsimConfig(QtGui.QMainWindow):
     def save_configurations(self):
         """Save the current differences to configuration files.
         """
+        message = "Finished saving configuration"
         if self.save_directory is None:
-                self.save_directory = os.curdir
+            self.save_directory = os.curdir
+            message += " in current working directory."
+        else:
+            message += "."
         for i in range(self.tab_widget.count()):
             tab = self.tab_widget.widget(i)
             tab.save(expand_path(str(self.save_directory)))
-        self.statusBar().showMessage("Finished saving configuration.", self.STATUS_BAR_TIMEOUT)
+        self.statusBar().showMessage(message, self.STATUS_BAR_TIMEOUT)
+        if self.save_directory == os.curdir:
+            self.save_directory = None
 
     def reset_tabs(self):
         """Reset all fields in all tabs.
