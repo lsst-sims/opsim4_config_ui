@@ -27,3 +27,7 @@ class SchedulerDriverWidget(ConfigurationTab):
         self.create_widget("Float", "timebonus_bmax")
         self.create_widget("Float", "timebonus_slope")
         self.create_widget("Float", "night_boundary")
+        self.create_widget("Bool", "ignore_sky_brightness")
+        self.create_widget("Bool", "ignore_airmass")
+        self.create_widget("Bool", "ignore_clouds")
+        self.create_widget("Bool", "ignore_seeing")
