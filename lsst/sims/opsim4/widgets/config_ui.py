@@ -318,15 +318,20 @@ class OpsimConfig(QtGui.QMainWindow):
     def about(self):
         """Show information about the program.
         """
-        QtGui.QMessageBox.about(self, "About OpSim Configuration UI",
-                                """
-                                <b>Operations Simulator Configuration UI</b> v{}
-                                <p>This application is used to create override files and new
-                                proposals to modify the running of the Operations Simulator
-                                from the baseline configuration.
-                                <br><br>
-                                Copyright 2016 LSST Simulations
-                                """.format(version))
+        about = QtGui.QMessageBox()
+        about.setIconPixmap(QtGui.QPixmap(":/socs_logo.png"))
+        about.setWindowTitle("About OpSim4 Configuration UI")
+        about.setStandardButtons(QtGui.QMessageBox.Ok)
+        about.setInformativeText("""
+                                 <b>Operations Simulator Configuration UI</b>
+                                 <p>Version {}</p>
+                                 <p>This application is used to create override files and new
+                                 proposals to modify the running of the Operations Simulator
+                                 from the baseline configuration.
+                                 <br><br>
+                                 Copyright 2016 LSST Simulations
+                                 """.format(version))
+        about.exec_()
 
 def run(opts):
     """Run the program.
