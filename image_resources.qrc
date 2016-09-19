@@ -1,0 +1,13 @@
+<RCC>
+	<qresource prefix="/" />
+	<qresource>
+		<file alias="document_new.svg">images/document_new.svg</file>
+		<file alias="exit.svg">images/exit.svg</file>
+		<file alias="filesave.svg">images/filesave-2.1.svg</file>
+		<file alias="folder_open.svg">images/folder_open.svg</file>
+		<file alias="skymap.jpg">images/skymap-2016.jpg</file>
+		<file alias="snavigator.svg">images/snavigator.svg</file>
+		<file alias="socs_logo.png">images/socs_logo.png</file>
+		<file alias="undo.svg">images/undo.svg</file>
+	</qresource>
+</RCC>
