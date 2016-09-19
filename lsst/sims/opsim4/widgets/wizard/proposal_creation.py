@@ -24,6 +24,10 @@ class ProposalCreationWizard(QtGui.QWizard):
         QtGui.QWizard.__init__(self, parent)
         self.save_directory = None
         self.setWindowTitle("Proposal Creation Wizard")
+        self.setWizardStyle(QtGui.QWizard.MacStyle)
+        self.setPixmap(QtGui.QWizard.BackgroundPixmap, QtGui.QPixmap(":/skymap.jpg"))
+        self.setPixmap(QtGui.QWizard.WatermarkPixmap, QtGui.QPixmap(":/skymap.jpg"))
+        self.setPixmap(QtGui.QWizard.LogoPixmap, QtGui.QPixmap(":/socs_logo.png"))
 
         self.addPage(ProposalTypePage())
         self.addPage(SkyRegionPage())
