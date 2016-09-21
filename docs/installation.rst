@@ -27,11 +27,12 @@ Using the conda environment that was created during the prerequisite installatio
 
 	cd opsim4_config_ui
 	source eups-setups.sh
-	eups declare opsim4_config_ui -r . -c -t $USER
+	eups declare opsim4_config_ui git -r . -c
 	setup opsim4_config_ui
 	python setup.py develop
+	python setup.py build_rcc
 
-This last step is important as it creates the version information for the program.
+The last two steps are important as they create the version information for the program and the image resource file.
 
 Start the Program
 -----------------
