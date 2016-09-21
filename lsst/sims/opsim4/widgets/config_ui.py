@@ -49,15 +49,16 @@ class OpsimConfig(QtGui.QMainWindow):
     def create_file_menu(self):
         """Create the file menu for the UI.
         """
-        file_set_save_dir = self.create_action("Save Directory", self.set_save_directory, "Ctrl+D", None,
+        file_set_save_dir = self.create_action("Save Directory", self.set_save_directory, "Ctrl+D",
+                                               "folder_open.svg",
                                                "Set the directory where the configurations will be saved.")
         file_clear_recent = self.create_action("Clear Recent List", self.clear_recent_list, "Ctrl+Alt+C",
-                                               None, "Clear the list of recent directories.")
+                                               "clear.svg", "Clear the list of recent directories.")
 
         file_save_configs = self.create_action("&Save Configuration", self.save_configurations,
                                                QtGui.QKeySequence.Save,
-                                               None, "Save the configuration to files.")
-        file_quit_action = self.create_action("&Quit", self.close, "Ctrl+Q", None,
+                                               "filesave.svg", "Save the configuration to files.")
+        file_quit_action = self.create_action("&Quit", self.close, "Ctrl+Q", "exit.svg",
                                               "Close the application,.")
 
         self.file_menu = self.menuBar().addMenu("&File")
@@ -68,13 +69,13 @@ class OpsimConfig(QtGui.QMainWindow):
     def create_reset_menu(self):
         """Create the reset menu for the UI.
         """
-        reset_all_defaults = self.create_action("All Defaults", self.reset_tabs, "Ctrl+R", None,
+        reset_all_defaults = self.create_action("All Defaults", self.reset_tabs, "Ctrl+R", "undo.svg",
                                                 "Reset all values to defaults.")
         reset_active_tab_defaults = self.create_action("Active Tab Defaults", self.reset_active_tab, "Ctrl+T",
-                                                       None,
+                                                       "undo_tab.svg",
                                                        "Reset all values in the active tab.")
         reset_active_field_default = self.create_action("Active Field Default", self.reset_active_field,
-                                                        "Ctrl+Alt+F", None,
+                                                        "Ctrl+Alt+F", "undo_field.svg",
                                                         "Reset value of the active field.")
 
         reset_menu = self.menuBar().addMenu("Reset")
@@ -84,9 +85,10 @@ class OpsimConfig(QtGui.QMainWindow):
     def create_create_menu(self):
         """ Create the create menu for the UI.
         """
-        diff_report = self.create_action("Diff Report", self.diff_report, "Ctrl+Alt+R", None,
+        diff_report = self.create_action("Diff Report", self.diff_report, "Ctrl+Alt+R", "snavigator.svg",
                                          "Generate a difference report.")
-        proposal_wizard = self.create_action("Proposal Creation", self.proposal_creation, "Ctrl+Alt+P", None,
+        proposal_wizard = self.create_action("Proposal Creation", self.proposal_creation, "Ctrl+Alt+P",
+                                             "document_new.svg",
                                              "Create a new proposal.")
 
         create_menu = self.menuBar().addMenu("Create")
@@ -124,7 +126,8 @@ class OpsimConfig(QtGui.QMainWindow):
         """
         action = QtGui.QAction(text, self)
         if icon is not None:
-            action.setIcon(QtGui.QIcon(":/{}.png".format(icon)))
+            action.setIcon(QtGui.QIcon(QtGui.QPixmap(":/{}".format(icon))))
+            action.setIconVisibleInMenu(True)
         if shortcut is not None:
             action.setShortcut(shortcut)
         if tip is not None:
@@ -315,15 +318,20 @@ class OpsimConfig(QtGui.QMainWindow):
     def about(self):
         """Show information about the program.
         """
-        QtGui.QMessageBox.about(self, "About OpSim Configuration UI",
-                                """
-                                <b>Operations Simulator Configuration UI</b> v{}
-                                <p>This application is used to create override files and new
-                                proposals to modify the running of the Operations Simulator
-                                from the baseline configuration.
-                                <br><br>
-                                Copyright 2016 LSST Simulations
-                                """.format(version))
+        about = QtGui.QMessageBox()
+        about.setIconPixmap(QtGui.QPixmap(":/socs_logo.png"))
+        about.setWindowTitle("About OpSim4 Configuration UI")
+        about.setStandardButtons(QtGui.QMessageBox.Ok)
+        about.setInformativeText("""
+                                 <b>Operations Simulator Configuration UI</b>
+                                 <p>Version {}</p>
+                                 <p>This application is used to create override files and new
+                                 proposals to modify the running of the Operations Simulator
+                                 from the baseline configuration.
+                                 <br><br>
+                                 Copyright 2016 LSST Simulations
+                                 """.format(version))
+        about.exec_()
 
 def run(opts):
     """Run the program.
