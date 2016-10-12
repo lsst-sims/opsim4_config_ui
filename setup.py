@@ -50,9 +50,7 @@ class BuildRccCommand(Command):
 
         if is_newer(qtr, pyqtr):
             # print(qtr, pyqtr)
-            pyrcc_cmd = ["pyrcc4"]
-            if platform.python_version_tuple()[0] == '3':
-                pyrcc_cmd.append("-py3")
+            pyrcc_cmd = ["pyrcc5"]
             pyrcc_cmd.extend(["-o", "{}".format(pyqtr), "{}".format(qtr)])
             print(" ".join(pyrcc_cmd))
             exec_cmd(pyrcc_cmd)

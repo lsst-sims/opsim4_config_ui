@@ -1,7 +1,7 @@
 import os
 import re
 
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 
 from lsst.sims.opsim4.widgets.wizard import BandFiltersPage, ProposalTypePage, SchedulingPage
 from lsst.sims.opsim4.widgets.wizard import SkyConstraintsPage
@@ -9,9 +9,7 @@ from lsst.sims.opsim4.widgets.wizard import SkyExclusionPage, SkyNightlyBoundsPa
 
 __all__ = ["ProposalCreationWizard"]
 
-PADDING = "    "
-
-class ProposalCreationWizard(QtGui.QWizard):
+class ProposalCreationWizard(QtWidgets.QWizard):
     """Main class for proposal creation wizard.
     """
 
@@ -23,11 +21,11 @@ class ProposalCreationWizard(QtGui.QWizard):
         parent : QWidget
             The widget's parent.
         """
-        QtGui.QWizard.__init__(self, parent)
+        QtWidgets.QWizard.__init__(self, parent)
         self.save_directory = None
         self.setWindowTitle("Proposal Creation Wizard")
-        self.setWizardStyle(QtGui.QWizard.MacStyle)
-        self.setPixmap(QtGui.QWizard.BackgroundPixmap, QtGui.QPixmap(":/skymap.png"))
+        self.setWizardStyle(QtWidgets.QWizard.MacStyle)
+        self.setPixmap(QtWidgets.QWizard.BackgroundPixmap, QtWidgets.QPixmap(":/skymap.png"))
 
         self.addPage(ProposalTypePage())
         self.addPage(SkyRegionPage())
@@ -274,4 +272,4 @@ class ProposalCreationWizard(QtGui.QWizard):
             for prop_file_line in prop_file_lines:
                 ofile.write(prop_file_line)
 
-        QtGui.QDialog.accept(self)
+        QtWidgets.QDialog.accept(self)

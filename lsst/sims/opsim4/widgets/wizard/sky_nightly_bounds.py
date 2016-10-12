@@ -1,8 +1,8 @@
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 
 __all__ = ["SkyNightlyBoundsPage"]
 
-class SkyNightlyBoundsPage(QtGui.QWizardPage):
+class SkyNightlyBoundsPage(QtWidgets.QWizardPage):
     """Main class for setting the proposal's sky nightly bounds.
     """
 
@@ -14,35 +14,35 @@ class SkyNightlyBoundsPage(QtGui.QWizardPage):
         parent : QWidget
             The widget's parent.
         """
-        QtGui.QWizardPage.__init__(self, parent)
+        QtWidgets.QWizardPage.__init__(self, parent)
         self.setTitle("Sky Nightly Bounds")
 
-        validator = QtGui.QDoubleValidator()
+        validator = QtWidgets.QDoubleValidator()
 
-        label1 = QtGui.QLabel("Set the sun's altitude that corresponds to the acceptable start "
-                              "of night for the proposal.")
+        label1 = QtWidgets.QLabel("Set the sun's altitude that corresponds to the acceptable start "
+                                  "of night for the proposal.")
         label1.setWordWrap(True)
 
-        twilight_bound_la = QtGui.QLabel("Twilight Boundary:")
-        twilight_bound_le = QtGui.QLineEdit("-12.0")
+        twilight_bound_la = QtWidgets.QLabel("Twilight Boundary:")
+        twilight_bound_le = QtWidgets.QLineEdit("-12.0")
         twilight_bound_la.setBuddy(twilight_bound_le)
         twilight_bound_le.setValidator(validator)
         self.registerField("sky_nightly_bounds_twilight_boundary", twilight_bound_le)
-        twilight_bound_un = QtGui.QLabel("degrees")
+        twilight_bound_un = QtWidgets.QLabel("degrees")
 
-        label2 = QtGui.QLabel("The extra window on either side of the sunset (-) or sunrise (+) "
-                              "LST in which the proposal will consider those fields for the night "
-                              "along with those fields between sunset and sunrise LST.")
+        label2 = QtWidgets.QLabel("The extra window on either side of the sunset (-) or sunrise (+) "
+                                  "LST in which the proposal will consider those fields for the night "
+                                  "along with those fields between sunset and sunrise LST.")
         label2.setWordWrap(True)
 
-        delta_lst_la = QtGui.QLabel("Delta LST:")
-        delta_lst_le = QtGui.QLineEdit("60.0")
+        delta_lst_la = QtWidgets.QLabel("Delta LST:")
+        delta_lst_le = QtWidgets.QLineEdit("60.0")
         delta_lst_la.setBuddy(delta_lst_le)
         delta_lst_le.setValidator(validator)
         self.registerField("sky_nightly_bounds_delta_lst", delta_lst_le)
-        delta_lst_un = QtGui.QLabel("degrees")
+        delta_lst_un = QtWidgets.QLabel("degrees")
 
-        layout = QtGui.QGridLayout()
+        layout = QtWidgets.QGridLayout()
 
         layout.addWidget(label1, 0, 0, 1, 4)
 

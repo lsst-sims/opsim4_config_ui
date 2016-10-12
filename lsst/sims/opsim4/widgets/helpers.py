@@ -1,4 +1,4 @@
-from PyQt4 import QtGui
+from PyQt5 import QtGui, QtWidgets
 
 __all__ = ["get_widget_by_type"]
 
@@ -31,26 +31,26 @@ def get_widget_by_type(widget_type):
     return func()
 
 def default_widget():
-    return (QtGui.QWidget(), None)
+    return (QtWidgets.QWidget(), None)
 
 def float_widget():
-    widget = QtGui.QLineEdit("0.0")
+    widget = QtWidgets.QLineEdit("0.0")
     widget.setValidator(QtGui.QDoubleValidator())
     return (widget, "editingFinished")
 
 def lineedit_widget():
-    return (QtGui.QLineEdit(" "), "editingFinished")
+    return (QtWidgets.QLineEdit(" "), "editingFinished")
 
 def int_widget():
-    widget = QtGui.QLineEdit("0")
+    widget = QtWidgets.QLineEdit("0")
     widget.setValidator(QtGui.QIntValidator())
     return (widget, "editingFinished")
 
 def bool_widget():
-    widget = QtGui.QCheckBox()
+    widget = QtWidgets.QCheckBox()
     return (widget, "stateChanged")
 
 def file_widget():
-    widget = QtGui.QPushButton()
+    widget = QtWidgets.QPushButton()
     widget.setCheckable(False)
     return (widget, "clicked")

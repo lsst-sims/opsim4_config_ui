@@ -1,8 +1,8 @@
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 
 __all__ = ["ConfigurationTabWidget"]
 
-class ConfigurationTabWidget(QtGui.QTabWidget):
+class ConfigurationTabWidget(QtWidgets.QTabWidget):
     """Configuration widget that holds configuration sub-tabs.
     """
 
@@ -16,7 +16,7 @@ class ConfigurationTabWidget(QtGui.QTabWidget):
         parent : QWidget
             The parent widget of this one.
         """
-        QtGui.QTabWidget.__init__(self, parent)
+        QtWidgets.QTabWidget.__init__(self, parent)
         self.tab_name = name
 
     def active_tab(self):

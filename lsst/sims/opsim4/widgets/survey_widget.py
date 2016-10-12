@@ -1,4 +1,4 @@
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 
 from lsst.sims.opsim4.widgets import ConfigurationTab
 
@@ -30,10 +30,10 @@ class SurveyWidget(ConfigurationTab):
         self.create_widget("Str", "start_date")
         self.create_widget("Float", "idle_delay")
 
-        ad_group_box = QtGui.QGroupBox("ad_proposals")
+        ad_group_box = QtWidgets.QGroupBox("ad_proposals")
         ad_group_box.setObjectName("ad_proposals")
         ad_group_box.setToolTip("Use the checkboxes to select which area distribution proposals NOT to run.")
-        glayout = QtGui.QGridLayout()
+        glayout = QtWidgets.QGridLayout()
 
         for i, prop_name in enumerate(self.proposals["AD"]):
             self.create_widget("Bool", prop_name, layout=glayout, rows=i)
@@ -161,7 +161,7 @@ class SurveyWidget(ConfigurationTab):
         """
         for i in xrange(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 0).widget()
-            if isinstance(widget, QtGui.QGroupBox):
+            if isinstance(widget, QtWidgets.QGroupBox):
                 glayout = widget.layout()
                 qualifier = "{}/{}".format(self.name, widget.title())
                 ConfigurationTab.reset_active_field(self, layout=glayout, qualifier=qualifier, position=i)
@@ -175,7 +175,7 @@ class SurveyWidget(ConfigurationTab):
         """
         for i in xrange(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 0).widget()
-            if isinstance(widget, QtGui.QGroupBox):
+            if isinstance(widget, QtWidgets.QGroupBox):
                 glayout = widget.layout()
                 qualifier = "{}/{}".format(self.name, widget.title())
                 ConfigurationTab.reset_all(self, layout=glayout, qualifier=qualifier, position=i)

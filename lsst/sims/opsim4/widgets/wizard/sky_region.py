@@ -1,12 +1,12 @@
 import os
 
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 
 from lsst.sims.ocs.configuration.proposal import SELECTION_LIMIT_TYPES
 
 __all__ = ["SkyRegionPage"]
 
-class SkyRegionPage(QtGui.QWizardPage):
+class SkyRegionPage(QtWidgets.QWizardPage):
     """Main class for setting the proposal's sky region.
     """
 
@@ -18,45 +18,45 @@ class SkyRegionPage(QtGui.QWizardPage):
         parent : QWidget
             The widget's parent.
         """
-        QtGui.QWizardPage.__init__(self, parent)
+        QtWidgets.QWizardPage.__init__(self, parent)
         self.setTitle("Sky Region Selection")
 
-        label = QtGui.QLabel("Select the region of sky for the proposals. There can be "
-                             "more than one selection, but one selection MUST be made.")
+        label = QtWidgets.QLabel("Select the region of sky for the proposals. There can be "
+                                 "more than one selection, but one selection MUST be made.")
         label.setWordWrap(True)
 
         self.selection_text = []
 
-        group_box = QtGui.QGroupBox("Select Regions")
+        group_box = QtWidgets.QGroupBox("Select Regions")
 
-        self.selection_types = QtGui.QComboBox()
+        self.selection_types = QtWidgets.QComboBox()
         self.selection_types.editable = False
         for selection in SELECTION_LIMIT_TYPES:
             self.selection_types.addItem(selection)
         self.selection_types.activated.connect(self.check_bounds_limit)
 
-        degrees_units1 = QtGui.QLabel("degrees")
-        degrees_units2 = QtGui.QLabel("degrees")
-        degrees_units3 = QtGui.QLabel("degrees")
-        validator = QtGui.QDoubleValidator()
+        degrees_units1 = QtWidgets.QLabel("degrees")
+        degrees_units2 = QtWidgets.QLabel("degrees")
+        degrees_units3 = QtWidgets.QLabel("degrees")
+        validator = QtWidgets.QDoubleValidator()
 
-        min_limit_la = QtGui.QLabel("Min Limit:")
-        self.min_limit_le = QtGui.QLineEdit()
+        min_limit_la = QtWidgets.QLabel("Min Limit:")
+        self.min_limit_le = QtWidgets.QLineEdit()
         self.min_limit_le.setValidator(validator)
         min_limit_la.setBuddy(self.min_limit_le)
 
-        max_limit_la = QtGui.QLabel("Max Limit:")
-        self.max_limit_le = QtGui.QLineEdit()
+        max_limit_la = QtWidgets.QLabel("Max Limit:")
+        self.max_limit_le = QtWidgets.QLineEdit()
         self.max_limit_le.setValidator(validator)
         max_limit_la.setBuddy(self.max_limit_le)
 
-        bounds_limit_la = QtGui.QLabel("Bounds Limit:")
-        self.bounds_limit_le = QtGui.QLineEdit("")
+        bounds_limit_la = QtWidgets.QLabel("Bounds Limit:")
+        self.bounds_limit_le = QtWidgets.QLineEdit("")
         self.bounds_limit_le.setValidator(validator)
         self.bounds_limit_le.setReadOnly(True)
         bounds_limit_la.setBuddy(self.bounds_limit_le)
 
-        gb_layout = QtGui.QGridLayout()
+        gb_layout = QtWidgets.QGridLayout()
         gb_layout.addWidget(self.selection_types, 0, 0, 1, 4)
 
         gb_layout.addWidget(min_limit_la, 1, 0)
@@ -71,10 +71,10 @@ class SkyRegionPage(QtGui.QWizardPage):
         gb_layout.addWidget(self.bounds_limit_le, 3, 1, 1, 2)
         gb_layout.addWidget(degrees_units3, 3, 3)
 
-        add_button = QtGui.QPushButton("Add")
+        add_button = QtWidgets.QPushButton("Add")
         add_button.clicked.connect(self.add_selection)
         add_button.setToolTip("Add the selection to the list.")
-        clear_button = QtGui.QPushButton("Clear")
+        clear_button = QtWidgets.QPushButton("Clear")
         clear_button.clicked.connect(self.clear_selection)
         clear_button.setToolTip("Clear the last selection from the list.")
 
@@ -83,29 +83,29 @@ class SkyRegionPage(QtGui.QWizardPage):
 
         group_box.setLayout(gb_layout)
 
-        self.show_selections = QtGui.QPlainTextEdit()
+        self.show_selections = QtWidgets.QPlainTextEdit()
         self.show_selections.setReadOnly(True)
         self.registerField("sky_region_selections*", self.show_selections, "plainText",
                            self.show_selections.textChanged)
 
-        comb_label = QtGui.QLabel("If more than one selection is made, a logical operator "
-                                  "must be designated below. Multiple operators should be in "
-                                  "a comma-delimited list. The number of operators should always be "
-                                  "one less than the number of selections.")
+        comb_label = QtWidgets.QLabel("If more than one selection is made, a logical operator "
+                                      "must be designated below. Multiple operators should be in "
+                                      "a comma-delimited list. The number of operators should always be "
+                                      "one less than the number of selections.")
         comb_label.setWordWrap(True)
 
-        combiners_le = QtGui.QLineEdit()
+        combiners_le = QtWidgets.QLineEdit()
         self.registerField("sky_region_combiners", combiners_le)
 
-        layout = QtGui.QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.addWidget(label)
         layout.addWidget(group_box)
         layout.addWidget(self.show_selections)
         layout.addWidget(comb_label)
         layout.addWidget(combiners_le)
 
-        scroll_area_widget = QtGui.QWidget()
-        scroll_area_widget_layout = QtGui.QVBoxLayout()
+        scroll_area_widget = QtWidgets.QWidget()
+        scroll_area_widget_layout = QtWidgets.QVBoxLayout()
         scroll_area_widget_layout.addWidget(label)
         scroll_area_widget_layout.addWidget(group_box)
         scroll_area_widget_layout.addWidget(self.show_selections)
@@ -114,11 +114,11 @@ class SkyRegionPage(QtGui.QWizardPage):
         scroll_area_widget_layout.addStretch(1)
         scroll_area_widget.setLayout(scroll_area_widget_layout)
 
-        scrollable = QtGui.QScrollArea()
+        scrollable = QtWidgets.QScrollArea()
         scrollable.setWidgetResizable(True)
         scrollable.setWidget(scroll_area_widget)
 
-        main_layout = QtGui.QVBoxLayout()
+        main_layout = QtWidgets.QVBoxLayout()
         main_layout.addWidget(scrollable)
         self.setLayout(main_layout)
 

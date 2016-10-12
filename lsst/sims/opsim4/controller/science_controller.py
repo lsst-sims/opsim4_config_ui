@@ -1,4 +1,4 @@
-from PyQt4 import QtCore
+from PyQt5 import QtCore
 
 from lsst.sims.opsim4.controller import BaseController
 from lsst.sims.opsim4.model import ScienceModel

@@ -1,13 +1,13 @@
 import collections
 import os
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtWidgets
 
 from lsst.sims.opsim4.utilities import title
 
 __all__ = ["ReportDialog"]
 
-class ReportDialog(QtGui.QDialog):
+class ReportDialog(QtWidgets.QDialog):
     """Class that shows the current differences.
 
     This class creates a set of HTML tables that show any currently
@@ -24,18 +24,18 @@ class ReportDialog(QtGui.QDialog):
         parent : QWidget
             The parent widget of this one.
         """
-        QtGui.QDialog.__init__(self, parent)
+        QtWidgets.QDialog.__init__(self, parent)
         self.setAttribute(QtCore.Qt.WA_DeleteOnClose)
         self.setWindowTitle("Difference Report")
         self.setMinimumSize(400, 300)
 
         self.report = []
-        self.report_text = QtGui.QTextEdit(self)
+        self.report_text = QtWidgets.QTextEdit(self)
         self.report_text.setReadOnly(True)
-        self.button_box = QtGui.QDialogButtonBox(QtGui.QDialogButtonBox.Ok)
+        self.button_box = QtWidgets.QDialogButtonBox(QtWidgets.QDialogButtonBox.Ok)
         self.button_box.accepted.connect(self.accept)
 
-        self.layout = QtGui.QVBoxLayout()
+        self.layout = QtWidgets.QVBoxLayout()
         self.layout.addWidget(self.report_text)
         self.layout.addWidget(self.button_box)
         self.setLayout(self.layout)
