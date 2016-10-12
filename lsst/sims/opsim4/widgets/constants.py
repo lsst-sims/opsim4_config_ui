@@ -5,7 +5,7 @@ CSS = """
             border: 1px solid gray;
             border-radius: 3px;
             margin-top: 0.5em;
-            font-size: 16px;
+            font-size: 14px;
         }
 
         QGroupBox::title {
@@ -17,54 +17,54 @@ CSS = """
         }
 
         QMenu {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         QMenuBar {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         QCheckBox {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         QToolTip {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         QLabel {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         QRadioButton {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         QComboBox {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         QPushButton {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         QPlainTextEdit {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         QWizard::title {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         QLineEdit {
-            font-size: 16px;
+            font-size: 14px;
             background: white;
             border: 2px solid gray;
             border-radius: 6px;
         }
 
         QLineEdit[readOnly="true"] {
-            font-size: 16px;
+            font-size: 14px;
             background: #f0f0f0;
         }
 
@@ -77,7 +77,7 @@ CSS = """
         }
 
         QTabBar::tab {
-            font-size: 16px;
+            font-size: 14px;
             background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
                                 stop: 0 #E1E1E1, stop: 0.4 #DDDDDD,
                                 stop: 0.5 #D8D8D8, stop: 1.0 #D3D3D3);
