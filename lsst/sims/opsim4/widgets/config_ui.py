@@ -59,7 +59,7 @@ class OpsimConfig(QtGui.QMainWindow):
                                                QtGui.QKeySequence.Save,
                                                "filesave.svg", "Save the configuration to files.")
         file_quit_action = self.create_action("&Quit", self.close, "Ctrl+Q", "exit.svg",
-                                              "Close the application,.")
+                                              "Close the application.")
 
         self.file_menu = self.menuBar().addMenu("&File")
         self.file_menu_actions = (file_set_save_dir, file_clear_recent, None,

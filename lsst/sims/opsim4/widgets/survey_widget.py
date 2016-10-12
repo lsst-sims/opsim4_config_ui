@@ -168,7 +168,7 @@ class SurveyWidget(ConfigurationTab):
             else:
                 property_name = str(widget.text())
                 if property_name.endswith(self.CHANGED_PARAMETER):
-                    self.getProperty.emit(property_name.strip(self.CHANGED_PARAMETER), i)
+                    self.getProperty.emit(property_name.strip(self.CHANGED_PARAMETER), [i])
 
     def reset_all(self):
         """Reset all of the changed parameters.

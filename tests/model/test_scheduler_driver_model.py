@@ -11,4 +11,4 @@ class SchedulerDriverModelTest(unittest.TestCase):
 
     def test_basic_information_after_creation(self):
         self.assertIsInstance(self.model.config_obj, SchedulerDriver)
-        self.assertEqual(len(self.model.params), 6)
+        self.assertEqual(len(self.model.params), 11)
