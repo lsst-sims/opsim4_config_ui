@@ -12,9 +12,9 @@ class ConfigurationTab(QtWidgets.QWidget):
     """
     CHANGED_PARAMETER = '*'
 
-    checkProperty = QtCore.pyqtSignal('QString', 'QString', list)
-    getProperty = QtCore.pyqtSignal('QString', list)
-    saveConfiguration = QtCore.pyqtSignal('QString', 'QString', list)
+    checkProperty = QtCore.pyqtSignal(str, str, list)
+    getProperty = QtCore.pyqtSignal(str, list)
+    saveConfiguration = QtCore.pyqtSignal(str, str, list)
 
     def __init__(self, name, mapping=None, parent=None):
         """Initialize the class.
@@ -266,10 +266,9 @@ class ConfigurationTab(QtWidgets.QWidget):
         try:
             pstate = pwidget.checkState()
             if pstate == 0:
-                pbool = "False"
+                pvalue = "False"
             if pstate == 2:
-                pbool = "True"
-            pvalue = QtCore.QString(pbool)
+                pvalue = "True"
         except AttributeError:
             pvalue = pwidget.text()
 
@@ -401,7 +400,7 @@ class ConfigurationTab(QtWidgets.QWidget):
                                           property_value))
 
         if len(changed_values):
-            self.saveConfiguration.emit(QtCore.QString(save_dir), self.name, changed_values)
+            self.saveConfiguration.emit(save_dir, self.name, changed_values)
 
     def set_information(self, key, info):
         """Set information in a particular parameter widget.

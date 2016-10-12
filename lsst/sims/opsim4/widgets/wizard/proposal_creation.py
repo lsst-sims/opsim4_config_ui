@@ -1,7 +1,7 @@
 import os
 import re
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtGui, QtWidgets
 
 from lsst.sims.opsim4.widgets.wizard import BandFiltersPage, ProposalTypePage, SchedulingPage
 from lsst.sims.opsim4.widgets.wizard import SkyConstraintsPage
@@ -25,7 +25,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         self.save_directory = None
         self.setWindowTitle("Proposal Creation Wizard")
         self.setWizardStyle(QtWidgets.QWizard.MacStyle)
-        self.setPixmap(QtWidgets.QWizard.BackgroundPixmap, QtWidgets.QPixmap(":/skymap.png"))
+        self.setPixmap(QtWidgets.QWizard.BackgroundPixmap, QtGui.QPixmap(":/skymap.png"))
 
         self.addPage(ProposalTypePage())
         self.addPage(SkyRegionPage())
@@ -54,8 +54,8 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         if not os.path.exists(prop_save_dir):
             os.mkdir(prop_save_dir)
 
-        is_ad = self.field("area_dist_choice").toBool()
-        is_td = self.field("time_dep_choice").toBool()
+        is_ad = self.field("area_dist_choice")
+        is_td = self.field("time_dep_choice")
         prop_type = None
         prop_reg_type = None
         if is_ad:
@@ -65,7 +65,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
             prop_type = "TimeDependent"
             prop_reg_type = "time_dep_prop_reg"
 
-        full_prop_name = str(self.field("proposal_name").toString())
+        full_prop_name = self.field("proposal_name")
         m = re.compile(r'[A-Z][^A-Z]+')
         name_parts = [x.lower() for x in m.findall(full_prop_name)]
         prop_file_name = "{}.py".format("_".join(name_parts))
@@ -232,7 +232,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         used_filters = []
         for band_filter in "u,g,r,i,z,y".split(','):
             field_stem = "{}_filter".format(band_filter)
-            use_filter = self.field("{}_use".format(field_stem)).toBool()
+            use_filter = self.field("{}_use".format(field_stem))
             if use_filter:
                 used_filters.append(("{}.name".format(field_stem), field_stem))
                 prop_file_lines.append("{}{} = BandFilter()".format(PADDING * 2, field_stem))

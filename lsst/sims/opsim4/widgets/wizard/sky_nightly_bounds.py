@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtGui, QtWidgets
 
 __all__ = ["SkyNightlyBoundsPage"]
 
@@ -17,7 +17,7 @@ class SkyNightlyBoundsPage(QtWidgets.QWizardPage):
         QtWidgets.QWizardPage.__init__(self, parent)
         self.setTitle("Sky Nightly Bounds")
 
-        validator = QtWidgets.QDoubleValidator()
+        validator = QtGui.QDoubleValidator()
 
         label1 = QtWidgets.QLabel("Set the sun's altitude that corresponds to the acceptable start "
                                   "of night for the proposal.")

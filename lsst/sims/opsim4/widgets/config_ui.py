@@ -159,7 +159,7 @@ class OpsimConfig(QtWidgets.QMainWindow):
     def clear_recent_list(self):
         """Clear out the list of recent directories.
         """
-        self.recent_directories.clear()
+        self.recent_directories = []
         self.update_file_menu()
 
     def create_tabs(self):
@@ -221,7 +221,7 @@ class OpsimConfig(QtWidgets.QMainWindow):
         """
         if self.ok_to_continue():
             settings = QtCore.QSettings()
-            save_directory = QtCore.QVariant(QtCore.QString(self.save_directory)) \
+            save_directory = QtCore.QVariant(self.save_directory) \
                 if self.save_directory is not None else QtCore.QVariant()
             settings.setValue("LastDirectory", save_directory)
             recent_directories = QtCore.QVariant(self.recent_directories) \
@@ -243,17 +243,20 @@ class OpsimConfig(QtWidgets.QMainWindow):
             self.file_menu.addAction(QtWidgets.QAction(str(current), self))
         self.file_menu.addSeparator()
 
-        for rdir in self.recent_directories:
-            if rdir != current and QtCore.QDir.exists(QtCore.QDir(rdir)):
-                recent_directories.append(rdir)
-        if len(recent_directories) != 0:
-            self.file_menu.addSeparator()
-            self.file_menu.addAction(QtWidgets.QAction("Recent:", self))
-            for i, rdir in enumerate(recent_directories):
-                action = QtWidgets.QAction("&{} {}".format(i + 1, rdir), self)
-                action.setData(QtCore.QVariant(rdir))
-                action.triggered.connect(self.set_internal_save_directory)
-                self.file_menu.addAction(action)
+        if self.recent_directories is not None:
+            for rdir in self.recent_directories:
+                if rdir != current and QtCore.QDir.exists(QtCore.QDir(rdir)):
+                    recent_directories.append(rdir)
+            if len(recent_directories) != 0:
+                self.file_menu.addSeparator()
+                self.file_menu.addAction(QtWidgets.QAction("Recent:", self))
+                for i, rdir in enumerate(recent_directories):
+                    action = QtWidgets.QAction("&{} {}".format(i + 1, rdir), self)
+                    action.setData(QtCore.QVariant(rdir))
+                    action.triggered.connect(self.set_internal_save_directory)
+                    self.file_menu.addAction(action)
+        else:
+            self.recent_directories = []
         self.file_menu.addSeparator()
         self.add_actions(self.file_menu, self.file_menu_actions[-2:])
 
@@ -266,10 +269,13 @@ class OpsimConfig(QtWidgets.QMainWindow):
         action = self.sender()
         if isinstance(action, QtWidgets.QAction):
             old_save_directory = self.save_directory
-            self.save_directory = action.data().toString()
+            self.save_directory = action.data()
             if self.save_directory in self.recent_directories:
-                self.recent_directories.removeAll(self.save_directory)
-            self.recent_directories.prepend(old_save_directory)
+                try:
+                    self.recent_directories.remove(self.save_directory)
+                except ValueError:
+                    pass
+            self.recent_directories.insert(0, old_save_directory)
             self.update_file_menu()
 
     def set_save_directory(self):
@@ -287,9 +293,9 @@ class OpsimConfig(QtWidgets.QMainWindow):
             return
 
         if old_save_directory not in self.recent_directories:
-            self.recent_directories.prepend(old_save_directory)
-            while self.recent_directories.count() > self.RECENT_DIRECTORIES_TO_LIST:
-                self.recent_directories.takeLast()
+            self.recent_directories.insert(0, old_save_directory)
+            while len(self.recent_directories) > self.RECENT_DIRECTORIES_TO_LIST:
+                self.recent_directories.pop()
         self.update_file_menu()
 
     def get_diff_dict(self):
@@ -320,7 +326,7 @@ class OpsimConfig(QtWidgets.QMainWindow):
         """Show information about the program.
         """
         about = QtWidgets.QMessageBox()
-        about.setIconPixmap(QtWidgets.QPixmap(":/socs_logo.png"))
+        about.setIconPixmap(QtGui.QPixmap(":/socs_logo.png"))
         about.setWindowTitle("About OpSim4 Configuration UI")
         about.setStandardButtons(QtWidgets.QMessageBox.Ok)
         about.setInformativeText("""

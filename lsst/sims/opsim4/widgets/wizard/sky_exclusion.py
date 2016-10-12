@@ -1,6 +1,6 @@
 import os
 
-from PyQt5 import QtWidgets
+from PyQt5 import QtGui, QtWidgets
 
 __all__ = ["SkyExclusionPage"]
 
@@ -54,7 +54,7 @@ class SkyExclusionPage(QtWidgets.QWizardPage):
         degrees_units1 = QtWidgets.QLabel("degrees")
         degrees_units2 = QtWidgets.QLabel("degrees")
         degrees_units3 = QtWidgets.QLabel("degrees")
-        validator = QtWidgets.QDoubleValidator()
+        validator = QtGui.QDoubleValidator()
 
         min_limit_la = QtWidgets.QLabel("Min Limit:")
         self.min_limit_le = QtWidgets.QLineEdit()

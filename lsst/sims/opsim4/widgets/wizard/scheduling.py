@@ -1,4 +1,4 @@
-from PyQt5 import QtWidgets
+from PyQt5 import QtGui, QtWidgets
 
 __all__ = ["SchedulingPage"]
 
@@ -24,7 +24,7 @@ class SchedulingPage(QtWidgets.QWizardPage):
         max_num_targets_la = QtWidgets.QLabel("Max Number of Targets:")
         max_num_targets_le = QtWidgets.QLineEdit("100")
         max_num_targets_la.setBuddy(max_num_targets_le)
-        int_validator = QtWidgets.QIntValidator()
+        int_validator = QtGui.QIntValidator()
         max_num_targets_le.setValidator(int_validator)
         self.registerField("scheduling_max_num_targets", max_num_targets_le)
 

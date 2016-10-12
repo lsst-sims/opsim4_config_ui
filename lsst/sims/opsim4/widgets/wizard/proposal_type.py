@@ -1,4 +1,4 @@
-from PyQt5 import QtCore, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 __all__ = ["ProposalTypePage"]
 
@@ -40,7 +40,7 @@ class ProposalTypePage(QtWidgets.QWizardPage):
         name_label.setWordWrap(True)
 
         name_le = QtWidgets.QLineEdit()
-        name_le.setValidator(QtWidgets.QRegExpValidator(QtCore.QRegExp(r'[A-Z]\w+')))
+        name_le.setValidator(QtGui.QRegExpValidator(QtCore.QRegExp(r'[A-Z]\w+')))
         self.registerField("proposal_name*", name_le)
 
         layout = QtWidgets.QVBoxLayout()
