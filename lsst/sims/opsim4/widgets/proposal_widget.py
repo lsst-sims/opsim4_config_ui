@@ -137,7 +137,8 @@ class ProposalWidget(ConfigurationTab):
             The configuration information for the sky constraints.
         """
         self.create_widget("Float", "max_airmass", layout=glayout, rows=0)
-        self.group_box_rows.append(1)
+        self.create_widget("Float", "max_cloud", layout=glayout, rows=1)
+        self.group_box_rows.append(2)
 
     def create_scheduling(self, glayout, params):
         """Set the information for the proposal scheduling.
@@ -152,7 +153,8 @@ class ProposalWidget(ConfigurationTab):
         self.create_widget("Int", "max_num_targets", layout=glayout, rows=0)
         self.create_widget("Bool", "accept_serendipity", layout=glayout, rows=1)
         self.create_widget("Bool", "accept_consecutive_visits", layout=glayout, rows=2)
-        self.group_box_rows.append(3)
+        self.create_widget("Float", "airmass_bonus", layout=glayout, rows=3)
+        self.group_box_rows.append(4)
 
     def create_filters(self, glayout, params):
         """Set the information for the proposal filters.
