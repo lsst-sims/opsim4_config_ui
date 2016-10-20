@@ -47,6 +47,15 @@ class SchedulingPage(QtGui.QWizardPage):
         accept_consecutive_visits_la.setBuddy(accept_consecutive_visits_cb)
         self.registerField("scheduling_accept_consecutive_visits", accept_consecutive_visits_cb)
 
+        label4 = QtGui.QLabel("Set the airmass bonus for ranking requested fields.")
+        label4.setWordWrap(True)
+
+        airmass_bonus_la = QtGui.QLabel("Airmass Bonus:")
+        airmass_bonus_le = QtGui.QLineEdit("0.5")
+        airmass_bonus_la.setBuddy(airmass_bonus_le)
+        airmass_bonus_le.setValidator(QtGui.QDoubleValidator())
+        self.registerField("scheduling_airmass_bonus", airmass_bonus_le)
+
         layout = QtGui.QGridLayout()
 
         layout.addWidget(label1, 0, 0, 1, 2)
@@ -58,5 +67,8 @@ class SchedulingPage(QtGui.QWizardPage):
         layout.addWidget(label3, 4, 0, 1, 2)
         layout.addWidget(accept_consecutive_visits_la, 5, 0)
         layout.addWidget(accept_consecutive_visits_cb, 5, 1)
+        layout.addWidget(label4, 6, 0, 1, 2)
+        layout.addWidget(airmass_bonus_la, 7, 0)
+        layout.addWidget(airmass_bonus_le, 7, 1)
 
         self.setLayout(layout)
