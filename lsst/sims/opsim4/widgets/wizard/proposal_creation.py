@@ -182,6 +182,9 @@ class ProposalCreationWizard(QtGui.QWizard):
         prop_file_lines.append("\tself.sky_constraints.max_airmass = {}"
                                .format(str(self.field("sky_constraints_max_airmass").toString())))
         prop_file_lines.append(os.linesep)
+        prop_file_lines.append("\tself.sky_constraints.max_cloud = {}"
+                               .format(str(self.field("sky_constraints_max_cloud").toString())))
+        prop_file_lines.append(os.linesep)
 
         prop_file_lines.append("\t# ----------------------")
         prop_file_lines.append(os.linesep)
@@ -201,6 +204,9 @@ class ProposalCreationWizard(QtGui.QWizard):
         prop_file_lines.append(os.linesep)
         prop_file_lines.append("\tself.scheduling.accept_consecutive_visits "
                                "= {}".format(self.field("scheduling_accept_consecutive_visits").toBool()))
+        prop_file_lines.append(os.linesep)
+        prop_file_lines.append("\tself.scheduling.airmass_bonus = {}"
+                               .format(str(self.field("scheduling_airmass_bonus").toString())))
         prop_file_lines.append(os.linesep)
 
         prop_file_lines.append("\t# --------------------------")
