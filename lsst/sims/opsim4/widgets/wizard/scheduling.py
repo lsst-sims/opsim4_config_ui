@@ -53,7 +53,7 @@ class SchedulingPage(QtWidgets.QWizardPage):
         airmass_bonus_la = QtWidgets.QLabel("Airmass Bonus:")
         airmass_bonus_le = QtWidgets.QLineEdit("0.5")
         airmass_bonus_la.setBuddy(airmass_bonus_le)
-        airmass_bonus_le.setValidator(QtWidgets.QDoubleValidator())
+        airmass_bonus_le.setValidator(QtGui.QDoubleValidator())
         self.registerField("scheduling_airmass_bonus", airmass_bonus_le)
 
         layout = QtWidgets.QGridLayout()
