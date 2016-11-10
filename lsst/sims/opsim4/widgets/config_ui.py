@@ -1,6 +1,6 @@
 import os
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from lsst.sims.ocs.utilities.file_helpers import expand_path
 
@@ -11,7 +11,7 @@ from lsst.sims.opsim4.widgets import ReportDialog
 from lsst.sims.opsim4.widgets.constants import CSS
 from lsst.sims.opsim4.widgets.wizard import ProposalCreationWizard
 
-class OpsimConfig(QtGui.QMainWindow):
+class OpsimConfig(QtWidgets.QMainWindow):
     """Top-level UI.
     """
     RECENT_DIRECTORIES_TO_LIST = 9
@@ -25,7 +25,7 @@ class OpsimConfig(QtGui.QMainWindow):
         parent : QWidget
             The parent widget of this one.
         """
-        QtGui.QMainWindow.__init__(self, parent)
+        QtWidgets.QMainWindow.__init__(self, parent)
         self.save_directory = None
 
         self.create_file_menu()
@@ -33,15 +33,15 @@ class OpsimConfig(QtGui.QMainWindow):
         self.create_create_menu()
         self.create_help_menu()
 
-        self.tab_widget = QtGui.QTabWidget()
+        self.tab_widget = QtWidgets.QTabWidget()
         self.main_controller = MainController()
         self.create_tabs()
 
         self.setCentralWidget(self.tab_widget)
 
         settings = QtCore.QSettings()
-        self.recent_directories = settings.value("RecentDirectories").toStringList()
-        setting_save_dir = str(settings.value("LastDirectory").toString())
+        self.recent_directories = settings.value("RecentDirectories")
+        setting_save_dir = str(settings.value("LastDirectory"))
         if setting_save_dir != "":
             self.save_directory = setting_save_dir
         self.update_file_menu()
@@ -104,7 +104,7 @@ class OpsimConfig(QtGui.QMainWindow):
         self.add_actions(help_menu, (help_about,))
 
     def create_action(self, text, slot=None, shortcut=None, icon=None, tip=None, checkable=False,
-                      signal="triggered()"):
+                      signal_name="triggered"):
         """Create menu actions.
 
         Parameters
@@ -121,10 +121,10 @@ class OpsimConfig(QtGui.QMainWindow):
             A tooltip string for the action.
         checkable : bool, optional
             Is the action checkable?
-        signal : str, optional
-            The signal associated with the action. Default: triggered()
+        signal_name : str, optional
+            The signal associated with the action. Default: triggered
         """
-        action = QtGui.QAction(text, self)
+        action = QtWidgets.QAction(text, self)
         if icon is not None:
             action.setIcon(QtGui.QIcon(QtGui.QPixmap(":/{}".format(icon))))
             action.setIconVisibleInMenu(True)
@@ -134,7 +134,8 @@ class OpsimConfig(QtGui.QMainWindow):
             action.setToolTip(tip)
             action.setStatusTip(tip)
         if slot is not None:
-            self.connect(action, QtCore.SIGNAL(signal), slot)
+            signal = getattr(action, signal_name)
+            signal.connect(slot)
         if checkable:
             action.setCheckable(True)
         return action
@@ -158,7 +159,7 @@ class OpsimConfig(QtGui.QMainWindow):
     def clear_recent_list(self):
         """Clear out the list of recent directories.
         """
-        self.recent_directories.clear()
+        self.recent_directories = []
         self.update_file_menu()
 
     def create_tabs(self):
@@ -220,7 +221,7 @@ class OpsimConfig(QtGui.QMainWindow):
         """
         if self.ok_to_continue():
             settings = QtCore.QSettings()
-            save_directory = QtCore.QVariant(QtCore.QString(self.save_directory)) \
+            save_directory = QtCore.QVariant(self.save_directory) \
                 if self.save_directory is not None else QtCore.QVariant()
             settings.setValue("LastDirectory", save_directory)
             recent_directories = QtCore.QVariant(self.recent_directories) \
@@ -234,25 +235,28 @@ class OpsimConfig(QtGui.QMainWindow):
         """
         self.file_menu.clear()
         self.add_actions(self.file_menu, self.file_menu_actions[:-2])
-        current = QtCore.QString(self.save_directory) if self.save_directory is not None else None
+        current = self.save_directory if self.save_directory is not None else None
 
         recent_directories = []
         if current is not None:
-            self.file_menu.addAction(QtGui.QAction("Current:", self))
-            self.file_menu.addAction(QtGui.QAction(str(current), self))
+            self.file_menu.addAction(QtWidgets.QAction("Current:", self))
+            self.file_menu.addAction(QtWidgets.QAction(str(current), self))
         self.file_menu.addSeparator()
 
-        for rdir in self.recent_directories:
-            if rdir != current and QtCore.QDir.exists(QtCore.QDir(rdir)):
-                recent_directories.append(rdir)
-        if len(recent_directories) != 0:
-            self.file_menu.addSeparator()
-            self.file_menu.addAction(QtGui.QAction("Recent:", self))
-            for i, rdir in enumerate(recent_directories):
-                action = QtGui.QAction("&{} {}".format(i + 1, rdir), self)
-                action.setData(QtCore.QVariant(rdir))
-                action.triggered.connect(self.set_internal_save_directory)
-                self.file_menu.addAction(action)
+        if self.recent_directories is not None:
+            for rdir in self.recent_directories:
+                if rdir != current and QtCore.QDir.exists(QtCore.QDir(rdir)):
+                    recent_directories.append(rdir)
+            if len(recent_directories) != 0:
+                self.file_menu.addSeparator()
+                self.file_menu.addAction(QtWidgets.QAction("Recent:", self))
+                for i, rdir in enumerate(recent_directories):
+                    action = QtWidgets.QAction("&{} {}".format(i + 1, rdir), self)
+                    action.setData(QtCore.QVariant(rdir))
+                    action.triggered.connect(self.set_internal_save_directory)
+                    self.file_menu.addAction(action)
+        else:
+            self.recent_directories = []
         self.file_menu.addSeparator()
         self.add_actions(self.file_menu, self.file_menu_actions[-2:])
 
@@ -263,20 +267,23 @@ class OpsimConfig(QtGui.QMainWindow):
 
     def set_internal_save_directory(self):
         action = self.sender()
-        if isinstance(action, QtGui.QAction):
+        if isinstance(action, QtWidgets.QAction):
             old_save_directory = self.save_directory
-            self.save_directory = action.data().toString()
+            self.save_directory = action.data()
             if self.save_directory in self.recent_directories:
-                self.recent_directories.removeAll(self.save_directory)
-            self.recent_directories.prepend(old_save_directory)
+                try:
+                    self.recent_directories.remove(self.save_directory)
+                except ValueError:
+                    pass
+            self.recent_directories.insert(0, old_save_directory)
             self.update_file_menu()
 
     def set_save_directory(self):
         """Add a save directory to the internals of the program.
         """
         old_save_directory = self.save_directory
-        self.save_directory = QtGui.QFileDialog.getExistingDirectory(self, "Set Save Directory",
-                                                                     os.path.expanduser("~/"))
+        self.save_directory = QtWidgets.QFileDialog.getExistingDirectory(self, "Set Save Directory",
+                                                                         os.path.expanduser("~/"))
 
         if self.save_directory == "":
             self.save_directory = old_save_directory
@@ -286,9 +293,9 @@ class OpsimConfig(QtGui.QMainWindow):
             return
 
         if old_save_directory not in self.recent_directories:
-            self.recent_directories.prepend(old_save_directory)
-            while self.recent_directories.count() > self.RECENT_DIRECTORIES_TO_LIST:
-                self.recent_directories.takeLast()
+            self.recent_directories.insert(0, old_save_directory)
+            while len(self.recent_directories) > self.RECENT_DIRECTORIES_TO_LIST:
+                self.recent_directories.pop()
         self.update_file_menu()
 
     def get_diff_dict(self):
@@ -318,10 +325,10 @@ class OpsimConfig(QtGui.QMainWindow):
     def about(self):
         """Show information about the program.
         """
-        about = QtGui.QMessageBox()
+        about = QtWidgets.QMessageBox()
         about.setIconPixmap(QtGui.QPixmap(":/socs_logo.png"))
         about.setWindowTitle("About OpSim4 Configuration UI")
-        about.setStandardButtons(QtGui.QMessageBox.Ok)
+        about.setStandardButtons(QtWidgets.QMessageBox.Ok)
         about.setInformativeText("""
                                  <b>Operations Simulator Configuration UI</b>
                                  <p>Version {}</p>
@@ -342,7 +349,7 @@ def run(opts):
         Command-line options.
     """
     import sys
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
     app.setStyleSheet(CSS)
     app.setOrganizationName("LSST-Simulations")
     app.setOrganizationDomain("lsst.org")

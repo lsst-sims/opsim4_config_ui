@@ -1,20 +1,20 @@
 import collections
 import os
 
-from PyQt4 import QtCore, QtGui
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from lsst.sims.opsim4.widgets import get_widget_by_type
 
 __all__ = ["ConfigurationTab"]
 
-class ConfigurationTab(QtGui.QWidget):
+class ConfigurationTab(QtWidgets.QWidget):
     """Widget for configuration information.
     """
     CHANGED_PARAMETER = '*'
 
-    checkProperty = QtCore.pyqtSignal('QString', 'QString', list)
-    getProperty = QtCore.pyqtSignal('QString', list)
-    saveConfiguration = QtCore.pyqtSignal('QString', 'QString', list)
+    checkProperty = QtCore.pyqtSignal(str, str, list)
+    getProperty = QtCore.pyqtSignal(str, list)
+    saveConfiguration = QtCore.pyqtSignal(str, str, list)
 
     def __init__(self, name, mapping=None, parent=None):
         """Initialize the class.
@@ -28,33 +28,33 @@ class ConfigurationTab(QtGui.QWidget):
         parent : QWidget
             The parent widget of this one.
         """
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
 
         self.name = name
-        self.layout = QtGui.QGridLayout()
+        self.layout = QtWidgets.QGridLayout()
         self.signal_mapper = QtCore.QSignalMapper(self)
         if mapping is not None:
             func = mapping
         else:
             func = self.property_changed
-        self.signal_mapper.mapped[QtGui.QWidget].connect(func)
+        self.signal_mapper.mapped[QtWidgets.QWidget].connect(func)
         self.rows = 0
 
         self.create_form()
-        grid_widget = QtGui.QWidget()
+        grid_widget = QtWidgets.QWidget()
         grid_widget.setLayout(self.layout)
 
-        scroll_area_widget = QtGui.QWidget()
-        scroll_area_widget_layout = QtGui.QVBoxLayout()
+        scroll_area_widget = QtWidgets.QWidget()
+        scroll_area_widget_layout = QtWidgets.QVBoxLayout()
         scroll_area_widget_layout.addWidget(grid_widget)
         scroll_area_widget_layout.addStretch(10)
         scroll_area_widget.setLayout(scroll_area_widget_layout)
 
-        self.scrollable = QtGui.QScrollArea()
+        self.scrollable = QtWidgets.QScrollArea()
         self.scrollable.setWidgetResizable(True)
         self.scrollable.setWidget(scroll_area_widget)
 
-        main_layout = QtGui.QVBoxLayout(self)
+        main_layout = QtWidgets.QVBoxLayout(self)
         main_layout.addWidget(self.scrollable)
         self.setLayout(main_layout)
 
@@ -88,7 +88,7 @@ class ConfigurationTab(QtGui.QWidget):
         rows : int, optional
             An alternate value for rows in a layout
         """
-        parameter_label = QtGui.QLabel(name)
+        parameter_label = QtWidgets.QLabel(name)
         parameter_widget, change_signal = get_widget_by_type(wtype)
         parameter_label.setBuddy(parameter_widget)
         if qualifier is not None:
@@ -96,7 +96,7 @@ class ConfigurationTab(QtGui.QWidget):
         else:
             full_name = name
         parameter_widget.setObjectName(full_name)
-        parameter_units = QtGui.QLabel()
+        parameter_units = QtWidgets.QLabel()
 
         signal = getattr(parameter_widget, change_signal)
         signal.connect(self.signal_mapper.map)
@@ -179,7 +179,7 @@ class ConfigurationTab(QtGui.QWidget):
         ddict = collections.defaultdict(dict)
         for i in range(layout.rowCount()):
             widget = layout.itemAtPosition(i, 0).widget()
-            if isinstance(widget, QtGui.QGroupBox):
+            if isinstance(widget, QtWidgets.QGroupBox):
                 gb_name = str(widget.title())
                 glayout = widget.layout()
                 ddict.update(self.get_diff(layout=glayout, parent_name=gb_name))
@@ -190,7 +190,7 @@ class ConfigurationTab(QtGui.QWidget):
                     property_widget = layout.itemAtPosition(i, 1).widget()
                     property_name = str(property_widget.objectName())
                     try:
-                        if isinstance(property_widget, QtGui.QPushButton):
+                        if isinstance(property_widget, QtWidgets.QPushButton):
                             property_value = str(property_widget.text())
                         else:
                             property_value = str(property_widget.isChecked())
@@ -250,10 +250,10 @@ class ConfigurationTab(QtGui.QWidget):
         if layout is None:
             layout = self.layout
 
-        if isinstance(pwidget, QtGui.QPushButton):
+        if isinstance(pwidget, QtWidgets.QPushButton):
             # These are reserved for file dialogs
-            file_text = QtGui.QFileDialog.getOpenFileName(self, "Set New File",
-                                                          os.path.expanduser("~/"))
+            file_text = QtWidgets.QFileDialog.getOpenFileName(self, "Set New File",
+                                                              os.path.expanduser("~/"))
             pwidget.setText(file_text)
         pos = layout.indexOf(pwidget)
         plabel = layout.itemAt(pos - 1).widget()
@@ -261,15 +261,14 @@ class ConfigurationTab(QtGui.QWidget):
         if qualifier is not None:
             pname = "{}/{}".format(qualifier, pname)
 
-        if plabel.text().endsWith(self.CHANGED_PARAMETER):
+        if plabel.text().endswith(self.CHANGED_PARAMETER):
             return
         try:
             pstate = pwidget.checkState()
             if pstate == 0:
-                pbool = "False"
+                pvalue = "False"
             if pstate == 2:
-                pbool = "True"
-            pvalue = QtCore.QString(pbool)
+                pvalue = "True"
         except AttributeError:
             pvalue = pwidget.text()
 
@@ -330,7 +329,7 @@ class ConfigurationTab(QtGui.QWidget):
             layout = self.layout
         for i in xrange(layout.rowCount()):
             property_label = layout.itemAtPosition(i, 0).widget()
-            if isinstance(property_label, QtGui.QGroupBox):
+            if isinstance(property_label, QtWidgets.QGroupBox):
                 continue
             property_name = str(property_label.text())
             if property_name.endswith(self.CHANGED_PARAMETER):
@@ -362,7 +361,7 @@ class ConfigurationTab(QtGui.QWidget):
         plabel.setText(pname.strip(self.CHANGED_PARAMETER))
         pwidget = layout.itemAtPosition(position[-1], 1).widget()
         try:
-            if isinstance(pwidget, QtGui.QPushButton):
+            if isinstance(pwidget, QtWidgets.QPushButton):
                 pwidget.setText(param_value)
             else:
                 pwidget.setChecked(param_value == "True")
@@ -381,7 +380,7 @@ class ConfigurationTab(QtGui.QWidget):
         changed_values = []
         for i in xrange(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 0).widget()
-            if isinstance(widget, QtGui.QGroupBox):
+            if isinstance(widget, QtWidgets.QGroupBox):
                 gb_name = str(widget.title())
                 glayout = widget.layout()
                 changed_values.extend(self.get_changed_parameters(layout=glayout, parent_name=gb_name))
@@ -391,7 +390,7 @@ class ConfigurationTab(QtGui.QWidget):
                 if property_name.endswith(self.CHANGED_PARAMETER):
                     property_widget = self.layout.itemAtPosition(i, 1).widget()
                     try:
-                        if isinstance(property_widget, QtGui.QPushButton):
+                        if isinstance(property_widget, QtWidgets.QPushButton):
                             property_value = str(property_widget.text())
                         else:
                             property_value = str(property_widget.isChecked())
@@ -401,7 +400,7 @@ class ConfigurationTab(QtGui.QWidget):
                                           property_value))
 
         if len(changed_values):
-            self.saveConfiguration.emit(QtCore.QString(save_dir), self.name, changed_values)
+            self.saveConfiguration.emit(save_dir, self.name, changed_values)
 
     def set_information(self, key, info):
         """Set information in a particular parameter widget.
@@ -415,7 +414,7 @@ class ConfigurationTab(QtGui.QWidget):
         """
         for i in xrange(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 1).widget()
-            if isinstance(widget, QtGui.QGroupBox):
+            if isinstance(widget, QtWidgets.QGroupBox):
                 continue
             if key in str(widget.objectName()):
                 value = info["value"]

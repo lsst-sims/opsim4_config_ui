@@ -1,8 +1,8 @@
-from PyQt4 import QtGui
+from PyQt5 import QtGui, QtWidgets
 
 __all__ = ["SkyConstraintsPage"]
 
-class SkyConstraintsPage(QtGui.QWizardPage):
+class SkyConstraintsPage(QtWidgets.QWizardPage):
     """Main class for setting the proposal's sky constraints.
     """
 
@@ -14,34 +14,34 @@ class SkyConstraintsPage(QtGui.QWizardPage):
         parent : QWidget
             The widget's parent.
         """
-        QtGui.QWizardPage.__init__(self, parent)
+        QtWidgets.QWizardPage.__init__(self, parent)
         self.setTitle("Sky Constraints")
 
-        label = QtGui.QLabel("Set the maxium airmass that is acceptable for any field "
-                             "in the proposal.")
+        label = QtWidgets.QLabel("Set the maxium airmass that is acceptable for any field "
+                                 "in the proposal.")
         label.setWordWrap(True)
 
-        max_airmass_la = QtGui.QLabel("Maximum Airmass:")
-        max_airmass_le = QtGui.QLineEdit("2.5")
+        max_airmass_la = QtWidgets.QLabel("Maximum Airmass:")
+        max_airmass_le = QtWidgets.QLineEdit("2.5")
         max_airmass_la.setBuddy(max_airmass_le)
         max_airmass_validator = QtGui.QDoubleValidator()
         max_airmass_validator.setBottom(1.0)
         max_airmass_le.setValidator(max_airmass_validator)
         self.registerField("sky_constraints_max_airmass", max_airmass_le)
 
-        label2 = QtGui.QLabel("Set the maximum fraction of clouds that is acceptable for "
-                              "any field in the proposal.")
+        label2 = QtWidgets.QLabel("Set the maximum fraction of clouds that is acceptable for "
+                                  "any field in the proposal.")
         label2.setWordWrap(True)
 
-        max_cloud_la = QtGui.QLabel("Maximum Cloud:")
-        max_cloud_le = QtGui.QLineEdit("0.7")
+        max_cloud_la = QtWidgets.QLabel("Maximum Cloud:")
+        max_cloud_le = QtWidgets.QLineEdit("0.7")
         max_cloud_la.setBuddy(max_cloud_le)
         max_cloud_validator = QtGui.QDoubleValidator()
         max_cloud_validator.setBottom(0.0)
         max_cloud_le.setValidator(max_cloud_validator)
         self.registerField("sky_constraints_max_cloud", max_cloud_le)
 
-        layout = QtGui.QGridLayout()
+        layout = QtWidgets.QGridLayout()
 
         layout.addWidget(label, 0, 0, 1, 4)
 

@@ -32,7 +32,7 @@ class SurveyController(BaseController):
 
         Parameters
         ----------
-        param_name : QString
+        param_name : str
             The parameter name to retrieve the stored value of.
         param_value : any
             The value of the parameter to check against the stored one.
@@ -56,7 +56,7 @@ class SurveyController(BaseController):
 
         Parameters
         ----------
-        param_name : QString
+        param_name : str
             The parameter name to retrieve the stored value of.
         position : list(int)
             The widget position that requested this check.

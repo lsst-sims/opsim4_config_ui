@@ -1,4 +1,4 @@
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 
 from lsst.sims.opsim4.widgets import ConfigurationTab
 
@@ -50,8 +50,8 @@ class ProposalWidget(ConfigurationTab):
         except TypeError:
             return
         self.num_group_boxes += 1
-        group_box = QtGui.QGroupBox(name)
-        grid_layout = QtGui.QGridLayout()
+        group_box = QtWidgets.QGroupBox(name)
+        grid_layout = QtWidgets.QGridLayout()
         func = getattr(self, "create_{}".format(name))
 
         func(grid_layout, params)
@@ -235,7 +235,7 @@ class ProposalWidget(ConfigurationTab):
         """
         for i in xrange(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 0).widget()
-            if isinstance(widget, QtGui.QGroupBox):
+            if isinstance(widget, QtWidgets.QGroupBox):
                 glayout = widget.layout()
                 qualifier = "{}/{}".format(self.name, widget.title())
                 ConfigurationTab.reset_active_field(self, layout=glayout, qualifier=qualifier, position=i)
@@ -254,7 +254,7 @@ class ProposalWidget(ConfigurationTab):
         """
         for i in xrange(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 0).widget()
-            if isinstance(widget, QtGui.QGroupBox):
+            if isinstance(widget, QtWidgets.QGroupBox):
                 glayout = widget.layout()
                 qualifier = "{}/{}".format(self.name, widget.title())
                 ConfigurationTab.reset_all(self, layout=glayout, qualifier=qualifier, position=i)
@@ -396,7 +396,7 @@ class ProposalWidget(ConfigurationTab):
         for i in xrange(self.group_box_rows[4]):
             label = glayout.itemAtPosition(i, 0).widget()
             widget = glayout.itemAtPosition(i, 1).widget()
-            if not isinstance(widget, QtGui.QCheckBox):
+            if not isinstance(widget, QtWidgets.QCheckBox):
                 widget.setText(str(params[str(label.text())]["value"]))
             widget.setToolTip(params[str(label.text())]["doc"])
             units = glayout.itemAtPosition(i, 2).widget()
@@ -431,7 +431,7 @@ class ProposalWidget(ConfigurationTab):
 
         Parameters
         ----------
-        widget : QtGui.QLabel
+        widget : QtWidgets.QLabel
             The label for the units.
         params : dict
             The instance containing the unit information.

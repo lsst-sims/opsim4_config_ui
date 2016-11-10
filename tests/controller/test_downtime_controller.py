@@ -5,13 +5,13 @@ except ImportError:
 import unittest
 import sys
 
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 
 from lsst.sims.opsim4.controller import DowntimeController
 
 class DowntimeControllerTest(unittest.TestCase):
 
-    app = QtGui.QApplication(sys.argv)
+    app = QtWidgets.QApplication(sys.argv)
 
     @classmethod
     def setupClass(cls):

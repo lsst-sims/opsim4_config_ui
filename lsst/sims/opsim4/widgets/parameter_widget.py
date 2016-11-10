@@ -1,20 +1,20 @@
-from PyQt4 import QtGui
+from PyQt5 import QtWidgets
 
 from lsst.sims.opsim4.widgets import get_widget_by_type
 
-class ParameterWidget(QtGui.QWidget):
+class ParameterWidget(QtWidgets.QWidget):
 
     def __init__(self, widget_type, parameter_path, parent=None):
-        QtGui.QWidget.__init__(self, parent)
+        QtWidgets.QWidget.__init__(self, parent)
         self.widget_type = widget_type
 
-        self.layout = QtGui.QHBoxLayout()
+        self.layout = QtWidgets.QHBoxLayout()
 
-        self.parameter_label = QtGui.QLabel(parameter_path)
+        self.parameter_label = QtWidgets.QLabel(parameter_path)
         self.parameter_widget, self.change_signal = get_widget_by_type(self.widget_type)
         self.parameter_label.setBuddy(self.parameter_widget)
         self.parameter_widget.setObjectName(parameter_path)
-        self.parameter_units = QtGui.QLabel()
+        self.parameter_units = QtWidgets.QLabel()
 
         self.layout.addWidget(self.parameter_label)
         self.layout.addWidget(self.parameter_widget)

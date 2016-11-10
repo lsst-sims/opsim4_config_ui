@@ -1,10 +1,10 @@
 import os
 
-from PyQt4 import QtGui
+from PyQt5 import QtGui, QtWidgets
 
 __all__ = ["SkyExclusionPage"]
 
-class SkyExclusionPage(QtGui.QWizardPage):
+class SkyExclusionPage(QtWidgets.QWizardPage):
     """Main class for setting the proposal's sky exclusion.
     """
 
@@ -16,21 +16,21 @@ class SkyExclusionPage(QtGui.QWizardPage):
         parent : QWidget
             The widget's parent.
         """
-        QtGui.QWizardPage.__init__(self, parent)
+        QtWidgets.QWizardPage.__init__(self, parent)
         self.setTitle("Sky Exclusion Selection")
 
-        dec_win_gb = QtGui.QGroupBox()
+        dec_win_gb = QtWidgets.QGroupBox()
 
-        dec_win_note_label = QtGui.QLabel("The declination window is used to handle moving the observation "
-                                          "site from current LSST location.")
+        dec_win_note_label = QtWidgets.QLabel("The declination window is used to handle moving the "
+                                              "observation site from current LSST location.")
         dec_win_note_label.setWordWrap(True)
 
-        dec_win_label = QtGui.QLabel("Dec Window:")
-        dec_win_le = QtGui.QLineEdit("90.0")
+        dec_win_label = QtWidgets.QLabel("Dec Window:")
+        dec_win_le = QtWidgets.QLineEdit("90.0")
         dec_win_label.setBuddy(dec_win_le)
-        dec_win_units = QtGui.QLabel("degrees")
+        dec_win_units = QtWidgets.QLabel("degrees")
 
-        dwgb_layout = QtGui.QGridLayout()
+        dwgb_layout = QtWidgets.QGridLayout()
         dwgb_layout.addWidget(dec_win_label, 0, 0)
         dwgb_layout.addWidget(dec_win_le, 0, 1, 1, 2)
         dwgb_layout.addWidget(dec_win_units, 0, 3)
@@ -39,39 +39,39 @@ class SkyExclusionPage(QtGui.QWizardPage):
 
         self.registerField("sky_exclusions_dec_window", dec_win_le)
 
-        exclusion_label = QtGui.QLabel("A galactic plane exclusion zone is available by filling out the "
-                                       "form below.")
+        exclusion_label = QtWidgets.QLabel("A galactic plane exclusion zone is available by filling out the "
+                                           "form below.")
         exclusion_label.setWordWrap(True)
 
         self.selection_text = []
 
-        group_box = QtGui.QGroupBox("Add Exclusion")
+        group_box = QtWidgets.QGroupBox("Add Exclusion")
 
-        self.selection_types = QtGui.QComboBox()
+        self.selection_types = QtWidgets.QComboBox()
         self.selection_types.editable = False
         self.selection_types.addItem("GP")
 
-        degrees_units1 = QtGui.QLabel("degrees")
-        degrees_units2 = QtGui.QLabel("degrees")
-        degrees_units3 = QtGui.QLabel("degrees")
+        degrees_units1 = QtWidgets.QLabel("degrees")
+        degrees_units2 = QtWidgets.QLabel("degrees")
+        degrees_units3 = QtWidgets.QLabel("degrees")
         validator = QtGui.QDoubleValidator()
 
-        min_limit_la = QtGui.QLabel("Min Limit:")
-        self.min_limit_le = QtGui.QLineEdit()
+        min_limit_la = QtWidgets.QLabel("Min Limit:")
+        self.min_limit_le = QtWidgets.QLineEdit()
         self.min_limit_le.setValidator(validator)
         min_limit_la.setBuddy(self.min_limit_le)
 
-        max_limit_la = QtGui.QLabel("Max Limit:")
-        self.max_limit_le = QtGui.QLineEdit()
+        max_limit_la = QtWidgets.QLabel("Max Limit:")
+        self.max_limit_le = QtWidgets.QLineEdit()
         self.max_limit_le.setValidator(validator)
         max_limit_la.setBuddy(self.max_limit_le)
 
-        bounds_limit_la = QtGui.QLabel("Bounds Limit:")
-        self.bounds_limit_le = QtGui.QLineEdit("")
+        bounds_limit_la = QtWidgets.QLabel("Bounds Limit:")
+        self.bounds_limit_le = QtWidgets.QLineEdit("")
         self.bounds_limit_le.setValidator(validator)
         bounds_limit_la.setBuddy(self.bounds_limit_le)
 
-        gb_layout = QtGui.QGridLayout()
+        gb_layout = QtWidgets.QGridLayout()
         gb_layout.addWidget(self.selection_types, 0, 0, 1, 4)
 
         gb_layout.addWidget(min_limit_la, 1, 0)
@@ -86,10 +86,10 @@ class SkyExclusionPage(QtGui.QWizardPage):
         gb_layout.addWidget(self.bounds_limit_le, 3, 1, 1, 2)
         gb_layout.addWidget(degrees_units3, 3, 3)
 
-        add_button = QtGui.QPushButton("Add")
+        add_button = QtWidgets.QPushButton("Add")
         add_button.clicked.connect(self.add_selection)
         add_button.setToolTip("Add the exclusion to the list.")
-        clear_button = QtGui.QPushButton("Clear")
+        clear_button = QtWidgets.QPushButton("Clear")
         clear_button.clicked.connect(self.clear_selection)
         clear_button.setToolTip("Clear the exclusion from the list.")
 
@@ -98,12 +98,12 @@ class SkyExclusionPage(QtGui.QWizardPage):
 
         group_box.setLayout(gb_layout)
 
-        self.show_selections = QtGui.QPlainTextEdit()
+        self.show_selections = QtWidgets.QPlainTextEdit()
         self.show_selections.setReadOnly(True)
         self.registerField("sky_exclusion_selections", self.show_selections, "plainText",
                            self.show_selections.textChanged)
 
-        layout = QtGui.QVBoxLayout()
+        layout = QtWidgets.QVBoxLayout()
         layout.addWidget(dec_win_note_label)
         layout.addWidget(dec_win_gb)
         layout.addWidget(exclusion_label)
