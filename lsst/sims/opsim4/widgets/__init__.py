@@ -6,6 +6,7 @@ from .config_tab_widget import *
 from .downtime_widget import *
 from .camera_widget import *
 from .dome_widget import *
+from .environment_widget import *
 from .obs_variation_widget import *
 from .optics_loop_corr_widget import *
 from .park_widget import *
