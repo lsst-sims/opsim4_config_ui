@@ -16,7 +16,7 @@ class MainController(object):
         """Initialize the class.
         """
         self.tab_order = ["survey", "science", "observatory", "observing_site",
-                          "scheduler_driver", "downtime"]
+                          "scheduler_driver", "environment", "downtime"]
         for tab in self.tab_order:
             setattr(self, tab + "_controller",
                     getattr(lsst.sims.opsim4.controller, title(tab, spacer="") + "Controller")(tab))
