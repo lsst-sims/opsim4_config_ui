@@ -1,11 +1,11 @@
 import unittest
 
-from lsst.sims.ocs.configuration.proposal import AreaDistribution
+from lsst.sims.ocs.configuration.proposal import General
 
-from lsst.sims.opsim4.model import AreaDistributionPropModel
+from lsst.sims.opsim4.model import GeneralPropModel
 
-class AreaDistributionModelTest(unittest.TestCase):
+class GeneralModelTest(unittest.TestCase):
 
     def setUp(self):
-        self.model = AreaDistributionPropModel(AreaDistribution())
+        self.model = GeneralPropModel(General())
         self.num_params = 7
