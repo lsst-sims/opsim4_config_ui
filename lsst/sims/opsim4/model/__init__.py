@@ -1,7 +1,7 @@
 """Module for model classes.
 """
 from .model_helper import *
-from .area_dist_prop_model import *
+from .gen_prop_model import *
 from .downtime_model import *
 from .camera_model import *
 from .dome_model import *
