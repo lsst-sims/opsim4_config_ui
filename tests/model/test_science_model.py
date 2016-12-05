@@ -6,7 +6,7 @@ class ScienceModelTest(unittest.TestCase):
 
     def setUp(self):
         self.model = ScienceModel()
-        self.num_proposals = 3
+        self.num_proposals = 4
 
     def test_basic_information_after_creation(self):
         gen_params = self.model.gen_params

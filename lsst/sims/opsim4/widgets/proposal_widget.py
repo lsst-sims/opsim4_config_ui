@@ -71,9 +71,9 @@ class ProposalWidget(ConfigurationTab):
         """
         num_selections = len(params["selections"]["value"])
         if num_selections:
-            n = num_selections - 1
+            num_widgets = 4
             for i in xrange(num_selections):
-                j = n - i
+                j = i * num_widgets
                 qualifier = "selections/{}".format(i)
                 self.create_widget("Str", "limit_type", qualifier=qualifier, layout=glayout,
                                    rows=(j + 0))
@@ -98,9 +98,9 @@ class ProposalWidget(ConfigurationTab):
         self.create_widget("Float", "dec_window", layout=glayout, rows=0)
         num_selections = len(params["selections"]["value"])
         if num_selections:
-            n = num_selections - 1
+            num_widgets = 4
             for i in xrange(num_selections):
-                j = n - i
+                j = i * num_widgets
                 qualifier = "selections/{}".format(i)
                 self.create_widget("Str", "limit_type", qualifier=qualifier, layout=glayout,
                                    rows=(j + 1))
@@ -175,28 +175,30 @@ class ProposalWidget(ConfigurationTab):
         if num_filters:
             filter_order = "u g r i z y".split()
             self.filter_index = {v["name"]["value"]: k for k, v in params.items()}
-            for i, band_filter in enumerate(filter_order):
+            used_filters = []
+            for band_filter in filter_order:
                 x = self.filter_index.get(band_filter, None)
-                if i is not None:
-                    # Remove name parameter from count
-                    n = len(params[x]) - 1
-                    j = n * i
-                    qualifier = "{}".format(x)
-                    filter_name = params[x]["name"]["value"]
-                    self.create_widget("Int", "{}_num_visits".format(filter_name), qualifier=qualifier,
-                                       layout=glayout, rows=(j + 0))
-                    self.create_widget("Int", "{}_num_grouped_visits".format(filter_name),
-                                       qualifier=qualifier, layout=glayout, rows=(j + 1))
-                    self.create_widget("Float", "{}_bright_limit".format(filter_name), qualifier=qualifier,
-                                       layout=glayout, rows=(j + 2))
-                    self.create_widget("Float", "{}_dark_limit".format(filter_name), qualifier=qualifier,
-                                       layout=glayout, rows=(j + 3))
-                    self.create_widget("Float", "{}_max_seeing".format(filter_name), qualifier=qualifier,
-                                       layout=glayout, rows=(j + 4))
-                    self.create_widget("StringList", "{}_exposures".format(filter_name), qualifier=qualifier,
-                                       layout=glayout, rows=(j + 5))
-                else:
-                    continue
+                if x is not None:
+                    used_filters.append(x)
+            for i, x in enumerate(used_filters):
+                # Remove name parameter from count
+                n = len(params[x]) - 1
+                j = n * i
+                qualifier = "{}".format(x)
+                filter_name = params[x]["name"]["value"]
+                self.create_widget("Int", "{}_num_visits".format(filter_name), qualifier=qualifier,
+                                   layout=glayout, rows=(j + 0))
+                self.create_widget("Int", "{}_num_grouped_visits".format(filter_name),
+                                   qualifier=qualifier, layout=glayout, rows=(j + 1))
+                self.create_widget("Float", "{}_bright_limit".format(filter_name), qualifier=qualifier,
+                                   layout=glayout, rows=(j + 2))
+                self.create_widget("Float", "{}_dark_limit".format(filter_name), qualifier=qualifier,
+                                   layout=glayout, rows=(j + 3))
+                self.create_widget("Float", "{}_max_seeing".format(filter_name), qualifier=qualifier,
+                                   layout=glayout, rows=(j + 4))
+                self.create_widget("StringList", "{}_exposures".format(filter_name), qualifier=qualifier,
+                                   layout=glayout, rows=(j + 5))
+
         self.group_box_rows.append(num_filters * 6)
 
     def is_changed(self, position, is_changed):
@@ -318,13 +320,15 @@ class ProposalWidget(ConfigurationTab):
         glayout = group_box.layout()
         num_selections = len(params["selections"]["value"])
         if num_selections:
-            for v in params["selections"]["value"].values():
-                for i in xrange(self.group_box_rows[0]):
-                    label = glayout.itemAtPosition(i, 0).widget()
-                    widget = glayout.itemAtPosition(i, 1).widget()
+            num_widgets = self.group_box_rows[0] / num_selections
+            for j, v in enumerate(params["selections"]["value"].values()):
+                for i in xrange(num_widgets):
+                    k = j * num_widgets + i
+                    label = glayout.itemAtPosition(k, 0).widget()
+                    widget = glayout.itemAtPosition(k, 1).widget()
                     widget.setText(str(v[str(label.text())]["value"]))
                     widget.setToolTip(v[str(label.text())]["doc"])
-                    units = glayout.itemAtPosition(i, 2).widget()
+                    units = glayout.itemAtPosition(k, 2).widget()
                     self.set_unit_labels(units, v[str(label.text())])
 
     def set_sky_exclusion(self, params):
