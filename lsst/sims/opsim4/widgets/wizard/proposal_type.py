@@ -21,16 +21,16 @@ class ProposalTypePage(QtWidgets.QWizardPage):
 
         group_box = QtWidgets.QGroupBox("Proposal Type")
 
-        ad_radio = QtWidgets.QRadioButton("Area Distribution")
-        td_radio = QtWidgets.QRadioButton("Time Dependent")
-        ad_radio.setChecked(True)
+        general_radio = QtWidgets.QRadioButton("General (Area, Hybrid, Time-Domain)")
+        sequence_radio = QtWidgets.QRadioButton("Sequence (Deep Drilling, Nested Subsequences)")
+        general_radio.setChecked(True)
 
-        self.registerField("area_dist_choice", ad_radio)
-        self.registerField("time_dep_choice", td_radio)
+        self.registerField("general_choice", general_radio)
+        self.registerField("sequence_choice", sequence_radio)
 
         gb_layout = QtWidgets.QVBoxLayout()
-        gb_layout.addWidget(ad_radio)
-        gb_layout.addWidget(td_radio)
+        gb_layout.addWidget(general_radio)
+        gb_layout.addWidget(sequence_radio)
         gb_layout.addStretch(1)
 
         group_box.setLayout(gb_layout)

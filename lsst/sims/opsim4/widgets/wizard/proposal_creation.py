@@ -56,16 +56,16 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         if not os.path.exists(prop_save_dir):
             os.mkdir(prop_save_dir)
 
-        is_ad = self.field("area_dist_choice")
-        is_td = self.field("time_dep_choice")
+        is_general = self.field("general_choice")
+        is_subseq = self.field("sequence_choice")
         prop_type = None
         prop_reg_type = None
-        if is_ad:
-            prop_type = "AreaDistribution"
-            prop_reg_type = "area_dist_prop_reg"
-        if is_td:
-            prop_type = "TimeDependent"
-            prop_reg_type = "time_dep_prop_reg"
+        if is_general:
+            prop_type = "General"
+            prop_reg_type = "gen_prop_reg"
+        if is_subseq:
+            prop_type = "Sequence"
+            prop_reg_type = "sequence_prop_reg"
 
         full_prop_name = self.field("proposal_name")
         m = re.compile(r'[A-Z][^A-Z]+')
@@ -78,8 +78,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         prop_file_lines.append("from lsst.sims.ocs.configuration.proposal import {}, BandFilter, "
                                "Selection".format(prop_type))
         prop_file_lines.append(os.linesep)
-        prop_file_lines.append("from lsst.sims.ocs.configuration.proposal import {}, "
-                               "SELECTION_LIMIT_TYPES".format(prop_reg_type))
+        prop_file_lines.append("from lsst.sims.ocs.configuration.proposal import {}".format(prop_reg_type))
         prop_file_lines.append(os.linesep)
         prop_file_lines.append("__all__ = [\"{}\"]".format(full_prop_name))
         prop_file_lines.append(os.linesep)
@@ -221,6 +220,24 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         prop_file_lines.append("{}self.scheduling.airmass_bonus = {}"
                                .format(PADDING * 2, str(self.field("scheduling_airmass_bonus"))))
         prop_file_lines.append(os.linesep)
+        prop_file_lines.append("{}self.scheduling.restrict_grouped_visits "
+                               "= {}".format(PADDING * 2,
+                                             self.field("scheduling_restrict_grouped_visits")))
+        prop_file_lines.append(os.linesep)
+        time_interval = str(self.field("scheduling_time_interval"))
+        if time_interval != "0.0":
+            prop_file_lines.append("{}self.scheduling.time_interval "
+                                   "= {}".format(PADDING * 2, time_interval))
+            prop_file_lines.append(os.linesep)
+            prop_file_lines.append("{}self.scheduling.time_window_start "
+                                   "= {}".format(PADDING * 2, self.field("scheduling_time_window_start")))
+            prop_file_lines.append(os.linesep)
+            prop_file_lines.append("{}self.scheduling.time_window_max "
+                                   "= {}".format(PADDING * 2, self.field("scheduling_time_window_max")))
+            prop_file_lines.append(os.linesep)
+            prop_file_lines.append("{}self.scheduling.time_window_end "
+                                   "= {}".format(PADDING * 2, self.field("scheduling_time_window_end")))
+            prop_file_lines.append(os.linesep)
 
         prop_file_lines.append("{}# --------------------------".format(PADDING * 2))
         prop_file_lines.append(os.linesep)
@@ -242,6 +259,9 @@ class ProposalCreationWizard(QtWidgets.QWizard):
                 prop_file_lines.append("{}{}.num_visits = {}".format(PADDING * 2, field_stem,
                                        str(self.field("{}_num_visits".format(field_stem)))))
                 prop_file_lines.append(os.linesep)
+                prop_file_lines.append("{}{}.num_grouped_visits = {}".format(PADDING * 2, field_stem,
+                                       str(self.field("{}_num_grouped_visits".format(field_stem)))))
+                prop_file_lines.append(os.linesep)
                 prop_file_lines.append("{}{}.bright_limit = {}".format(PADDING * 2, field_stem,
                                        str(self.field("{}_bright_limit".format(field_stem)))))
                 prop_file_lines.append(os.linesep)
@@ -252,7 +272,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
                                        str(self.field("{}_max_seeing".format(field_stem)))))
                 prop_file_lines.append(os.linesep)
                 prop_file_lines.append("{}{}.exposures = [{}]".format(PADDING * 2, field_stem,
-                                       str(self.field("{}_exposures".format(field_stem)))))
+                                       str(self.field("{}_exposures".format(field_stem))).replace(',', ', ')))
                 prop_file_lines.append(os.linesep)
 
         filters = []
@@ -267,6 +287,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         filters_spec = os.linesep.join(filters)
 
         prop_file_lines.append("{}self.filters = {}{}{}".format(PADDING * 2, "{", filters_spec, "}"))
+        prop_file_lines.append(os.linesep)
 
         with open(os.path.join(prop_save_dir, prop_file_name), 'w') as ofile:
             for prop_file_line in prop_file_lines:
