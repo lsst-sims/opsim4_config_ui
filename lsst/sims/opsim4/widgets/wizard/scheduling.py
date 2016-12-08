@@ -65,6 +65,9 @@ class SchedulingPage(QtWidgets.QWizardPage):
         restrict_grouped_visits_la.setBuddy(restrict_grouped_visits_cb)
         self.registerField("scheduling_restrict_grouped_visits", restrict_grouped_visits_cb)
 
+        label_img = QtWidgets.QLabel()
+        label_img.setPixmap(QtGui.QPixmap(":/time_domain_window.png"))
+
         label6 = QtWidgets.QLabel("Set the time interval for subsequent revisits of the same target "
                                   "(field/filter) in a night. Leave zero if all filters only require a "
                                   "single target visit.")
@@ -125,19 +128,20 @@ class SchedulingPage(QtWidgets.QWizardPage):
         scroll_area_widget_layout.addWidget(label5, 8, 0, 1, 3)
         scroll_area_widget_layout.addWidget(restrict_grouped_visits_la, 9, 0)
         scroll_area_widget_layout.addWidget(restrict_grouped_visits_cb, 9, 1)
-        scroll_area_widget_layout.addWidget(label6, 10, 0, 1, 3)
-        scroll_area_widget_layout.addWidget(time_interval_la, 11, 0)
-        scroll_area_widget_layout.addWidget(time_interval_le, 11, 1)
-        scroll_area_widget_layout.addWidget(time_interval_un, 11, 2)
-        scroll_area_widget_layout.addWidget(label7, 12, 0, 1, 3)
-        scroll_area_widget_layout.addWidget(time_window_start_la, 13, 0)
-        scroll_area_widget_layout.addWidget(time_window_start_le, 13, 1)
-        scroll_area_widget_layout.addWidget(label8, 14, 0, 1, 3)
-        scroll_area_widget_layout.addWidget(time_window_max_la, 15, 0)
-        scroll_area_widget_layout.addWidget(time_window_max_le, 15, 1)
-        scroll_area_widget_layout.addWidget(label9, 16, 0, 1, 3)
-        scroll_area_widget_layout.addWidget(time_window_end_la, 17, 0)
-        scroll_area_widget_layout.addWidget(time_window_end_le, 17, 1)
+        scroll_area_widget_layout.addWidget(label_img, 10, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(label6, 11, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(time_interval_la, 12, 0)
+        scroll_area_widget_layout.addWidget(time_interval_le, 12, 1)
+        scroll_area_widget_layout.addWidget(time_interval_un, 12, 2)
+        scroll_area_widget_layout.addWidget(label7, 13, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(time_window_start_la, 14, 0)
+        scroll_area_widget_layout.addWidget(time_window_start_le, 14, 1)
+        scroll_area_widget_layout.addWidget(label8, 15, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(time_window_max_la, 16, 0)
+        scroll_area_widget_layout.addWidget(time_window_max_le, 16, 1)
+        scroll_area_widget_layout.addWidget(label9, 17, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(time_window_end_la, 18, 0)
+        scroll_area_widget_layout.addWidget(time_window_end_le, 18, 1)
 
         scroll_area_widget.setLayout(scroll_area_widget_layout)
 
