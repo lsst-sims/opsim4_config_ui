@@ -29,7 +29,7 @@ class SurveyModel(ModelHelper):
         any
             The associated parameter value.
         """
-        if "gen_proposals" in parameter_name:
+        if "general_proposals" in parameter_name:
             return list(self.proposals["GEN"])
         else:
             return ModelHelper.get_parameter(self, parameter_name)
