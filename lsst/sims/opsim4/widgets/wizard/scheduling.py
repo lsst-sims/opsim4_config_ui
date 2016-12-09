@@ -56,19 +56,99 @@ class SchedulingPage(QtWidgets.QWizardPage):
         airmass_bonus_le.setValidator(QtGui.QDoubleValidator())
         self.registerField("scheduling_airmass_bonus", airmass_bonus_le)
 
-        layout = QtWidgets.QGridLayout()
+        label5 = QtWidgets.QLabel("Set the checkbox to restrict the number of visits in a night of the "
+                                  "same target (field/filter).")
+        label5.setWordWrap(True)
 
-        layout.addWidget(label1, 0, 0, 1, 2)
-        layout.addWidget(max_num_targets_la, 1, 0)
-        layout.addWidget(max_num_targets_le, 1, 1)
-        layout.addWidget(label2, 2, 0, 1, 2)
-        layout.addWidget(accept_serendipity_la, 3, 0)
-        layout.addWidget(accept_serendipity_cb, 3, 1)
-        layout.addWidget(label3, 4, 0, 1, 2)
-        layout.addWidget(accept_consecutive_visits_la, 5, 0)
-        layout.addWidget(accept_consecutive_visits_cb, 5, 1)
-        layout.addWidget(label4, 6, 0, 1, 2)
-        layout.addWidget(airmass_bonus_la, 7, 0)
-        layout.addWidget(airmass_bonus_le, 7, 1)
+        restrict_grouped_visits_la = QtWidgets.QLabel("Restrict Grouped Visits:")
+        restrict_grouped_visits_cb = QtWidgets.QCheckBox()
+        restrict_grouped_visits_la.setBuddy(restrict_grouped_visits_cb)
+        self.registerField("scheduling_restrict_grouped_visits", restrict_grouped_visits_cb)
 
-        self.setLayout(layout)
+        label_img = QtWidgets.QLabel()
+        label_img.setPixmap(QtGui.QPixmap(":/time_domain_window.png"))
+
+        label6 = QtWidgets.QLabel("Set the time interval for subsequent revisits of the same target "
+                                  "(field/filter) in a night. Leave zero if all filters only require a "
+                                  "single target visit.")
+        label6.setWordWrap(True)
+
+        time_interval_la = QtWidgets.QLabel("Time Interval:")
+        time_interval_le = QtWidgets.QLineEdit("0.0")
+        time_interval_la.setBuddy(time_interval_le)
+        time_interval_le.setValidator(QtGui.QDoubleValidator())
+        time_interval_un = QtWidgets.QLabel("seconds")
+        self.registerField("scheduling_time_interval", time_interval_le)
+
+        label7 = QtWidgets.QLabel("Set the relative time where the ranking priority for a target starts "
+                                  "increasing linearly.")
+        label7.setWordWrap(True)
+
+        time_window_start_la = QtWidgets.QLabel("Time Window Start:")
+        time_window_start_le = QtWidgets.QLineEdit("0.0")
+        time_window_start_la.setBuddy(time_window_start_le)
+        time_window_start_le.setValidator(QtGui.QDoubleValidator())
+        self.registerField("scheduling_time_window_start", time_window_start_le)
+
+        label8 = QtWidgets.QLabel("Set the relative time where the ranking priority for a target reaches "
+                                  "maximum.")
+        label8.setWordWrap(True)
+
+        time_window_max_la = QtWidgets.QLabel("Time Window Max:")
+        time_window_max_le = QtWidgets.QLineEdit("0.0")
+        time_window_max_la.setBuddy(time_window_max_le)
+        time_window_max_le.setValidator(QtGui.QDoubleValidator())
+        self.registerField("scheduling_time_window_max", time_window_max_le)
+
+        label9 = QtWidgets.QLabel("Set the relative time where the ranking priority for a target drops to "
+                                  "zero.")
+        label9.setWordWrap(True)
+
+        time_window_end_la = QtWidgets.QLabel("Time Window End:")
+        time_window_end_le = QtWidgets.QLineEdit("0.0")
+        time_window_end_la.setBuddy(time_window_end_le)
+        time_window_end_le.setValidator(QtGui.QDoubleValidator())
+        self.registerField("scheduling_time_window_end", time_window_end_le)
+
+        scroll_area_widget = QtWidgets.QWidget()
+        scroll_area_widget_layout = QtWidgets.QGridLayout()
+
+        scroll_area_widget_layout.addWidget(label1, 0, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(max_num_targets_la, 1, 0)
+        scroll_area_widget_layout.addWidget(max_num_targets_le, 1, 1)
+        scroll_area_widget_layout.addWidget(label2, 2, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(accept_serendipity_la, 3, 0)
+        scroll_area_widget_layout.addWidget(accept_serendipity_cb, 3, 1)
+        scroll_area_widget_layout.addWidget(label3, 4, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(accept_consecutive_visits_la, 5, 0)
+        scroll_area_widget_layout.addWidget(accept_consecutive_visits_cb, 5, 1)
+        scroll_area_widget_layout.addWidget(label4, 6, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(airmass_bonus_la, 7, 0)
+        scroll_area_widget_layout.addWidget(airmass_bonus_le, 7, 1)
+        scroll_area_widget_layout.addWidget(label5, 8, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(restrict_grouped_visits_la, 9, 0)
+        scroll_area_widget_layout.addWidget(restrict_grouped_visits_cb, 9, 1)
+        scroll_area_widget_layout.addWidget(label_img, 10, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(label6, 11, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(time_interval_la, 12, 0)
+        scroll_area_widget_layout.addWidget(time_interval_le, 12, 1)
+        scroll_area_widget_layout.addWidget(time_interval_un, 12, 2)
+        scroll_area_widget_layout.addWidget(label7, 13, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(time_window_start_la, 14, 0)
+        scroll_area_widget_layout.addWidget(time_window_start_le, 14, 1)
+        scroll_area_widget_layout.addWidget(label8, 15, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(time_window_max_la, 16, 0)
+        scroll_area_widget_layout.addWidget(time_window_max_le, 16, 1)
+        scroll_area_widget_layout.addWidget(label9, 17, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(time_window_end_la, 18, 0)
+        scroll_area_widget_layout.addWidget(time_window_end_le, 18, 1)
+
+        scroll_area_widget.setLayout(scroll_area_widget_layout)
+
+        scrollable = QtWidgets.QScrollArea()
+        scrollable.setWidgetResizable(True)
+        scrollable.setWidget(scroll_area_widget)
+
+        main_layout = QtWidgets.QVBoxLayout()
+        main_layout.addWidget(scrollable)
+        self.setLayout(main_layout)

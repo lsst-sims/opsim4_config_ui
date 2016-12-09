@@ -2,7 +2,7 @@ import os
 
 from lsst.sims.ocs.configuration import ScienceProposals, Survey
 
-from lsst.sims.opsim4.model import AreaDistributionPropModel
+from lsst.sims.opsim4.model import GeneralPropModel
 from lsst.sims.opsim4.utilities import load_class
 
 __all__ = ["ScienceModel"]
@@ -16,19 +16,19 @@ class ScienceModel(object):
         """
         sci_props = ScienceProposals()
         survey = Survey()
-        sci_props.load_proposals({"AD": survey.ad_proposals})
+        sci_props.load_proposals({"GEN": survey.general_proposals})
 
-        self.ad_params = {}
-        self.ad_modules = {}
+        self.general_params = {}
+        self.general_modules = {}
 
-        ad_objs = sci_props.area_dist_props.active
-        for ad_obj in ad_objs:
-            ad_module = load_class(ad_obj).__module__
-            ad_model = AreaDistributionPropModel(ad_obj)
-            params = ad_model.make_parameter_dictionary()
+        general_objs = sci_props.general_props.active
+        for general_obj in general_objs:
+            general_module = load_class(general_obj).__module__
+            general_model = GeneralPropModel(general_obj)
+            params = general_model.make_parameter_dictionary()
             prop_name = params["name"]["value"]
-            self.ad_params[prop_name] = params
-            self.ad_modules[prop_name] = ad_module
+            self.general_params[prop_name] = params
+            self.general_modules[prop_name] = general_module
 
     def get_proposal_names(self):
         """Return names of stored proposals.
@@ -37,7 +37,7 @@ class ScienceModel(object):
         -------
         list(str)
         """
-        proposal_names = self.ad_params.keys()
+        proposal_names = self.general_params.keys()
         return proposal_names
 
     def check_parameter(self, parameter_name, value_to_check):
@@ -75,8 +75,8 @@ class ScienceModel(object):
 
         prop_name = pnames.pop(0)
         pvalue = None
-        if prop_name in self.ad_params:
-            prop_params = self.ad_params[prop_name]
+        if prop_name in self.general_params:
+            prop_params = self.general_params[prop_name]
             while len(pnames):
                 name = pnames.pop(0)
                 try:
@@ -111,8 +111,8 @@ class ScienceModel(object):
         changed_params : list((str, str))
             The list of changed parameters.
         """
-        if name in self.ad_modules:
-            modules = self.ad_modules
+        if name in self.general_modules:
+            modules = self.general_modules
 
         filename = "{}_prop.py".format(name.lower())
         with open(os.path.join(save_dir, filename), 'w') as ofile:

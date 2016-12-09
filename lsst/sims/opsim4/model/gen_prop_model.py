@@ -3,16 +3,16 @@ import collections
 from lsst.sims.opsim4.model import ModelHelper
 from lsst.sims.opsim4.utilities import load_class
 
-__all__ = ["AreaDistributionPropModel"]
+__all__ = ["GeneralPropModel"]
 
-class AreaDistributionPropModel(ModelHelper):
+class GeneralPropModel(ModelHelper):
 
     def __init__(self, config_obj):
         """Initialize class.
 
         Parameters
         ----------
-        config_obj : lsst.sims.ocs.configuration.proposal.AreaDistribution instance
+        config_obj : lsst.sims.ocs.configuration.proposal.General instance
             The instance containing the area distribution proposal information.
         """
         self.parameter_order = ["name", "sky_region", "sky_exclusion", "sky_nightly_bounds",

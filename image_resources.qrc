@@ -12,5 +12,6 @@
 		<file alias="undo_tab.svg">images/undo_tab.svg</file>
 		<file alias="undo_field.svg">images/undo_field.svg</file>
 		<file alias="clear.svg">images/clear_left-2.0.svg</file>
+		<file alias="time_domain_window.png">images/time_domain_window.png</file>
 	</qresource>
 </RCC>

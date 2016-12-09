@@ -30,17 +30,17 @@ class SurveyWidget(ConfigurationTab):
         self.create_widget("Str", "start_date")
         self.create_widget("Float", "idle_delay")
 
-        ad_group_box = QtWidgets.QGroupBox("ad_proposals")
-        ad_group_box.setObjectName("ad_proposals")
-        ad_group_box.setToolTip("Use the checkboxes to select which area distribution proposals NOT to run.")
+        gen_group_box = QtWidgets.QGroupBox("gen_proposals")
+        gen_group_box.setObjectName("gen_proposals")
+        gen_group_box.setToolTip("Use the checkboxes to select which general proposals NOT to run.")
         glayout = QtWidgets.QGridLayout()
 
-        for i, prop_name in enumerate(self.proposals["AD"]):
+        for i, prop_name in enumerate(self.proposals["GEN"]):
             self.create_widget("Bool", prop_name, layout=glayout, rows=i)
 
-        ad_group_box.setLayout(glayout)
+        gen_group_box.setLayout(glayout)
 
-        self.layout.addWidget(ad_group_box, 3, 0, 1, 3)
+        self.layout.addWidget(gen_group_box, 3, 0, 1, 3)
 
     def get_changed_parameters(self, layout=None, parent_name=None):
         """Find the changed parameters.
@@ -58,23 +58,23 @@ class SurveyWidget(ConfigurationTab):
             A list of 2-tuples of the changed property name and the property value.
         """
         changed_values = ConfigurationTab.get_changed_parameters(self, layout=layout, parent_name=parent_name)
-        ad_props_changed = False
+        gen_props_changed = False
         for changed_value in changed_values:
-            if "ad_proposals" in changed_value[0]:
-                ad_props_changed = True
+            if "gen_proposals" in changed_value[0]:
+                gen_props_changed = True
         corrected_changed_values = []
-        if ad_props_changed:
+        if gen_props_changed:
             for changed_value in changed_values:
-                if "ad_proposals" not in changed_value[0]:
+                if "gen_proposals" not in changed_value[0]:
                     corrected_changed_values.append(changed_value)
-            ad_prop_gb = self.layout.itemAtPosition(3, 0).widget()
-            ad_prop_gb_layout = ad_prop_gb.layout()
-            ad_proposals = []
-            for i in xrange(ad_prop_gb_layout.rowCount()):
-                cb = ad_prop_gb_layout.itemAtPosition(i, 1).widget()
+            gen_prop_gb = self.layout.itemAtPosition(3, 0).widget()
+            gen_prop_gb_layout = gen_prop_gb.layout()
+            gen_proposals = []
+            for i in xrange(gen_prop_gb_layout.rowCount()):
+                cb = gen_prop_gb_layout.itemAtPosition(i, 1).widget()
                 if not cb.isChecked():
-                    ad_proposals.append(str(ad_prop_gb_layout.itemAtPosition(i, 0).widget().text()))
-            corrected_changed_values.append(("ad_proposals", ad_proposals))
+                    gen_proposals.append(str(gen_prop_gb_layout.itemAtPosition(i, 0).widget().text()))
+            corrected_changed_values.append(("gen_proposals", gen_proposals))
         else:
             corrected_changed_values = changed_values
 
@@ -100,20 +100,20 @@ class SurveyWidget(ConfigurationTab):
         else:
             # Parent class calls this function with another layout, so just return the results.
             return ConfigurationTab.get_diff(self, layout=layout, parent_name=parent_name)
-        ad_props_changed = False
+        gen_props_changed = False
         for key in diff:
-            if "ad_proposals" in key:
-                ad_props_changed = True
-        if ad_props_changed:
-            del diff["survey/ad_proposals"]
-            ad_prop_gb = self.layout.itemAtPosition(3, 0).widget()
-            ad_prop_gb_layout = ad_prop_gb.layout()
-            ad_proposals = []
-            for i in xrange(ad_prop_gb_layout.rowCount()):
-                cb = ad_prop_gb_layout.itemAtPosition(i, 1).widget()
+            if "gen_proposals" in key:
+                gen_props_changed = True
+        if gen_props_changed:
+            del diff["survey/gen_proposals"]
+            gen_prop_gb = self.layout.itemAtPosition(3, 0).widget()
+            gen_prop_gb_layout = gen_prop_gb.layout()
+            gen_proposals = []
+            for i in xrange(gen_prop_gb_layout.rowCount()):
+                cb = gen_prop_gb_layout.itemAtPosition(i, 1).widget()
                 if not cb.isChecked():
-                    ad_proposals.append(str(ad_prop_gb_layout.itemAtPosition(i, 0).widget().text()))
-            diff["survey"]["ad_proposals"] = [",".join(ad_proposals)]
+                    gen_proposals.append(str(gen_prop_gb_layout.itemAtPosition(i, 0).widget().text()))
+            diff["survey"]["gen_proposals"] = [",".join(gen_proposals)]
 
         return diff
 

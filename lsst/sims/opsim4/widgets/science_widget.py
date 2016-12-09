@@ -26,6 +26,6 @@ class ScienceWidget(ConfigurationTabWidget):
         params : dict(str: params)
             Set of configuration information.
         """
-        for name, values in params.items():
+        for name, values in sorted(params.items()):
             tab = ProposalWidget(name, values)
             self.addTab(tab, name)
