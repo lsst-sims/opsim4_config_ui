@@ -1,5 +1,4 @@
 import os
-import platform
 from setuptools import Command, setup
 import stat
 import subprocess
@@ -7,7 +6,7 @@ import subprocess
 PACKAGE = 'opsim4'
 
 MAJOR = 0
-MINOR = 8
+MINOR = 7
 PATCH = 0
 
 MODULE = "lsst.sims.{}".format(PACKAGE)
