@@ -16,19 +16,19 @@ class ScienceModel(object):
         """
         sci_props = ScienceProposals()
         survey = Survey()
-        sci_props.load_proposals({"GEN": survey.gen_proposals})
+        sci_props.load_proposals({"GEN": survey.general_proposals})
 
-        self.gen_params = {}
-        self.gen_modules = {}
+        self.general_params = {}
+        self.general_modules = {}
 
-        gen_objs = sci_props.gen_props.active
-        for gen_obj in gen_objs:
-            gen_module = load_class(gen_obj).__module__
-            gen_model = GeneralPropModel(gen_obj)
-            params = gen_model.make_parameter_dictionary()
+        general_objs = sci_props.general_props.active
+        for general_obj in general_objs:
+            general_module = load_class(general_obj).__module__
+            general_model = GeneralPropModel(general_obj)
+            params = general_model.make_parameter_dictionary()
             prop_name = params["name"]["value"]
-            self.gen_params[prop_name] = params
-            self.gen_modules[prop_name] = gen_module
+            self.general_params[prop_name] = params
+            self.general_modules[prop_name] = general_module
 
     def get_proposal_names(self):
         """Return names of stored proposals.
@@ -37,7 +37,7 @@ class ScienceModel(object):
         -------
         list(str)
         """
-        proposal_names = self.gen_params.keys()
+        proposal_names = self.general_params.keys()
         return proposal_names
 
     def check_parameter(self, parameter_name, value_to_check):
@@ -75,8 +75,8 @@ class ScienceModel(object):
 
         prop_name = pnames.pop(0)
         pvalue = None
-        if prop_name in self.gen_params:
-            prop_params = self.gen_params[prop_name]
+        if prop_name in self.general_params:
+            prop_params = self.general_params[prop_name]
             while len(pnames):
                 name = pnames.pop(0)
                 try:
@@ -111,8 +111,8 @@ class ScienceModel(object):
         changed_params : list((str, str))
             The list of changed parameters.
         """
-        if name in self.gen_modules:
-            modules = self.gen_modules
+        if name in self.general_modules:
+            modules = self.general_modules
 
         filename = "{}_prop.py".format(name.lower())
         with open(os.path.join(save_dir, filename), 'w') as ofile:

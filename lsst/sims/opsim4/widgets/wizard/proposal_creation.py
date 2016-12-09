@@ -62,7 +62,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         prop_reg_type = None
         if is_general:
             prop_type = "General"
-            prop_reg_type = "gen_prop_reg"
+            prop_reg_type = "general_prop_reg"
         if is_subseq:
             prop_type = "Sequence"
             prop_reg_type = "sequence_prop_reg"

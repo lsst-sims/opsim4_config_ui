@@ -14,7 +14,7 @@ class SurveyModel(ModelHelper):
         survey = Survey()
         ModelHelper.__init__(self, survey)
 
-        self.proposals = {"GEN": survey.gen_proposals}
+        self.proposals = {"GEN": survey.general_proposals}
 
     def get_parameter(self, parameter_name):
         """Get a value for the given parameter.
