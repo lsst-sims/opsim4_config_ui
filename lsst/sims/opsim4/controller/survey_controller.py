@@ -20,8 +20,7 @@ class SurveyController(BaseController):
         self.model = SurveyModel()
         self.widget = SurveyWidget(name, self.model.proposals)
 
-        for key, value in self.model.params.items():
-            self.widget.set_information(key, value)
+        self.widget.set_information(self.model.params)
 
         self.widget.checkProperty.connect(self.check_property)
         self.widget.getProperty.connect(self.get_property)
@@ -41,12 +40,12 @@ class SurveyController(BaseController):
         """
         pname = str(param_name)
         pvalue = str(param_value)
-        if "ad_proposals" in pname:
+        if "general_proposals" in pname:
             prop_name = pname.split('/')[-1]
             if pvalue == "True":
-                is_changed = self.model.is_proposal_active(prop_name)
-            else:
                 is_changed = False
+            else:
+                is_changed = self.model.is_proposal_active(prop_name)
             self.widget.is_changed(position, is_changed)
         else:
             BaseController.check_property(self, param_name, param_value, position)
@@ -62,9 +61,9 @@ class SurveyController(BaseController):
             The widget position that requested this check.
         """
         pname = str(param_name)
-        if "ad_proposals" in pname:
+        if "general_proposals" in pname:
             prop_name = pname.split('/')[-1]
-            is_active = not self.model.is_proposal_active(prop_name)
+            is_active = self.model.is_proposal_active(prop_name)
             self.widget.reset_field(position, str(is_active))
         else:
             BaseController.get_property(self, param_name, position)

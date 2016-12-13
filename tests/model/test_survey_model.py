@@ -21,4 +21,4 @@ class SurveyModelTest(unittest.TestCase):
         self.assertFalse(self.model.is_proposal_active("TestTheProp"))
 
     def test_get_parameters(self):
-        self.assertEqual(len(self.model.get_parameter("survey/gen_proposals")), self.num_proposals)
+        self.assertEqual(len(self.model.get_parameter("survey/general_proposals")), self.num_proposals)
