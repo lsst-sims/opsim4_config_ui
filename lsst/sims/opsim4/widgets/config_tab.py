@@ -218,19 +218,25 @@ class ConfigurationTab(QtWidgets.QWidget):
         position : int
             The position (usually row) of the widget.
         is_changed : bool
-            Flag set to True if the parameter has changed from baseline, false if not.
+            Flag set to True if the parameter has changed from baseline, False if not.
         layout : QLayout, optional
             An alternative layout to check.
         """
-        if not is_changed:
-            return
         if layout is None:
             layout = self.layout
         plabel = layout.itemAt(position[-1] - 1).widget()
         pname = str(plabel.text())
-        changed_label = "{}{}".format(pname, self.CHANGED_PARAMETER)
-        plabel.setText(changed_label)
-        self.change_label_color(plabel, QtCore.Qt.red)
+        if pname.endswith(self.CHANGED_PARAMETER):
+            if not is_changed:
+                plabel.setText(pname.strip(self.CHANGED_PARAMETER))
+                self.change_label_color(plabel, QtCore.Qt.black)
+        else:
+            if not is_changed:
+                self.change_label_color(plabel, QtCore.Qt.black)
+            else:
+                changed_label = "{}{}".format(pname, self.CHANGED_PARAMETER)
+                plabel.setText(changed_label)
+                self.change_label_color(plabel, QtCore.Qt.red)
 
     def property_changed(self, pwidget, layout=None, qualifier=None, position=None):
         """Get information from a possibly changed parameter.
@@ -256,13 +262,10 @@ class ConfigurationTab(QtWidgets.QWidget):
                                                               os.path.expanduser("~/"))
             pwidget.setText(file_text)
         pos = layout.indexOf(pwidget)
-        plabel = layout.itemAt(pos - 1).widget()
         pname = pwidget.objectName()
         if qualifier is not None:
             pname = "{}/{}".format(qualifier, pname)
 
-        if plabel.text().endswith(self.CHANGED_PARAMETER):
-            return
         try:
             pstate = pwidget.checkState()
             if pstate == 0:
