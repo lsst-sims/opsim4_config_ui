@@ -38,7 +38,11 @@ class SkyRegionPage(QtWidgets.QWizardPage):
         degrees_units1 = QtWidgets.QLabel("degrees")
         degrees_units2 = QtWidgets.QLabel("degrees")
         degrees_units3 = QtWidgets.QLabel("degrees")
+        days_units1 = QtWidgets.QLabel("days")
+        days_units2 = QtWidgets.QLabel("days")
         validator = QtGui.QDoubleValidator()
+        int_validator = QtGui.QIntValidator()
+        int_validator.setBottom(1)
 
         min_limit_la = QtWidgets.QLabel("Min Limit:")
         self.min_limit_le = QtWidgets.QLineEdit()
@@ -56,6 +60,16 @@ class SkyRegionPage(QtWidgets.QWizardPage):
         self.bounds_limit_le.setReadOnly(True)
         bounds_limit_la.setBuddy(self.bounds_limit_le)
 
+        start_time_la = QtWidgets.QLabel("Start Time:")
+        self.start_time_le = QtWidgets.QLineEdit()
+        self.start_time_le.setValidator(int_validator)
+        start_time_la.setBuddy(self.start_time_le)
+
+        end_time_la = QtWidgets.QLabel("End Time:")
+        self.end_time_le = QtWidgets.QLineEdit()
+        self.end_time_le.setValidator(int_validator)
+        end_time_la.setBuddy(self.end_time_le)
+
         gb_layout = QtWidgets.QGridLayout()
         gb_layout.addWidget(self.selection_types, 0, 0, 1, 4)
 
@@ -71,6 +85,14 @@ class SkyRegionPage(QtWidgets.QWizardPage):
         gb_layout.addWidget(self.bounds_limit_le, 3, 1, 1, 2)
         gb_layout.addWidget(degrees_units3, 3, 3)
 
+        gb_layout.addWidget(start_time_la, 4, 0)
+        gb_layout.addWidget(self.start_time_le, 4, 1, 1, 2)
+        gb_layout.addWidget(days_units1, 4, 3)
+
+        gb_layout.addWidget(end_time_la, 5, 0)
+        gb_layout.addWidget(self.end_time_le, 5, 1, 1, 2)
+        gb_layout.addWidget(days_units2, 5, 3)
+
         add_button = QtWidgets.QPushButton("Add")
         add_button.clicked.connect(self.add_selection)
         add_button.setToolTip("Add the selection to the list.")
@@ -78,8 +100,8 @@ class SkyRegionPage(QtWidgets.QWizardPage):
         clear_button.clicked.connect(self.clear_selection)
         clear_button.setToolTip("Clear the last selection from the list.")
 
-        gb_layout.addWidget(add_button, 4, 0, 1, 2)
-        gb_layout.addWidget(clear_button, 4, 2, 1, 2)
+        gb_layout.addWidget(add_button, 6, 0, 1, 2)
+        gb_layout.addWidget(clear_button, 6, 2, 1, 2)
 
         group_box.setLayout(gb_layout)
 
@@ -126,13 +148,26 @@ class SkyRegionPage(QtWidgets.QWizardPage):
         """Combine information for a sky region selection.
         """
         current_text = self.show_selections.toPlainText()
-        selection_text = "{},{},{}".format(str(self.selection_types.currentText()),
-                                           str(self.min_limit_le.text()),
-                                           str(self.max_limit_le.text()))
-        if not self.bounds_limit_le.isReadOnly():
-            selection_text += str(self.bounds_limit_le.text())
+        selection_text = "{},{},{},{},{},{}"
 
-        current_text += selection_text + os.linesep
+        selection_type = str(self.selection_types.currentText())
+        min_limit = str(self.min_limit_le.text())
+        max_limit = str(self.max_limit_le.text())
+
+        if self.bounds_limit_le.isReadOnly():
+            bounds_limit = "nan"
+        else:
+            bounds_limit = str(self.bounds_limit_le.text())
+
+        start_time = str(self.start_time_le.text())
+        if start_time == "":
+            start_time = "0"
+        end_time = str(self.end_time_le.text())
+        if end_time == "":
+            end_time = "0"
+
+        current_text += selection_text.format(selection_type, min_limit, max_limit, bounds_limit,
+                                              start_time, end_time) + os.linesep
         self.show_selections.setPlainText(current_text)
 
     def check_bounds_limit(self, selection):
