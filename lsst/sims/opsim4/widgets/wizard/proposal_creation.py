@@ -104,7 +104,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         selection_mapping_values = []
         for i, sky_region_selection in enumerate(sky_regions_selections.split(os.linesep)):
             selection_obj = "sel{}".format(i)
-            selection_list.append("{}: {}".format(i, selection_obj))
+            selection_list.append((str(i), selection_obj))
             parts = sky_region_selection.split(',')
             prop_file_lines.append("{}{} = Selection()".format(PADDING * 2, selection_obj))
             prop_file_lines.append(os.linesep)
@@ -133,9 +133,9 @@ class ProposalCreationWizard(QtWidgets.QWizard):
                     else:
                         selection_mapping_values.append([i])
 
+        selection_spec = self.format_dictionaries(selection_list, padding_size=PADDING * 9 + "  ")
         prop_file_lines.append("{}self.sky_region.selections = {}{}{}".format(PADDING * 2, "{",
-                                                                              ", ".join(selection_list),
-                                                                              "}"))
+                                                                              selection_spec, "}"))
         prop_file_lines.append(os.linesep)
 
         if len(time_range_values):
@@ -143,7 +143,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
             time_range_list = []
             for j, time_range in enumerate(time_range_values):
                 time_range_obj = "time_range{}".format(j)
-                time_range_list.append("{}: {}".format(j, time_range_obj))
+                time_range_list.append((str(j), time_range_obj))
                 prop_file_lines.append("{}{} = TimeRange()".format(PADDING * 2, time_range_obj))
                 prop_file_lines.append(os.linesep)
                 prop_file_lines.append("{}{}.start = {}".format(PADDING * 2, time_range_obj,
@@ -152,23 +152,24 @@ class ProposalCreationWizard(QtWidgets.QWizard):
                 prop_file_lines.append("{}{}.end = {}".format(PADDING * 2, time_range_obj,
                                                               str(time_range[1])))
                 prop_file_lines.append(os.linesep)
+            time_range_spec = self.format_dictionaries(time_range_list, padding_size=PADDING * 9 + "   ")
             prop_file_lines.append("{}self.sky_region.time_ranges = {}{}{}".format(PADDING * 2, "{",
-                                                                                   ", ".join(time_range_list),
-                                                                                   "}"))
+                                                                                   time_range_spec, "}"))
             prop_file_lines.append(os.linesep)
 
             selection_mapping_list = []
             for k, selection_mapping in enumerate(selection_mapping_values):
                 selection_mapping_obj = "sel_map{}".format(k)
-                selection_mapping_list.append("{}: {}".format(k, selection_mapping_obj))
+                selection_mapping_list.append((str(k), selection_mapping_obj))
                 prop_file_lines.append("{}{} = SelectionList()".format(PADDING * 2, selection_mapping_obj))
                 prop_file_lines.append(os.linesep)
                 prop_file_lines.append("{}{}.indexes = {}".format(PADDING * 2, selection_mapping_obj,
                                                                   str(selection_mapping)))
                 prop_file_lines.append(os.linesep)
+            selection_mapping_spec = self.format_dictionaries(selection_mapping_list,
+                                                              padding_size=PADDING * 11 + " ")
             prop_file_lines.append("{}self.sky_region.selection_mapping "
-                                   "= {}{}{}".format(PADDING * 2, "{", ", ".join(selection_mapping_list),
-                                                     "}"))
+                                   "= {}{}{}".format(PADDING * 2, "{", selection_mapping_spec, "}"))
 
             prop_file_lines.append(os.linesep)
 
@@ -321,16 +322,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
                                        str(self.field("{}_exposures".format(field_stem))).replace(',', ', ')))
                 prop_file_lines.append(os.linesep)
 
-        filters = []
-        for i, used_filter in enumerate(used_filters):
-            if i != 0:
-                line_padding = PADDING * 6
-            else:
-                line_padding = ""
-            filters.append("{}{}: {},".format(line_padding, used_filter[0], used_filter[1]))
-
-        filters[-1] = filters[-1].strip(',')
-        filters_spec = os.linesep.join(filters)
+        filters_spec = self.format_dictionaries(used_filters)
 
         prop_file_lines.append("{}self.filters = {}{}{}".format(PADDING * 2, "{", filters_spec, "}"))
         prop_file_lines.append(os.linesep)
@@ -340,3 +332,27 @@ class ProposalCreationWizard(QtWidgets.QWizard):
                 ofile.write(prop_file_line)
 
         QtWidgets.QDialog.accept(self)
+
+    def format_dictionaries(self, infos, padding_size=PADDING * 6):
+        """Format dictionaries in columns.
+
+        Parameters
+        ----------
+        infos : list
+            The set of information for writing the dictionary.
+
+        Returns
+        -------
+        list
+            The column list for the dictionary.
+        """
+        out_list = []
+        for i, info in enumerate(infos):
+            if i != 0:
+                line_padding = padding_size
+            else:
+                line_padding = ""
+            out_list.append("{}{}: {},".format(line_padding, info[0], info[1]))
+
+        out_list[-1] = out_list[-1].strip(',')
+        return os.linesep.join(out_list)
