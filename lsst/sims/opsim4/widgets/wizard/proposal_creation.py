@@ -100,6 +100,8 @@ class ProposalCreationWizard(QtWidgets.QWizard):
 
         sky_regions_selections = str(self.field("sky_region_selections")).strip()
         selection_list = []
+        time_range_values = []
+        selection_mapping_values = []
         for i, sky_region_selection in enumerate(sky_regions_selections.split(os.linesep)):
             selection_obj = "sel{}".format(i)
             selection_list.append("{}: {}".format(i, selection_obj))
@@ -114,17 +116,61 @@ class ProposalCreationWizard(QtWidgets.QWizard):
             prop_file_lines.append("{}{}.maximum_limit = {}".format(PADDING * 2, selection_obj,
                                                                     float(parts[2])))
             prop_file_lines.append(os.linesep)
-            try:
+            bounds_limit = parts[3]
+            if parts[3] != "nan":
                 prop_file_lines.append("{}{}.bounds_limit = {}".format(PADDING * 2, selection_obj,
-                                                                       float(parts[3])))
+                                                                       float(bounds_limit)))
                 prop_file_lines.append(os.linesep)
-            except IndexError:
-                pass
+            start_time = int(parts[4])
+            if start_time:
+                time_range_values.append((start_time, int(parts[5])))
+                if len(selection_mapping_values) == 0:
+                    selection_mapping_values.append([i])
+                else:
+                    index = len(time_range_values) - 2
+                    if start_time == time_range_values[index][0]:
+                        selection_mapping_values[-1].append(i)
+                    else:
+                        selection_mapping_values.append([i])
 
         prop_file_lines.append("{}self.sky_region.selections = {}{}{}".format(PADDING * 2, "{",
                                                                               ", ".join(selection_list),
                                                                               "}"))
         prop_file_lines.append(os.linesep)
+
+        if len(time_range_values):
+            prop_file_lines[2] += ", SelectionList, TimeRange"
+            time_range_list = []
+            for j, time_range in enumerate(time_range_values):
+                time_range_obj = "time_range{}".format(j)
+                time_range_list.append("{}: {}".format(j, time_range_obj))
+                prop_file_lines.append("{}{} = TimeRange()".format(PADDING * 2, time_range_obj))
+                prop_file_lines.append(os.linesep)
+                prop_file_lines.append("{}{}.start = {}".format(PADDING * 2, time_range_obj,
+                                                                str(time_range[0])))
+                prop_file_lines.append(os.linesep)
+                prop_file_lines.append("{}{}.end = {}".format(PADDING * 2, time_range_obj,
+                                                              str(time_range[1])))
+                prop_file_lines.append(os.linesep)
+            prop_file_lines.append("{}self.sky_region.time_ranges = {}{}{}".format(PADDING * 2, "{",
+                                                                                   ", ".join(time_range_list),
+                                                                                   "}"))
+            prop_file_lines.append(os.linesep)
+
+            selection_mapping_list = []
+            for k, selection_mapping in enumerate(selection_mapping_values):
+                selection_mapping_obj = "sel_map{}".format(k)
+                selection_mapping_list.append("{}: {}".format(k, selection_mapping_obj))
+                prop_file_lines.append("{}{} = SelectionList()".format(PADDING * 2, selection_mapping_obj))
+                prop_file_lines.append(os.linesep)
+                prop_file_lines.append("{}{}.indexes = {}".format(PADDING * 2, selection_mapping_obj,
+                                                                  str(selection_mapping)))
+                prop_file_lines.append(os.linesep)
+            prop_file_lines.append("{}self.sky_region.selection_mapping "
+                                   "= {}{}{}".format(PADDING * 2, "{", ", ".join(selection_mapping_list),
+                                                     "}"))
+
+            prop_file_lines.append(os.linesep)
 
         sky_region_combiners = str(self.field("sky_region_combiners"))
         if sky_region_combiners != "":

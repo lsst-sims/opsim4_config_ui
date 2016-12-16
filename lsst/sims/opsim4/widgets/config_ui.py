@@ -321,6 +321,7 @@ class OpsimConfig(QtWidgets.QMainWindow):
         wizard.set_save_directory(self.save_directory)
         wizard.resize(600, 500)
         wizard.exec_()
+        self.statusBar().showMessage("Proposal saved.", self.STATUS_BAR_TIMEOUT)
 
     def about(self):
         """Show information about the program.

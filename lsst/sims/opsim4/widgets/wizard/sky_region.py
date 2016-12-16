@@ -154,10 +154,9 @@ class SkyRegionPage(QtWidgets.QWizardPage):
         min_limit = str(self.min_limit_le.text())
         max_limit = str(self.max_limit_le.text())
 
-        if self.bounds_limit_le.isReadOnly():
+        bounds_limit = str(self.bounds_limit_le.text())
+        if bounds_limit == "":
             bounds_limit = "nan"
-        else:
-            bounds_limit = str(self.bounds_limit_le.text())
 
         start_time = str(self.start_time_le.text())
         if start_time == "":
@@ -179,7 +178,7 @@ class SkyRegionPage(QtWidgets.QWizardPage):
         Parameters
         ----------
         selection : str
-            The seleciton type from the QComboBox
+            The selection type from the QComboBox
         """
         self.bounds_limit_le.setReadOnly(str(selection) == "GP")
 
