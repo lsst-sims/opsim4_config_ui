@@ -285,6 +285,9 @@ class ProposalCreationWizard(QtWidgets.QWizard):
             prop_file_lines.append("{}self.scheduling.time_window_end "
                                    "= {}".format(PADDING * 2, self.field("scheduling_time_window_end")))
             prop_file_lines.append(os.linesep)
+            prop_file_lines.append("{}self.scheduling.time_weight "
+                                   "= {}".format(PADDING * 2, self.field("scheduling_time_weight")))
+            prop_file_lines.append(os.linesep)
 
         prop_file_lines.append("{}# --------------------------".format(PADDING * 2))
         prop_file_lines.append(os.linesep)
