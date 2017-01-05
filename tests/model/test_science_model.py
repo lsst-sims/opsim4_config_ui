@@ -17,6 +17,7 @@ class ScienceModelTest(unittest.TestCase):
         for k, v in self.model.general_params.items():
             if k == "SouthCelestialPole":
                 self.assertIsNotNone(v["sky_exclusion"])
+                self.assertIsNotNone(v["filters"]["value"]["u"])
 
         for k, v in self.model.general_modules.items():
             if k == "SouthCelestialPole":

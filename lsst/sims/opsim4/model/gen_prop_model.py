@@ -39,7 +39,7 @@ class GeneralPropModel(ModelHelper):
                         sub_cls1 = load_class(v1)
                         sparams1 = ModelHelper.make_parameter_dictionary(self, fields=sub_cls1._fields,
                                                                          obj=v1)
-                        iparams[key]["value"][i] = sparams1
+                        iparams[key]["value"][k1] = sparams1
 
                 iparams1 = iparams[key]["value"]
                 for k2 in iparams1:

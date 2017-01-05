@@ -85,7 +85,12 @@ class ScienceModel(object):
                     pvalue = pvalue[name]
                     continue
                 except ValueError:
-                    pass
+                    # Filter keys are single letters
+                    if len(name) == 1:
+                        pvalue = pvalue[name]
+                        continue
+                    else:
+                        pass
                 if pvalue is None:
                     pvalue = prop_params[name]["value"]
                 else:
@@ -132,6 +137,8 @@ class ScienceModel(object):
                 for ppart in pparts[1:]:
                     if ppart.isdigit():
                         prop_name = "{}[{}]".format(prop_name, ppart)
+                    elif len(ppart) == 1:
+                        prop_name = "{}[\'{}\']".format(prop_name, ppart)
                     else:
                         prop_name = "{}.{}".format(prop_name, ppart)
                 try:
