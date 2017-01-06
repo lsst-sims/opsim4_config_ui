@@ -200,7 +200,10 @@ class ConfigurationTab(QtWidgets.QWidget):
                             if "," in property_text:
                                 property_value = property_text
                             else:
-                                property_value = float(property_text)
+                                if "." in property_text:
+                                    property_value = float(property_text)
+                                else:
+                                    property_value = int(property_text)
                         except ValueError:
                             property_value = str(property_widget.text())
 

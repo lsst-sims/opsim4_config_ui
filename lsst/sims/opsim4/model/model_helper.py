@@ -234,13 +234,19 @@ class ModelHelper(object):
                     if "," in value:
                         items = value.split(',')
                         try:
-                            pvalue = str([float(x) for x in items])
+                            if "." in items[0]:
+                                pvalue = str([float(x) for x in items])
+                            else:
+                                pvalue = str([int(x) for x in items])
                         except ValueError:
                             pvalue = str([str(x) for x in items])
                     elif isinstance(value, list):
                         pvalue = str(value)
                     else:
-                        pvalue = float(value)
+                        if "." in value:
+                            pvalue = float(value)
+                        else:
+                            pvalue = int(value)
                 except ValueError:
                     if value in (str(True), str(False)):
                         pvalue = value == str(True)

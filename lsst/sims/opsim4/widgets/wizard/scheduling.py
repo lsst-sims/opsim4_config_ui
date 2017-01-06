@@ -110,6 +110,15 @@ class SchedulingPage(QtWidgets.QWizardPage):
         time_window_end_le.setValidator(QtGui.QDoubleValidator())
         self.registerField("scheduling_time_window_end", time_window_end_le)
 
+        label10 = QtWidgets.QLabel("Set the weighting value to scale the shape of the time window function.")
+        label10.setWordWrap(True)
+
+        time_weight_la = QtWidgets.QLabel("Time Weight:")
+        time_weight_le = QtWidgets.QLineEdit("0.0")
+        time_weight_la.setBuddy(time_weight_le)
+        time_weight_le.setValidator(QtGui.QDoubleValidator())
+        self.registerField("scheduling_time_weight", time_window_end_le)
+
         scroll_area_widget = QtWidgets.QWidget()
         scroll_area_widget_layout = QtWidgets.QGridLayout()
 
@@ -142,6 +151,9 @@ class SchedulingPage(QtWidgets.QWizardPage):
         scroll_area_widget_layout.addWidget(label9, 17, 0, 1, 3)
         scroll_area_widget_layout.addWidget(time_window_end_la, 18, 0)
         scroll_area_widget_layout.addWidget(time_window_end_le, 18, 1)
+        scroll_area_widget_layout.addWidget(label10, 19, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(time_weight_la, 20, 0)
+        scroll_area_widget_layout.addWidget(time_weight_le, 20, 1)
 
         scroll_area_widget.setLayout(scroll_area_widget_layout)
 

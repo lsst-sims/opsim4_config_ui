@@ -159,7 +159,8 @@ class ProposalWidget(ConfigurationTab):
         self.create_widget("Float", "time_window_start", layout=glayout, rows=6)
         self.create_widget("Float", "time_window_max", layout=glayout, rows=7)
         self.create_widget("Float", "time_window_end", layout=glayout, rows=8)
-        self.group_box_rows.append(9)
+        self.create_widget("Float", "time_weight", layout=glayout, rows=9)
+        self.group_box_rows.append(10)
 
     def create_filters(self, glayout, params):
         """Set the information for the proposal filters.
