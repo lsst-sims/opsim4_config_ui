@@ -75,7 +75,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         prop_file_lines = []
         prop_file_lines.append("import lsst.pex.config as pexConfig")
         prop_file_lines.append(os.linesep)
-        prop_file_lines.append("from lsst.sims.ocs.configuration.proposal import {}, BandFilter, "
+        prop_file_lines.append("from lsst.sims.ocs.configuration.proposal import {}, GeneralBandFilter, "
                                "Selection".format(prop_type))
         prop_file_lines.append(os.linesep)
         prop_file_lines.append("from lsst.sims.ocs.configuration.proposal import {}".format(prop_reg_type))
@@ -303,7 +303,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
             use_filter = self.field("{}_use".format(field_stem))
             if use_filter:
                 used_filters.append(("{}.name".format(field_stem), field_stem))
-                prop_file_lines.append("{}{} = BandFilter()".format(PADDING * 2, field_stem))
+                prop_file_lines.append("{}{} = GeneralBandFilter()".format(PADDING * 2, field_stem))
                 prop_file_lines.append(os.linesep)
                 prop_file_lines.append("{}{}.name = \'{}\'".format(PADDING * 2, field_stem, band_filter))
                 prop_file_lines.append(os.linesep)
