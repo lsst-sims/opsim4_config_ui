@@ -14,7 +14,8 @@ class SurveyModel(ModelHelper):
         survey = Survey()
         ModelHelper.__init__(self, survey)
 
-        self.proposals = {"GEN": survey.general_proposals}
+        self.proposals = {"GEN": survey.general_proposals,
+                          "SEQ": survey.sequence_proposals}
 
     def get_parameter(self, parameter_name):
         """Get a value for the given parameter.
@@ -31,6 +32,8 @@ class SurveyModel(ModelHelper):
         """
         if "general_proposals" in parameter_name:
             return list(self.proposals["GEN"])
+        elif "sequence_proposals" in parameter_name:
+            return list(self.proposals["SEQ"])
         else:
             return ModelHelper.get_parameter(self, parameter_name)
 

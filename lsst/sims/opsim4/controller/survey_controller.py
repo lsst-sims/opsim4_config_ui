@@ -40,7 +40,7 @@ class SurveyController(BaseController):
         """
         pname = str(param_name)
         pvalue = str(param_value)
-        if "general_proposals" in pname:
+        if "general_proposals" in pname or "sequence_proposals" in pname:
             prop_name = pname.split('/')[-1]
             if pvalue == "True":
                 is_changed = False
@@ -61,7 +61,7 @@ class SurveyController(BaseController):
             The widget position that requested this check.
         """
         pname = str(param_name)
-        if "general_proposals" in pname:
+        if "general_proposals" in pname or "sequence_proposals" in pname:
             prop_name = pname.split('/')[-1]
             is_active = self.model.is_proposal_active(prop_name)
             self.widget.reset_field(position, str(is_active))

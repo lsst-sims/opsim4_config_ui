@@ -2,7 +2,7 @@ import os
 
 from lsst.sims.ocs.configuration import ScienceProposals, Survey
 
-from lsst.sims.opsim4.model import GeneralPropModel
+from lsst.sims.opsim4.model import GeneralPropModel, SequencePropModel
 from lsst.sims.opsim4.utilities import load_class
 
 __all__ = ["ScienceModel"]
@@ -16,7 +16,8 @@ class ScienceModel(object):
         """
         sci_props = ScienceProposals()
         survey = Survey()
-        sci_props.load_proposals({"GEN": survey.general_proposals})
+        sci_props.load_proposals({"GEN": survey.general_proposals,
+                                  "SEQ": survey.sequence_proposals})
 
         self.general_params = {}
         self.general_modules = {}
@@ -30,6 +31,18 @@ class ScienceModel(object):
             self.general_params[prop_name] = params
             self.general_modules[prop_name] = general_module
 
+        self.sequence_params = {}
+        self.sequence_modules = {}
+
+        sequence_objs = sci_props.sequence_props.active
+        for sequence_obj in sequence_objs:
+            sequence_module = load_class(sequence_obj).__module__
+            sequence_model = SequencePropModel(sequence_obj)
+            params = sequence_model.make_parameter_dictionary()
+            prop_name = params["name"]["value"]
+            self.sequence_params[prop_name] = params
+            self.sequence_modules[prop_name] = sequence_module
+
     def get_proposal_names(self):
         """Return names of stored proposals.
 
@@ -38,6 +51,7 @@ class ScienceModel(object):
         list(str)
         """
         proposal_names = self.general_params.keys()
+        proposal_names += self.sequence_params.keys()
         return proposal_names
 
     def check_parameter(self, parameter_name, value_to_check):

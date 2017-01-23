@@ -2,6 +2,7 @@
 """
 from .model_helper import *
 from .gen_prop_model import *
+from .seq_prop_model import *
 from .downtime_model import *
 from .camera_model import *
 from .dome_model import *
