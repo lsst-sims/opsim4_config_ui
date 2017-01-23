@@ -2,9 +2,9 @@ from PyQt5 import QtWidgets
 
 from lsst.sims.opsim4.widgets import ConfigurationTab
 
-__all__ = ["ProposalWidget"]
+__all__ = ["GeneralProposalWidget"]
 
-class ProposalWidget(ConfigurationTab):
+class GeneralProposalWidget(ConfigurationTab):
 
     def __init__(self, name, params, parent=None):
         """Initialize the class.

@@ -24,6 +24,8 @@ class ScienceController(BaseController):
 
         self.widget.create_tabs(self.model.general_params)
         self.widget.set_information(self.model.general_params)
+        self.widget.create_tabs(self.model.sequence_params)
+        self.widget.set_information(self.model.sequence_params)
 
         for i in xrange(self.widget.count()):
             tab = self.widget.widget(i)

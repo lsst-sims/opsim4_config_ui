@@ -129,6 +129,8 @@ class ConfigurationTabWidget(QtWidgets.QTabWidget):
         param_dict : dict
             The set of information for the configuration
         """
+        proposals = param_dict.keys()
         for i in xrange(self.count()):
             tab = self.widget(i)
-            tab.set_information(param_dict[tab.name])
+            if tab.name in proposals:
+                tab.set_information(param_dict[tab.name])

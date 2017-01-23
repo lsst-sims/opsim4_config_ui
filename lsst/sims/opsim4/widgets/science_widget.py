@@ -1,4 +1,5 @@
-from lsst.sims.opsim4.widgets import ConfigurationTabWidget, ProposalWidget
+from lsst.sims.opsim4.widgets import ConfigurationTabWidget, GeneralProposalWidget
+from lsst.sims.opsim4.widgets import SequenceProposalWidget
 
 __all__ = ["ScienceWidget"]
 
@@ -27,5 +28,8 @@ class ScienceWidget(ConfigurationTabWidget):
             Set of configuration information.
         """
         for name, values in sorted(params.items()):
-            tab = ProposalWidget(name, values)
+            if "sky_region" in values:
+                tab = GeneralProposalWidget(name, values)
+            else:
+                tab = SequenceProposalWidget(name, values)
             self.addTab(tab, name)
