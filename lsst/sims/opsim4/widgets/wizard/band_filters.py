@@ -6,7 +6,7 @@ class BandFiltersPage(QtWidgets.QWizardPage):
     """Main class for setting the proposal's band filters information.
     """
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, is_general=True):
         """Initialize the class
 
         Parameters
@@ -16,6 +16,7 @@ class BandFiltersPage(QtWidgets.QWizardPage):
         """
         QtWidgets.QWizardPage.__init__(self, parent)
         self.setTitle("Band Filters Setup")
+        self.is_general = is_general
 
         label = QtWidgets.QLabel("Set the band filter information. At least one filter must be specified "
                                  "otherwise the proposal will not gather any observations. When setting "
@@ -66,21 +67,22 @@ class BandFiltersPage(QtWidgets.QWizardPage):
 
         glayout = QtWidgets.QGridLayout()
 
-        num_visits_la = QtWidgets.QLabel("Number of Visits:")
-        num_visits_le = QtWidgets.QLineEdit()
-        num_visits_la.setBuddy(num_visits_le)
-        int_validator = QtGui.QIntValidator()
-        int_validator.setBottom(1)
-        num_visits_le.setValidator(int_validator)
-        self.registerField("{}_filter_num_visits".format(band_filter), num_visits_le)
+        if self.is_general:
+            num_visits_la = QtWidgets.QLabel("Number of Visits:")
+            num_visits_le = QtWidgets.QLineEdit()
+            num_visits_la.setBuddy(num_visits_le)
+            int_validator = QtGui.QIntValidator()
+            int_validator.setBottom(1)
+            num_visits_le.setValidator(int_validator)
+            self.registerField("{}_filter_num_visits".format(band_filter), num_visits_le)
 
-        num_grouped_visits_la = QtWidgets.QLabel("Number of Grouped Visits:")
-        num_grouped_visits_le = QtWidgets.QLineEdit()
-        num_grouped_visits_la.setBuddy(num_grouped_visits_le)
-        int_validator = QtGui.QIntValidator()
-        int_validator.setBottom(1)
-        num_grouped_visits_le.setValidator(int_validator)
-        self.registerField("{}_filter_num_grouped_visits".format(band_filter), num_grouped_visits_le)
+            num_grouped_visits_la = QtWidgets.QLabel("Number of Grouped Visits:")
+            num_grouped_visits_le = QtWidgets.QLineEdit()
+            num_grouped_visits_la.setBuddy(num_grouped_visits_le)
+            int_validator = QtGui.QIntValidator()
+            int_validator.setBottom(1)
+            num_grouped_visits_le.setValidator(int_validator)
+            self.registerField("{}_filter_num_grouped_visits".format(band_filter), num_grouped_visits_le)
 
         bright_limit_la = QtWidgets.QLabel("Bright Limit:")
         bright_limit_le = QtWidgets.QLineEdit()
@@ -109,19 +111,27 @@ class BandFiltersPage(QtWidgets.QWizardPage):
         exposures_un = QtWidgets.QLabel("seconds")
         self.registerField("{}_filter_exposures".format(band_filter), exposures_le)
 
-        glayout.addWidget(num_visits_la, 0, 0)
-        glayout.addWidget(num_visits_le, 0, 1)
-        glayout.addWidget(num_grouped_visits_la, 1, 0)
-        glayout.addWidget(num_grouped_visits_le, 1, 1)
-        glayout.addWidget(bright_limit_la, 2, 0)
-        glayout.addWidget(bright_limit_le, 2, 1)
-        glayout.addWidget(dark_limit_la, 3, 0)
-        glayout.addWidget(dark_limit_le, 3, 1)
-        glayout.addWidget(max_seeing_la, 4, 0)
-        glayout.addWidget(max_seeing_le, 4, 1)
-        glayout.addWidget(exposures_la, 5, 0)
-        glayout.addWidget(exposures_le, 5, 1)
-        glayout.addWidget(exposures_un, 5, 2)
+        offset = 0
+        if self.is_general:
+            glayout.addWidget(num_visits_la, 0, 0)
+            glayout.addWidget(num_visits_le, 0, 1)
+            glayout.addWidget(num_grouped_visits_la, 1, 0)
+            glayout.addWidget(num_grouped_visits_le, 1, 1)
+            offset = 2
+        glayout.addWidget(bright_limit_la, 0 + offset, 0)
+        glayout.addWidget(bright_limit_le, 0 + offset, 1)
+        glayout.addWidget(dark_limit_la, 1 + offset, 0)
+        glayout.addWidget(dark_limit_le, 1 + offset, 1)
+        glayout.addWidget(max_seeing_la, 2 + offset, 0)
+        glayout.addWidget(max_seeing_le, 2 + offset, 1)
+        glayout.addWidget(exposures_la, 3 + offset, 0)
+        glayout.addWidget(exposures_le, 3 + offset, 1)
+        glayout.addWidget(exposures_un, 3 + offset, 2)
 
         group_box.setLayout(glayout)
         return group_box
+
+    def nextId(self):
+        """Move to next page.
+        """
+        return -1

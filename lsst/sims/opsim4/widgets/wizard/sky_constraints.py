@@ -1,5 +1,7 @@
 from PyQt5 import QtGui, QtWidgets
 
+from lsst.sims.opsim4.widgets.wizard import WizardPages
+
 __all__ = ["SkyConstraintsPage"]
 
 class SkyConstraintsPage(QtWidgets.QWizardPage):
@@ -54,3 +56,11 @@ class SkyConstraintsPage(QtWidgets.QWizardPage):
         layout.addWidget(max_cloud_le, 3, 1, 1, 2)
 
         self.setLayout(layout)
+
+    def nextId(self):
+        """Move to next page.
+        """
+        if self.wizard().hasVisitedPage(WizardPages.PageSkyRegions):
+            return WizardPages.PageGeneralScheduling
+        else:
+            return WizardPages.PageSequenceScheduling

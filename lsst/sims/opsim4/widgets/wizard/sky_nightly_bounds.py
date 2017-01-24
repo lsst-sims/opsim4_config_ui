@@ -1,5 +1,7 @@
 from PyQt5 import QtGui, QtWidgets
 
+from lsst.sims.opsim4.widgets.wizard import WizardPages
+
 __all__ = ["SkyNightlyBoundsPage"]
 
 class SkyNightlyBoundsPage(QtWidgets.QWizardPage):
@@ -57,3 +59,8 @@ class SkyNightlyBoundsPage(QtWidgets.QWizardPage):
         layout.addWidget(delta_lst_un, 3, 3)
 
         self.setLayout(layout)
+
+    def nextId(self):
+        """Move to next page.
+        """
+        return WizardPages.PageSkyConstraints

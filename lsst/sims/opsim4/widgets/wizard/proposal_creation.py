@@ -4,8 +4,9 @@ import re
 from PyQt5 import QtGui, QtWidgets
 
 from lsst.sims.opsim4.widgets.wizard import BandFiltersPage, ProposalTypePage, SchedulingPage
-from lsst.sims.opsim4.widgets.wizard import SkyConstraintsPage
-from lsst.sims.opsim4.widgets.wizard import SkyExclusionPage, SkyNightlyBoundsPage, SkyRegionPage
+from lsst.sims.opsim4.widgets.wizard import SkyConstraintsPage, SkyExclusionPage
+from lsst.sims.opsim4.widgets.wizard import SkyNightlyBoundsPage, SkyRegionPage, SkyUserRegionsPage
+from lsst.sims.opsim4.widgets.wizard import WizardPages
 
 __all__ = ["ProposalCreationWizard"]
 
@@ -29,13 +30,17 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         self.setWizardStyle(QtWidgets.QWizard.MacStyle)
         self.setPixmap(QtWidgets.QWizard.BackgroundPixmap, QtGui.QPixmap(":/skymap.png"))
 
-        self.addPage(ProposalTypePage())
-        self.addPage(SkyRegionPage())
-        self.addPage(SkyExclusionPage())
-        self.addPage(SkyNightlyBoundsPage())
-        self.addPage(SkyConstraintsPage())
-        self.addPage(SchedulingPage())
-        self.addPage(BandFiltersPage())
+        self.setPage(WizardPages.PageProposalType, ProposalTypePage())
+        self.setPage(WizardPages.PageSkyRegions, SkyRegionPage())
+        self.setPage(WizardPages.PageSkyUserRegions, SkyUserRegionsPage())
+        self.setPage(WizardPages.PageGeneralSkyExclusions, SkyExclusionPage())
+        self.setPage(WizardPages.PageSequenceSkyExclusions, SkyExclusionPage(is_general=False))
+        self.setPage(WizardPages.PageSkyNightlyBounds, SkyNightlyBoundsPage())
+        self.setPage(WizardPages.PageSkyConstraints, SkyConstraintsPage())
+        self.setPage(WizardPages.PageGeneralScheduling, SchedulingPage())
+        self.setPage(WizardPages.PageSequenceScheduling, SchedulingPage(is_general=False))
+        self.setPage(WizardPages.PageGeneralFilters, BandFiltersPage())
+        self.setPage(WizardPages.PageSequenceFilters, BandFiltersPage(is_general=False))
 
     def set_save_directory(self, save_dir):
         """Set the save directory to the wizard.
@@ -189,7 +194,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
 
         prop_file_lines.append("{}self.sky_exclusion.dec_window "
                                "= {}".format(PADDING * 2,
-                                             str(self.field("sky_exclusions_dec_window"))))
+                                             str(self.field("general_sky_exclusions_dec_window"))))
         prop_file_lines.append(os.linesep)
 
         sky_exclusion_selections = str(self.field("sky_exclusion_selections")).strip()
