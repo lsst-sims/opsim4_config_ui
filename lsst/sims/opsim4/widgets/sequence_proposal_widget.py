@@ -30,12 +30,15 @@ class SequenceProposalWidget(ConfigurationTab):
         """
         self.create_widget("Str", "name")
         self.layout.itemAtPosition(0, 1).widget().setReadOnly(True)
-        self.create_widget("Str", "sky_user_regions")
+        self.create_widget("IntList", "sky_user_regions")
         self.create_group_box("sky_exclusion")
         self.create_group_box("sky_nightly_bounds")
         self.create_group_box("sky_constraints")
+        self.create_group_box("sub_sequences")
+        self.create_group_box("master_sub_sequences")
         self.create_group_box("scheduling")
         self.create_group_box("filters")
+        self.hide_unused()
 
     def create_group_box(self, name):
         """Create a group box for configuration information."
@@ -114,6 +117,62 @@ class SequenceProposalWidget(ConfigurationTab):
         self.create_widget("Float", "max_cloud", layout=glayout, rows=1)
         self.group_box_rows.append(2)
 
+    def create_sub_sequences(self, glayout, params):
+        """Set the sub-sequence information for the proposal.
+
+        Parameters
+        ----------
+        glayout : QGridLayout
+            Instance of a grid layout.
+        params : dict
+            The configuration information for the sub-sequence information.
+        """
+        num_sub_sequences = len(params)
+        if num_sub_sequences:
+            num_widgets = 10
+            for i in xrange(num_sub_sequences):
+                j = i * num_widgets
+                qualifier = "sub_sequences/{}".format(i)
+                self.create_widget("Str", "name", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 0))
+                self.create_widget("StringList", "filters", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 1))
+                self.create_widget("IntList", "visits_per_filter", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 2))
+                self.create_widget("Int", "num_events", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 3))
+                self.create_widget("Int", "num_max_missed", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 4))
+                self.create_widget("Float", "time_interval", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 5))
+                self.create_widget("Float", "time_window_start", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 6))
+                self.create_widget("Float", "time_window_max", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 7))
+                self.create_widget("Float", "time_window_end", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 8))
+                self.create_widget("Float", "time_weight", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 9))
+            self.group_box_rows.append(num_sub_sequences * num_widgets)
+        else:
+            self.group_box_rows.append(0)
+
+    def create_master_sub_sequences(self, glayout, params):
+        """Set the nested sub-sequences information for the proposal.
+
+        Parameters
+        ----------
+        glayout : QGridLayout
+            Instance of a grid layout.
+        params : dict
+            The configuration information for the nested sub-sequences information.
+        """
+        num_master_sub_sequences = len(params)
+        if num_master_sub_sequences:
+            self.group_box_rows.append(num_master_sub_sequences)
+        else:
+            self.group_box_rows.append(0)
+
     def create_scheduling(self, glayout, params):
         """Set the information for the proposal scheduling.
 
@@ -165,6 +224,22 @@ class SequenceProposalWidget(ConfigurationTab):
                                    layout=glayout, rows=(j + 3))
 
         self.group_box_rows.append(num_filters * 4)
+
+    def hide_unused(self):
+        """Hide sub-sequece ot master sub-sequence group box if none present.
+        """
+        for i in xrange(2, self.layout.count() - 1):
+            try:
+                group_box = self.layout.itemAtPosition(i, 0).widget()
+            except AttributeError:
+                # Somehow have extra unexplained widgets in main layout.
+                continue
+            if group_box.title() == "master_sub_sequences":
+                if not self.group_box_rows[4]:
+                    group_box.hide()
+            if group_box.title() == "sub_sequences":
+                if not self.group_box_rows[3]:
+                    group_box.hide()
 
     def is_changed(self, position, is_changed):
         """Mark a parameter widget as changed.
@@ -272,6 +347,7 @@ class SequenceProposalWidget(ConfigurationTab):
         self.set_sky_exclusion(params["sky_exclusion"]["value"])
         self.set_sky_nightly_bounds(params["sky_nightly_bounds"]["value"])
         self.set_sky_constraints(params["sky_constraints"]["value"])
+        self.set_sub_sequences(params["sub_sequences"]["value"])
         self.set_scheduling(params["scheduling"]["value"])
         self.set_filters(params["filters"]["value"])
 
@@ -339,6 +415,29 @@ class SequenceProposalWidget(ConfigurationTab):
             units = glayout.itemAtPosition(i, 2).widget()
             self.set_unit_labels(units, params[str(label.text())])
 
+    def set_sub_sequences(self, params):
+        """Set information in the sub-sequences parameters group box.
+
+        Parameters
+        ----------
+        params : dict
+            The set of parameters for the sub-sequences information.
+        """
+        group_box = self.layout.itemAtPosition(5, 0).widget()
+        glayout = group_box.layout()
+        num_sub_sequences = len(params)
+        if num_sub_sequences:
+            num_widgets = self.group_box_rows[3] / num_sub_sequences
+            for j, v in enumerate(params.values()):
+                for i in xrange(num_widgets):
+                    k = j * num_widgets + i
+                    label = glayout.itemAtPosition(k, 0).widget()
+                    widget = glayout.itemAtPosition(k, 1).widget()
+                    widget.setText(str(v[str(label.text())]["value"]))
+                    widget.setToolTip(v[str(label.text())]["doc"])
+                    units = glayout.itemAtPosition(k, 2).widget()
+                    self.set_unit_labels(units, v[str(label.text())])
+
     def set_scheduling(self, params):
         """Set information in the scheduling parameters group box.
 
@@ -347,9 +446,9 @@ class SequenceProposalWidget(ConfigurationTab):
         params : dict
             The set of parameters for the scheduling information.
         """
-        group_box = self.layout.itemAtPosition(5, 0).widget()
+        group_box = self.layout.itemAtPosition(7, 0).widget()
         glayout = group_box.layout()
-        for i in xrange(self.group_box_rows[3]):
+        for i in xrange(self.group_box_rows[5]):
             label = glayout.itemAtPosition(i, 0).widget()
             widget = glayout.itemAtPosition(i, 1).widget()
             value = params[str(label.text())]["value"]
@@ -369,11 +468,11 @@ class SequenceProposalWidget(ConfigurationTab):
         params : dict
             The set of parameters for the filters information.
         """
-        group_box = self.layout.itemAtPosition(6, 0).widget()
+        group_box = self.layout.itemAtPosition(8, 0).widget()
         glayout = group_box.layout()
         num_filters = len(params)
         if num_filters:
-            for i in xrange(self.group_box_rows[4]):
+            for i in xrange(self.group_box_rows[6]):
                 label = glayout.itemAtPosition(i, 0).widget()
                 widget = glayout.itemAtPosition(i, 1).widget()
                 filter_name = str(label.text()).split('_')[0]
