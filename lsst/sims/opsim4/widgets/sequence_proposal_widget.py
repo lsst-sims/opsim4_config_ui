@@ -30,7 +30,7 @@ class SequenceProposalWidget(ConfigurationTab):
         """
         self.create_widget("Str", "name")
         self.layout.itemAtPosition(0, 1).widget().setReadOnly(True)
-        self.create_widget("IntList", "sky_user_regions")
+        self.create_widget("IntList", "sky_user_regions", qualifier=self.name)
         self.create_group_box("sky_exclusion")
         self.create_group_box("sky_nightly_bounds")
         self.create_group_box("sky_constraints")
@@ -132,7 +132,7 @@ class SequenceProposalWidget(ConfigurationTab):
             num_widgets = 10
             for i in xrange(num_sub_sequences):
                 j = i * num_widgets
-                qualifier = "sub_sequences/{}".format(i)
+                qualifier = "{}".format(i)
                 self.create_widget("Str", "name", qualifier=qualifier, layout=glayout,
                                    rows=(j + 0))
                 self.create_widget("StringList", "filters", qualifier=qualifier, layout=glayout,

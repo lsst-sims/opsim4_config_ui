@@ -91,30 +91,33 @@ class ScienceModel(object):
         pvalue = None
         if prop_name in self.general_params:
             prop_params = self.general_params[prop_name]
-            while len(pnames):
-                name = pnames.pop(0)
-                try:
-                    # Need to handle integer indexed dictionaries
-                    name = int(name)
+        if prop_name in self.sequence_params:
+            prop_params = self.sequence_params[prop_name]
+
+        while len(pnames):
+            name = pnames.pop(0)
+            try:
+                # Need to handle integer indexed dictionaries
+                name = int(name)
+                pvalue = pvalue[name]
+                continue
+            except ValueError:
+                # Filter keys are single letters
+                if len(name) == 1:
                     pvalue = pvalue[name]
                     continue
-                except ValueError:
-                    # Filter keys are single letters
-                    if len(name) == 1:
-                        pvalue = pvalue[name]
-                        continue
-                    else:
-                        pass
-                if pvalue is None:
-                    pvalue = prop_params[name]["value"]
                 else:
-                    try:
-                        pvalue = pvalue[name]["value"]
-                    except KeyError:
-                        # This is a filter parameter, so it needs to be
-                        # handled differently
-                        name = "_".join(name.split('_')[1:])
-                        pvalue = pvalue[name]["value"]
+                    pass
+            if pvalue is None:
+                pvalue = prop_params[name]["value"]
+            else:
+                try:
+                    pvalue = pvalue[name]["value"]
+                except KeyError:
+                    # This is a filter parameter, so it needs to be
+                    # handled differently
+                    name = "_".join(name.split('_')[1:])
+                    pvalue = pvalue[name]["value"]
 
         return pvalue
 
@@ -132,6 +135,8 @@ class ScienceModel(object):
         """
         if name in self.general_modules:
             modules = self.general_modules
+        if name in self.sequence_modules:
+            modules = self.sequence_modules
 
         filename = "{}_prop.py".format(name.lower())
         with open(os.path.join(save_dir, filename), 'w') as ofile:
