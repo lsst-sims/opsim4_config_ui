@@ -46,6 +46,46 @@ class WriterBase(object):
         self.lines.append("{}self.name = \"{}\"".format(PADDING * 2, full_prop_name))
         self.lines.append(os.linesep)
 
+    def sky_exclusions(self, params, param_tag):
+        """Create the sky exclusion information.
+
+        Parameters
+        ----------
+        params : dict
+            The information for the sky exclusions.
+        param_tag : str
+            Identifier for proposal type.
+        """
+        self.lines.append("{}# ----------------------------".format(PADDING * 2))
+        self.lines.append(os.linesep)
+        self.lines.append("{}# Sky Exclusion specifications".format(PADDING * 2))
+        self.lines.append(os.linesep)
+        self.lines.append("{}# ----------------------------".format(PADDING * 2))
+        self.lines.append(os.linesep)
+
+        self.lines.append("{}self.sky_exclusion.dec_window "
+                          "= {}".format(PADDING * 2,
+                                        str(params["{}_sky_exclusions_dec_window".format(param_tag)])))
+        self.lines.append(os.linesep)
+
+        sky_exclusion_selections = str(params["sky_exclusion_selections"]).strip()
+        if sky_exclusion_selections != "":
+            selection_obj = "excl0"
+            parts = sky_exclusion_selections.split(',')
+            self.lines.append("{}{} = Selection()".format(PADDING * 2, selection_obj))
+            self.lines.append(os.linesep)
+            self.lines.append("{}{}.limit_type = \"{}\"".format(PADDING * 2, selection_obj, parts[0]))
+            self.lines.append(os.linesep)
+            self.lines.append("{}{}.minimum_limit = {}".format(PADDING * 2, selection_obj, float(parts[1])))
+            self.lines.append(os.linesep)
+            self.lines.append("{}{}.maximum_limit = {}".format(PADDING * 2, selection_obj, float(parts[2])))
+            self.lines.append(os.linesep)
+            self.lines.append("{}{}.bounds_limit = {}".format(PADDING * 2, selection_obj, float(parts[3])))
+            self.lines.append(os.linesep)
+            self.lines.append("{}self.sky_exclusion.selections = {}0: {}{}".format(PADDING * 2, "{",
+                                                                                   selection_obj, "}"))
+            self.lines.append(os.linesep)
+
     def sky_nightly_bounds(self, params):
         """Create the sky nightly bounds information.
 
