@@ -5,7 +5,7 @@ from lsst.sims.opsim4.widgets.wizard import WriterBase, PADDING
 __all__ = ["GeneralWriter"]
 
 class GeneralWriter(WriterBase):
-    """Class to handl writing a General proposal configuration file.
+    """Class to handle writing a General proposal configuration file.
     """
 
     def __init__(self):
@@ -14,34 +14,14 @@ class GeneralWriter(WriterBase):
         WriterBase.__init__(self)
 
     def file_def(self, params):
-        """Create the file definition information.definition
+        """Create the file definition information.
 
         Parameters
         ----------
         params : dict
             The information for the file definition.
         """
-        full_prop_name = params["full_prop_name"]
-        prop_type = params["prop_type"]
-        prop_reg_type = params["prop_reg_type"]
-        self.lines.append("import lsst.pex.config as pexConfig")
-        self.lines.append(os.linesep)
-        self.lines.append("from lsst.sims.ocs.configuration.proposal import {}, GeneralBandFilter, "
-                          "Selection".format(params["prop_type"]))
-        self.lines.append(os.linesep)
-        self.lines.append("from lsst.sims.ocs.configuration.proposal import {}".format(prop_reg_type))
-        self.lines.append(os.linesep)
-        self.lines.append("__all__ = [\"{}\"]".format(full_prop_name))
-        self.lines.append(os.linesep)
-        self.lines.append("@pexConfig.registerConfig(\"{}\", {}, {})".format(full_prop_name,
-                                                                             prop_reg_type, prop_type))
-        self.lines.append(os.linesep)
-        self.lines.append("class {}({}):".format(full_prop_name, prop_type))
-        self.lines.append(os.linesep)
-        self.lines.append("{}def setDefaults(self):".format(PADDING))
-        self.lines.append(os.linesep)
-        self.lines.append("{}self.name = \"{}\"".format(PADDING * 2, full_prop_name))
-        self.lines.append(os.linesep)
+        WriterBase.file_def(self, params, "GeneralBandFilter, Selection")
 
     def sky_regions(self, params):
         """Create the sky regions information.

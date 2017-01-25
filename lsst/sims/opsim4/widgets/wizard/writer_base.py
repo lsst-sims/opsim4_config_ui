@@ -13,6 +13,39 @@ class WriterBase(object):
         """
         self.lines = []
 
+    def file_def(self, params, extra_classes):
+        """Create the file definition information.
+
+        Parameters
+        ----------
+        params : dict
+            The information for the file definition.
+        extra_classes : str
+            A comma-delimited list of classes.
+        """
+        full_prop_name = params["full_prop_name"]
+        prop_type = params["prop_type"]
+        prop_reg_type = params["prop_reg_type"]
+        self.lines.append("import lsst.pex.config as pexConfig")
+        self.lines.append(os.linesep)
+        self.lines.append("from lsst.sims.ocs.configuration.proposal import {}".format(params["prop_type"]))
+        self.lines.append(os.linesep)
+        self.lines.append("from lsst.sims.ocs.configuration.proposal import {}".format(extra_classes))
+        self.lines.append(os.linesep)
+        self.lines.append("from lsst.sims.ocs.configuration.proposal import {}".format(prop_reg_type))
+        self.lines.append(os.linesep)
+        self.lines.append("__all__ = [\"{}\"]".format(full_prop_name))
+        self.lines.append(os.linesep)
+        self.lines.append("@pexConfig.registerConfig(\"{}\", {}, {})".format(full_prop_name,
+                                                                             prop_reg_type, prop_type))
+        self.lines.append(os.linesep)
+        self.lines.append("class {}({}):".format(full_prop_name, prop_type))
+        self.lines.append(os.linesep)
+        self.lines.append("{}def setDefaults(self):".format(PADDING))
+        self.lines.append(os.linesep)
+        self.lines.append("{}self.name = \"{}\"".format(PADDING * 2, full_prop_name))
+        self.lines.append(os.linesep)
+
     def sky_nightly_bounds(self, params):
         """Create the sky nightly bounds information.
 
