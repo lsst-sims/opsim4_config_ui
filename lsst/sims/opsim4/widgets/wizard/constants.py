@@ -1,6 +1,8 @@
 from enum import IntEnum
 
-__all__ = ["WizardPages"]
+__all__ = ["WizardPages", "PADDING"]
+
+PADDING = "    "
 
 class WizardPages(IntEnum):
     """Page numbers of the pick-a-path proposal creation.
@@ -18,4 +20,3 @@ class WizardPages(IntEnum):
     PageSequenceScheduling = 11,
     PageGeneralFilters = 12,
     PageSequenceFilters = 13
-
