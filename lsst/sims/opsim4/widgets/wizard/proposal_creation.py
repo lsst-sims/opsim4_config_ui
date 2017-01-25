@@ -7,13 +7,13 @@ from lsst.sims.opsim4.widgets.wizard import BandFiltersPage, ProposalTypePage, S
 from lsst.sims.opsim4.widgets.wizard import SkyConstraintsPage, SkyExclusionPage
 from lsst.sims.opsim4.widgets.wizard import SkyNightlyBoundsPage, SkyRegionPage, SkyUserRegionsPage
 from lsst.sims.opsim4.widgets.wizard import WizardPages
-from lsst.sims.opsim4.widgets.wizard import GeneralWriter
+from lsst.sims.opsim4.widgets.wizard import GeneralWriter, SequenceWriter
 
 from lsst.sims.opsim4.widgets.wizard import band_filters_params, scheduling_params
 from lsst.sims.opsim4.widgets.wizard import sky_constraints_params
 from lsst.sims.opsim4.widgets.wizard import sky_exclusion_params
 from lsst.sims.opsim4.widgets.wizard import sky_nightly_bounds_params
-from lsst.sims.opsim4.widgets.wizard import sky_region_params
+from lsst.sims.opsim4.widgets.wizard import sky_region_params, sky_user_regions_params
 
 __all__ = ["ProposalCreationWizard"]
 
@@ -101,6 +101,21 @@ class ProposalCreationWizard(QtWidgets.QWizard):
             pdict = self.create_field_parameters(scheduling_params())
             writer.scheduling(pdict)
             pdict = self.create_field_parameters(band_filters_params())
+            writer.band_filters(pdict)
+        if is_subseq:
+            writer = SequenceWriter()
+            writer.file_def(file_def_dict)
+            pdict = self.create_field_parameters(sky_user_regions_params())
+            writer.sky_user_regions(pdict)
+            pdict = self.create_field_parameters(sky_exclusion_params(False))
+            writer.sky_exclusions(pdict)
+            pdict = self.create_field_parameters(sky_nightly_bounds_params())
+            writer.sky_nightly_bounds(pdict)
+            pdict = self.create_field_parameters(sky_constraints_params())
+            writer.sky_constraints(pdict)
+            pdict = self.create_field_parameters(scheduling_params(False))
+            writer.scheduling(pdict)
+            pdict = self.create_field_parameters(band_filters_params(False))
             writer.band_filters(pdict)
 
         prop_file_lines = writer.lines
