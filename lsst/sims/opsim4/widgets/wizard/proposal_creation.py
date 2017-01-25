@@ -256,7 +256,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         prop_file_lines.append("{}# ----------------------".format(PADDING * 2))
         prop_file_lines.append(os.linesep)
 
-        max_num_targets = str(self.field("scheduling_max_num_targets"))
+        max_num_targets = str(self.field("general_scheduling_max_num_targets"))
         if max_num_targets == "":
             max_num_targets = "100"
         prop_file_lines.append("{}self.scheduling.max_num_targets "
@@ -264,14 +264,14 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         prop_file_lines.append(os.linesep)
         prop_file_lines.append("{}self.scheduling.accept_serendipity "
                                "= {}".format(PADDING * 2,
-                                             self.field("scheduling_accept_serendipity")))
+                                             self.field("general_scheduling_accept_serendipity")))
         prop_file_lines.append(os.linesep)
         prop_file_lines.append("{}self.scheduling.accept_consecutive_visits "
                                "= {}".format(PADDING * 2,
-                                             self.field("scheduling_accept_consecutive_visits")))
+                                             self.field("general_scheduling_accept_consecutive_visits")))
         prop_file_lines.append(os.linesep)
         prop_file_lines.append("{}self.scheduling.airmass_bonus = {}"
-                               .format(PADDING * 2, str(self.field("scheduling_airmass_bonus"))))
+                               .format(PADDING * 2, str(self.field("general_scheduling_airmass_bonus"))))
         prop_file_lines.append(os.linesep)
         prop_file_lines.append("{}self.scheduling.restrict_grouped_visits "
                                "= {}".format(PADDING * 2,
@@ -305,7 +305,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         used_filters = []
         for band_filter in "u,g,r,i,z,y".split(','):
             field_stem = "{}_filter".format(band_filter)
-            use_filter = self.field("{}_use".format(field_stem))
+            use_filter = self.field("general_{}_use".format(field_stem))
             if use_filter:
                 used_filters.append(("{}.name".format(field_stem), field_stem))
                 prop_file_lines.append("{}{} = GeneralBandFilter()".format(PADDING * 2, field_stem))
@@ -319,16 +319,17 @@ class ProposalCreationWizard(QtWidgets.QWizard):
                                        str(self.field("{}_num_grouped_visits".format(field_stem)))))
                 prop_file_lines.append(os.linesep)
                 prop_file_lines.append("{}{}.bright_limit = {}".format(PADDING * 2, field_stem,
-                                       str(self.field("{}_bright_limit".format(field_stem)))))
+                                       str(self.field("general_{}_bright_limit".format(field_stem)))))
                 prop_file_lines.append(os.linesep)
                 prop_file_lines.append("{}{}.dark_limit = {}".format(PADDING * 2, field_stem,
-                                       str(self.field("{}_dark_limit".format(field_stem)))))
+                                       str(self.field("general_{}_dark_limit".format(field_stem)))))
                 prop_file_lines.append(os.linesep)
                 prop_file_lines.append("{}{}.max_seeing = {}".format(PADDING * 2, field_stem,
-                                       str(self.field("{}_max_seeing".format(field_stem)))))
+                                       str(self.field("general_{}_max_seeing".format(field_stem)))))
                 prop_file_lines.append(os.linesep)
                 prop_file_lines.append("{}{}.exposures = [{}]".format(PADDING * 2, field_stem,
-                                       str(self.field("{}_exposures".format(field_stem))).replace(',', ', ')))
+                                       str(self.field("general_{}_exposures".
+                                                      format(field_stem))).replace(',', ', ')))
                 prop_file_lines.append(os.linesep)
 
         filters_spec = self.format_dictionaries(used_filters)

@@ -19,6 +19,10 @@ class SchedulingPage(QtWidgets.QWizardPage):
         QtWidgets.QWizardPage.__init__(self, parent)
         self.setTitle("Scheduling Setup")
         self.is_general = is_general
+        if self.is_general:
+            self.param_tag = "general"
+        else:
+            self.param_tag = "sequence"
 
         label1 = QtWidgets.QLabel("Set the maximum number of targets to be sent to the scheduler "
                                   "driver for final target consideration")
@@ -29,7 +33,7 @@ class SchedulingPage(QtWidgets.QWizardPage):
         max_num_targets_la.setBuddy(max_num_targets_le)
         int_validator = QtGui.QIntValidator()
         max_num_targets_le.setValidator(int_validator)
-        self.registerField("scheduling_max_num_targets", max_num_targets_le)
+        self.registerField("{}_scheduling_max_num_targets".format(self.param_tag), max_num_targets_le)
 
         label2 = QtWidgets.QLabel("Set the checkbox to accept observed targets (field/filter) that "
                                   "were not in the proposal's list of winners that were sent to the "
@@ -39,7 +43,7 @@ class SchedulingPage(QtWidgets.QWizardPage):
         accept_serendipity_la = QtWidgets.QLabel("Accept Serendipity:")
         accept_serendipity_cb = QtWidgets.QCheckBox()
         accept_serendipity_la.setBuddy(accept_serendipity_cb)
-        self.registerField("scheduling_accept_serendipity", accept_serendipity_cb)
+        self.registerField("{}_scheduling_accept_serendipity".format(self.param_tag), accept_serendipity_cb)
 
         label3 = QtWidgets.QLabel("Set the checkbox to accept back-to-back visits of the "
                                   "same target (field/filter).")
@@ -48,7 +52,8 @@ class SchedulingPage(QtWidgets.QWizardPage):
         accept_consecutive_visits_la = QtWidgets.QLabel("Accept Consecutive Visits:")
         accept_consecutive_visits_cb = QtWidgets.QCheckBox()
         accept_consecutive_visits_la.setBuddy(accept_consecutive_visits_cb)
-        self.registerField("scheduling_accept_consecutive_visits", accept_consecutive_visits_cb)
+        self.registerField("{}_scheduling_accept_consecutive_visits".format(self.param_tag),
+                           accept_consecutive_visits_cb)
 
         label4 = QtWidgets.QLabel("Set the airmass bonus for ranking requested fields.")
         label4.setWordWrap(True)
@@ -57,7 +62,7 @@ class SchedulingPage(QtWidgets.QWizardPage):
         airmass_bonus_le = QtWidgets.QLineEdit("0.5")
         airmass_bonus_la.setBuddy(airmass_bonus_le)
         airmass_bonus_le.setValidator(QtGui.QDoubleValidator())
-        self.registerField("scheduling_airmass_bonus", airmass_bonus_le)
+        self.registerField("{}_scheduling_airmass_bonus".format(self.param_tag), airmass_bonus_le)
 
         if self.is_general:
             label5 = QtWidgets.QLabel("Set the checkbox to restrict the number of visits in a night of the "

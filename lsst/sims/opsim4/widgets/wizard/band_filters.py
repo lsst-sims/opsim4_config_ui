@@ -17,6 +17,10 @@ class BandFiltersPage(QtWidgets.QWizardPage):
         QtWidgets.QWizardPage.__init__(self, parent)
         self.setTitle("Band Filters Setup")
         self.is_general = is_general
+        if self.is_general:
+            self.param_tag = "general"
+        else:
+            self.param_tag = "sequence"
 
         label = QtWidgets.QLabel("Set the band filter information. At least one filter must be specified "
                                  "otherwise the proposal will not gather any observations. When setting "
@@ -63,7 +67,8 @@ class BandFiltersPage(QtWidgets.QWizardPage):
         group_box = QtWidgets.QGroupBox(band_filter + " Band Filter")
         group_box.setCheckable(True)
         group_box.setChecked(False)
-        self.registerField("{}_filter_use".format(band_filter), group_box, "checked", group_box.clicked)
+        self.registerField("{}_{}_filter_use".format(self.param_tag, band_filter),
+                           group_box, "checked", group_box.clicked)
 
         glayout = QtWidgets.QGridLayout()
 
@@ -89,27 +94,31 @@ class BandFiltersPage(QtWidgets.QWizardPage):
         bright_limit_la.setBuddy(bright_limit_le)
         dbl_validator1 = QtGui.QDoubleValidator()
         bright_limit_le.setValidator(dbl_validator1)
-        self.registerField("{}_filter_bright_limit".format(band_filter), bright_limit_le)
+        self.registerField("{}_{}_filter_bright_limit".format(self.param_tag, band_filter),
+                           bright_limit_le)
 
         dark_limit_la = QtWidgets.QLabel("Dark Limit:")
         dark_limit_le = QtWidgets.QLineEdit()
         dark_limit_la.setBuddy(dark_limit_le)
         dbl_validator2 = QtGui.QDoubleValidator()
         dark_limit_le.setValidator(dbl_validator2)
-        self.registerField("{}_filter_dark_limit".format(band_filter), dark_limit_le)
+        self.registerField("{}_{}_filter_dark_limit".format(self.param_tag, band_filter),
+                           dark_limit_le)
 
         max_seeing_la = QtWidgets.QLabel("Maximum Seeing:")
         max_seeing_le = QtWidgets.QLineEdit()
         max_seeing_la.setBuddy(max_seeing_le)
         dbl_validator3 = QtGui.QDoubleValidator()
         max_seeing_le.setValidator(dbl_validator3)
-        self.registerField("{}_filter_max_seeing".format(band_filter), max_seeing_le)
+        self.registerField("{}_{}_filter_max_seeing".format(self.param_tag, band_filter),
+                           max_seeing_le)
 
         exposures_la = QtWidgets.QLabel("Exposures:")
         exposures_le = QtWidgets.QLineEdit()
         exposures_la.setBuddy(exposures_le)
         exposures_un = QtWidgets.QLabel("seconds")
-        self.registerField("{}_filter_exposures".format(band_filter), exposures_le)
+        self.registerField("{}_{}_filter_exposures".format(self.param_tag, band_filter),
+                           exposures_le)
 
         offset = 0
         if self.is_general:
