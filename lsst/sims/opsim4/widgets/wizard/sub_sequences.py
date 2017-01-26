@@ -80,9 +80,9 @@ class SubSequencesPage(QtWidgets.QWizardPage):
         label6.setWordWrap(True)
 
         time_interval_la = QtWidgets.QLabel("Time Interval:")
-        self.time_interval_le = QtWidgets.QLineEdit("0.0")
+        self.time_interval_le = QtWidgets.QLineEdit()
         time_interval_la.setBuddy(self.time_interval_le)
-        self.time_interval_le.setValidator(QtGui.QDoubleValidator())
+        #self.time_interval_le.setValidator(QtGui.QDoubleValidator())
         time_interval_un = QtWidgets.QLabel("seconds")
 
         label7 = QtWidgets.QLabel("Set the relative time where the ranking priority for a target starts "
@@ -117,7 +117,7 @@ class SubSequencesPage(QtWidgets.QWizardPage):
         label10.setWordWrap(True)
 
         time_weight_la = QtWidgets.QLabel("Time Weight:")
-        self.time_weight_le = QtWidgets.QLineEdit("0.0")
+        self.time_weight_le = QtWidgets.QLineEdit("1.0")
         time_weight_la.setBuddy(self.time_weight_le)
         self.time_weight_le.setValidator(QtGui.QDoubleValidator())
 

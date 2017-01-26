@@ -3,7 +3,8 @@ __all__ = ["band_filters_params", "scheduling_params",
            "sky_exclusion_params",
            "sky_nightly_bounds_params",
            "sky_region_params",
-           "sky_user_regions_params"]
+           "sky_user_regions_params",
+           "sub_sequences_params"]
 
 def band_filters_params(is_general=True):
     """Create band filters registered field names.
@@ -123,3 +124,13 @@ def sky_user_regions_params():
         Set of registered field names.
     """
     return ["sky_user_regions"]
+
+def sub_sequences_params():
+    """Create sub-sequence registered field names.
+
+    Returns
+    -------
+    list[str]
+        Set of registered field names.
+    """
+    return ["sub_sequences"]
