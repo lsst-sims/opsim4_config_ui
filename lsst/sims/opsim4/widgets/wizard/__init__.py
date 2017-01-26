@@ -13,4 +13,5 @@ from .sky_exclusion import *
 from .sky_nightly_bounds import *
 from .sky_region import *
 from .sky_user_regions import *
+from .sub_sequences import *
 from .proposal_creation import *

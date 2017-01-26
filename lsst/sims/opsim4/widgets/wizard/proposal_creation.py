@@ -6,9 +6,8 @@ from PyQt5 import QtGui, QtWidgets
 from lsst.sims.opsim4.widgets.wizard import BandFiltersPage, ProposalTypePage, SchedulingPage
 from lsst.sims.opsim4.widgets.wizard import SkyConstraintsPage, SkyExclusionPage
 from lsst.sims.opsim4.widgets.wizard import SkyNightlyBoundsPage, SkyRegionPage, SkyUserRegionsPage
-from lsst.sims.opsim4.widgets.wizard import WizardPages
+from lsst.sims.opsim4.widgets.wizard import SubSequencesPage, WizardPages
 from lsst.sims.opsim4.widgets.wizard import GeneralWriter, SequenceWriter
-
 from lsst.sims.opsim4.widgets.wizard import band_filters_params, scheduling_params
 from lsst.sims.opsim4.widgets.wizard import sky_constraints_params
 from lsst.sims.opsim4.widgets.wizard import sky_exclusion_params
@@ -42,6 +41,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         self.setPage(WizardPages.PageSequenceSkyExclusions, SkyExclusionPage(is_general=False))
         self.setPage(WizardPages.PageSkyNightlyBounds, SkyNightlyBoundsPage())
         self.setPage(WizardPages.PageSkyConstraints, SkyConstraintsPage())
+        self.setPage(WizardPages.PageSubSequences, SubSequencesPage())
         self.setPage(WizardPages.PageGeneralScheduling, SchedulingPage())
         self.setPage(WizardPages.PageSequenceScheduling, SchedulingPage(is_general=False))
         self.setPage(WizardPages.PageGeneralFilters, BandFiltersPage())

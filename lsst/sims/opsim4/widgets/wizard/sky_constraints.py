@@ -63,4 +63,4 @@ class SkyConstraintsPage(QtWidgets.QWizardPage):
         if self.wizard().hasVisitedPage(WizardPages.PageSkyRegions):
             return WizardPages.PageGeneralScheduling
         else:
-            return WizardPages.PageSequenceScheduling
+            return WizardPages.PageSubSequences
