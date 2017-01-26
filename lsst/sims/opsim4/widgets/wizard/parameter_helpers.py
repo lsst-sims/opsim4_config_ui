@@ -1,4 +1,6 @@
-__all__ = ["band_filters_params", "scheduling_params",
+__all__ = ["band_filters_params",
+           "master_sub_sequences_params",
+           "scheduling_params",
            "sky_constraints_params",
            "sky_exclusion_params",
            "sky_nightly_bounds_params",
@@ -34,6 +36,16 @@ def band_filters_params(is_general=True):
         params.append("{}_{}_max_seeing".format(param_tag, field_stem))
         params.append("{}_{}_exposures".format(param_tag, field_stem))
     return params
+
+def master_sub_sequences_params():
+    """Create master sub-sequence registered field names.
+
+    Returns
+    -------
+    list[str]
+        Set of registered field names.
+    """
+    return ["master_sub_sequences"]
 
 def scheduling_params(is_general=True):
     """Create scheduling registered field names.

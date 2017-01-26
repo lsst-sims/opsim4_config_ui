@@ -3,12 +3,14 @@ import re
 
 from PyQt5 import QtGui, QtWidgets
 
-from lsst.sims.opsim4.widgets.wizard import BandFiltersPage, ProposalTypePage, SchedulingPage
+from lsst.sims.opsim4.widgets.wizard import BandFiltersPage, MasterSubSequencesPage, ProposalTypePage
+from lsst.sims.opsim4.widgets.wizard import SchedulingPage
 from lsst.sims.opsim4.widgets.wizard import SkyConstraintsPage, SkyExclusionPage
 from lsst.sims.opsim4.widgets.wizard import SkyNightlyBoundsPage, SkyRegionPage, SkyUserRegionsPage
 from lsst.sims.opsim4.widgets.wizard import SubSequencesPage, WizardPages
 from lsst.sims.opsim4.widgets.wizard import GeneralWriter, SequenceWriter
-from lsst.sims.opsim4.widgets.wizard import band_filters_params, scheduling_params
+from lsst.sims.opsim4.widgets.wizard import band_filters_params, master_sub_sequences_params
+from lsst.sims.opsim4.widgets.wizard import scheduling_params
 from lsst.sims.opsim4.widgets.wizard import sky_constraints_params
 from lsst.sims.opsim4.widgets.wizard import sky_exclusion_params
 from lsst.sims.opsim4.widgets.wizard import sky_nightly_bounds_params
@@ -43,6 +45,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         self.setPage(WizardPages.PageSkyNightlyBounds, SkyNightlyBoundsPage())
         self.setPage(WizardPages.PageSkyConstraints, SkyConstraintsPage())
         self.setPage(WizardPages.PageSubSequences, SubSequencesPage())
+        self.setPage(WizardPages.PageMasterSubSequences, MasterSubSequencesPage())
         self.setPage(WizardPages.PageGeneralScheduling, SchedulingPage())
         self.setPage(WizardPages.PageSequenceScheduling, SchedulingPage(is_general=False))
         self.setPage(WizardPages.PageGeneralFilters, BandFiltersPage())
@@ -116,6 +119,8 @@ class ProposalCreationWizard(QtWidgets.QWizard):
             writer.sky_constraints(pdict)
             pdict = self.create_field_parameters(sub_sequences_params())
             writer.sub_sequences(pdict)
+            pdict = self.create_field_parameters(master_sub_sequences_params())
+            writer.master_sub_sequences(pdict)
             pdict = self.create_field_parameters(scheduling_params(False))
             writer.scheduling(pdict)
             pdict = self.create_field_parameters(band_filters_params(False))
