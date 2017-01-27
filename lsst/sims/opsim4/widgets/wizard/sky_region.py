@@ -186,7 +186,7 @@ class SkyRegionPage(QtWidgets.QWizardPage):
     def clear_selection(self):
         """Clear the last selection.
         """
-        current_text = str(self.show_selections.toPlainText())
+        current_text = str(self.show_selections.toPlainText()).strip()
         parts = current_text.split(os.linesep)
         del parts[-1]
         self.show_selections.setPlainText(os.linesep.join(parts))
