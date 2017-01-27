@@ -10,47 +10,59 @@ class SubSequencesPage(QtWidgets.QWizardPage):
     """Main class for setting the proposal's sub-sequences.
     """
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, is_nested=False):
         """Initialize the class
 
         Parameters
         ----------
         parent : QWidget
             The widget's parent.
+        is_nested : bool
+            Flag for nested or normal sub-sequence mode.
         """
         QtWidgets.QWizardPage.__init__(self, parent)
-        self.setTitle("Sub-sequence Specifications")
+        self.is_nested = is_nested
+        if not self.is_nested:
+            self.title_name = "Sub-Sequence"
+        else:
+            self.title_name = "Nested Sub-Sequence"
+        self.text_name = self.title_name.lower()
 
-        label = QtWidgets.QLabel("Set the parameters for a sub-sequence in the form provided.")
+        self.setTitle("{} Specifications".format(self.title_name))
+
+        label = QtWidgets.QLabel("Set the parameters for a {} in the form provided.".format(self.text_name))
         label.setWordWrap(True)
 
-        group_box = QtWidgets.QGroupBox("Sub-sequence")
+        group_box = QtWidgets.QGroupBox("{}".format(self.title_name))
 
-        label1 = QtWidgets.QLabel("Set the identifier for the sub-sequence.")
+        label1 = QtWidgets.QLabel("Set the identifier for the {}.".format(self.text_name))
         label1.setWordWrap(True)
 
-        name_la = QtWidgets.QLabel("Sub-sequence Name:")
-        self.name_le = QtWidgets.QLineEdit()
+        name_la = QtWidgets.QLabel("{} Name:".format(self.title_name))
+        if not self.is_nested:
+            self.name_le = QtWidgets.QLineEdit()
+        else:
+            self.name_le = QtWidgets.QComboBox()
         name_la.setBuddy(self.name_le)
 
         label2 = QtWidgets.QLabel("Set a comma-delimited list of band filter names to use "
-                                  "in the sub-sequence.")
+                                  "in the {}.".format(self.text_name))
         label2.setWordWrap(True)
 
-        filters_la = QtWidgets.QLabel("Sub-sequence Filters:")
+        filters_la = QtWidgets.QLabel("{} Filters:".format(self.title_name))
         self.filters_le = QtWidgets.QLineEdit()
         filters_la.setBuddy(self.filters_le)
 
         label3 = QtWidgets.QLabel("Set a comma-delimited list of the number of visits for "
-                                  "each band filter in the sub-sequence.")
+                                  "each band filter in the {}.".format(self.text_name))
         label3.setWordWrap(True)
 
         visits_per_filter_la = QtWidgets.QLabel("Number of Visits Per Filter:")
         self.visits_per_filter_le = QtWidgets.QLineEdit()
         visits_per_filter_la.setBuddy(self.visits_per_filter_le)
 
-        label4 = QtWidgets.QLabel("Set the number of times the sub-sequence should occur over the "
-                                  "duration of the survey.")
+        label4 = QtWidgets.QLabel("Set the number of times the {} should occur over the "
+                                  "duration of the survey.".format(self.text_name))
         label4.setWordWrap(True)
 
         num_events_la = QtWidgets.QLabel("Number of Events:")
@@ -60,8 +72,8 @@ class SubSequencesPage(QtWidgets.QWizardPage):
         int_validator.setBottom(1)
         self.num_events_le.setValidator(int_validator)
 
-        label5 = QtWidgets.QLabel("Set the number of times the sub-sequence should be allowed to be "
-                                  "missed over the duration of the survey.")
+        label5 = QtWidgets.QLabel("Set the number of times the {} should be allowed to be "
+                                  "missed over the duration of the survey.".format(self.text_name))
         label5.setWordWrap(True)
 
         num_max_missed_la = QtWidgets.QLabel("Maximum Number of Events:")
@@ -74,7 +86,8 @@ class SubSequencesPage(QtWidgets.QWizardPage):
         label_img = QtWidgets.QLabel()
         label_img.setPixmap(QtGui.QPixmap(":/time_domain_window.png"))
 
-        label6 = QtWidgets.QLabel("Set the time interval for subsequent revisits of the same sub-sequence.")
+        label6 = QtWidgets.QLabel("Set the time interval for subsequent revisits of the same "
+                                  "{}.".format(self.text_name))
         label6.setWordWrap(True)
 
         time_interval_la = QtWidgets.QLabel("Time Interval:")
@@ -83,8 +96,8 @@ class SubSequencesPage(QtWidgets.QWizardPage):
         #self.time_interval_le.setValidator(QtGui.QDoubleValidator())
         time_interval_un = QtWidgets.QLabel("seconds")
 
-        label7 = QtWidgets.QLabel("Set the relative time where the ranking priority for the sub-sequence "
-                                  "starts increasing linearly.")
+        label7 = QtWidgets.QLabel("Set the relative time where the ranking priority for the {} "
+                                  "starts increasing linearly.".format(self.text_name))
         label7.setWordWrap(True)
 
         time_window_start_la = QtWidgets.QLabel("Time Window Start:")
@@ -92,8 +105,8 @@ class SubSequencesPage(QtWidgets.QWizardPage):
         time_window_start_la.setBuddy(self.time_window_start_le)
         self.time_window_start_le.setValidator(QtGui.QDoubleValidator())
 
-        label8 = QtWidgets.QLabel("Set the relative time where the ranking priority for the sub-sequence "
-                                  "reaches maximum.")
+        label8 = QtWidgets.QLabel("Set the relative time where the ranking priority for the {} "
+                                  "reaches maximum.".format(self.text_name))
         label8.setWordWrap(True)
 
         time_window_max_la = QtWidgets.QLabel("Time Window Max:")
@@ -101,8 +114,8 @@ class SubSequencesPage(QtWidgets.QWizardPage):
         time_window_max_la.setBuddy(self.time_window_max_le)
         self.time_window_max_le.setValidator(QtGui.QDoubleValidator())
 
-        label9 = QtWidgets.QLabel("Set the relative time where the ranking priority for the sub-sequence "
-                                  "drops to zero.")
+        label9 = QtWidgets.QLabel("Set the relative time where the ranking priority for the {} "
+                                  "drops to zero.".format(self.text_name))
         label9.setWordWrap(True)
 
         time_window_end_la = QtWidgets.QLabel("Time Window End:")
@@ -121,10 +134,10 @@ class SubSequencesPage(QtWidgets.QWizardPage):
 
         add_button = QtWidgets.QPushButton("Add")
         add_button.clicked.connect(self.add_subsequence)
-        add_button.setToolTip("Add the sub-sequence to the list.")
+        add_button.setToolTip("Add the {} to the list.".format(self.text_name))
         clear_button = QtWidgets.QPushButton("Clear")
         clear_button.clicked.connect(self.clear_subsequence)
-        clear_button.setToolTip("Clear the last sub-sequence from the list.")
+        clear_button.setToolTip("Clear the last {} from the list.".format(self.text_name))
 
         gb_layout = QtWidgets.QGridLayout()
 
@@ -167,7 +180,12 @@ class SubSequencesPage(QtWidgets.QWizardPage):
 
         self.show_subsequences = QtWidgets.QPlainTextEdit()
         self.show_subsequences.setReadOnly(True)
-        self.registerField("sub_sequences", self.show_subsequences, "plainText",
+
+        field_name = "sub_sequences"
+        if self.is_nested:
+            field_name = "nested_" + field_name
+
+        self.registerField(field_name, self.show_subsequences, "plainText",
                            self.show_subsequences.textChanged)
 
         scroll_area_widget = QtWidgets.QWidget()
@@ -193,7 +211,12 @@ class SubSequencesPage(QtWidgets.QWizardPage):
         current_text = self.show_subsequences.toPlainText()
         subsequence_text = "{},{},{},{},{},{},{},{},{},{}"
 
-        name = str(self.name_le.text())
+        if not self.is_nested:
+            name = str(self.name_le.text())
+        else:
+            name = str(self.name_le.itemText(0))
+        if name == '':
+            return
         filters = self.format_comma_list(str(self.filters_le.text()))
         visits_per_filter = self.format_comma_list(str(self.visits_per_filter_le.text()))
         num_events = str(self.num_events_le.text())
@@ -211,11 +234,18 @@ class SubSequencesPage(QtWidgets.QWizardPage):
                                                 time_weight) + os.linesep
         self.show_subsequences.setPlainText(current_text)
 
+        if self.is_nested:
+            self.name_le.removeItem(0)
+
     def clear_subsequence(self):
         """Clear the last sub-sequence.
         """
-        current_text = str(self.show_subsequences.toPlainText())
+        current_text = str(self.show_subsequences.toPlainText()).strip()
         parts = current_text.split(os.linesep)
+        if self.is_nested:
+            name = parts[-1].split(',')[0]
+            self.name_le.insertItem(0, name)
+            self.name_le.setCurrentIndex(0)
         del parts[-1]
         self.show_subsequences.setPlainText(os.linesep.join(parts))
 
@@ -237,7 +267,33 @@ class SubSequencesPage(QtWidgets.QWizardPage):
         """
         return "({})".format(" ".join(istr.split(',')))
 
+    def get_sub_sequence_names(self):
+        """Get the sub-sequence names from master sub-sequences.
+
+        Returns
+        -------
+        list[str]
+            The set of sub-sequence names given by master sub-sequences.
+        """
+        master_sub_sequences = str(self.field("master_sub_sequences")).strip().split(os.linesep)
+        names = []
+        for sub_sequence in master_sub_sequences:
+            parts = sub_sequence.split(',')
+            name = parts[1].strip('(').strip(')').split(' ')
+            names.extend(name)
+        return names
+
+    def initializePage(self):
+        if self.is_nested:
+            sub_sequence_names = self.get_sub_sequence_names()
+            self.name_le.addItems(sub_sequence_names)
+        else:
+            pass
+
     def nextId(self):
         """Move to next page.
         """
-        return WizardPages.PageMasterSubSequences
+        if not self.is_nested:
+            return WizardPages.PageMasterSubSequences
+        else:
+            return WizardPages.PageSequenceScheduling

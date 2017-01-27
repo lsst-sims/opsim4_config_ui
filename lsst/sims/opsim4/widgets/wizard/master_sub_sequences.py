@@ -206,7 +206,7 @@ class MasterSubSequencesPage(QtWidgets.QWizardPage):
     def clear_subsequence(self):
         """Clear the last sub-sequence.
         """
-        current_text = str(self.show_subsequences.toPlainText())
+        current_text = str(self.show_subsequences.toPlainText()).strip()
         parts = current_text.split(os.linesep)
         del parts[-1]
         del self.name_list[-1]

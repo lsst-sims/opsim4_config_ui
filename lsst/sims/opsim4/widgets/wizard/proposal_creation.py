@@ -46,6 +46,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
         self.setPage(WizardPages.PageSkyConstraints, SkyConstraintsPage())
         self.setPage(WizardPages.PageSubSequences, SubSequencesPage())
         self.setPage(WizardPages.PageMasterSubSequences, MasterSubSequencesPage())
+        self.setPage(WizardPages.PageNestedSubSequences, SubSequencesPage(is_nested=True))
         self.setPage(WizardPages.PageGeneralScheduling, SchedulingPage())
         self.setPage(WizardPages.PageSequenceScheduling, SchedulingPage(is_general=False))
         self.setPage(WizardPages.PageGeneralFilters, BandFiltersPage())

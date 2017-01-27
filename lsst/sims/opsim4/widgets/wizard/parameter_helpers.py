@@ -1,5 +1,6 @@
 __all__ = ["band_filters_params",
            "master_sub_sequences_params",
+           "nested_sub_sequences_params",
            "scheduling_params",
            "sky_constraints_params",
            "sky_exclusion_params",
@@ -46,6 +47,16 @@ def master_sub_sequences_params():
         Set of registered field names.
     """
     return ["master_sub_sequences"]
+
+def nested_sub_sequences_params():
+    """Create nested sub-sequence registered field names.
+
+    Returns
+    -------
+    list[str]
+        Set of registered field names.
+    """
+    return ["nested_sub_sequences"]
 
 def scheduling_params(is_general=True):
     """Create scheduling registered field names.

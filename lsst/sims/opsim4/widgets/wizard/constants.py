@@ -16,7 +16,8 @@ class WizardPages(IntEnum):
     PageSkyConstraints = 7,
     PageSubSequences = 8,
     PageMasterSubSequences = 9,
-    PageGeneralScheduling = 10,
-    PageSequenceScheduling = 11,
-    PageGeneralFilters = 12,
-    PageSequenceFilters = 13
+    PageNestedSubSequences = 10,
+    PageGeneralScheduling = 11,
+    PageSequenceScheduling = 12,
+    PageGeneralFilters = 13,
+    PageSequenceFilters = 14
