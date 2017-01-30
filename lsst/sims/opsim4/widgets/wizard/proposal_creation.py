@@ -10,7 +10,7 @@ from lsst.sims.opsim4.widgets.wizard import SkyNightlyBoundsPage, SkyRegionPage,
 from lsst.sims.opsim4.widgets.wizard import SubSequencesPage, WizardPages
 from lsst.sims.opsim4.widgets.wizard import GeneralWriter, SequenceWriter
 from lsst.sims.opsim4.widgets.wizard import band_filters_params, master_sub_sequences_params
-from lsst.sims.opsim4.widgets.wizard import scheduling_params
+from lsst.sims.opsim4.widgets.wizard import nested_sub_sequences_params, scheduling_params
 from lsst.sims.opsim4.widgets.wizard import sky_constraints_params
 from lsst.sims.opsim4.widgets.wizard import sky_exclusion_params
 from lsst.sims.opsim4.widgets.wizard import sky_nightly_bounds_params
@@ -121,7 +121,8 @@ class ProposalCreationWizard(QtWidgets.QWizard):
             pdict = self.create_field_parameters(sub_sequences_params())
             writer.sub_sequences(pdict)
             pdict = self.create_field_parameters(master_sub_sequences_params())
-            writer.master_sub_sequences(pdict)
+            pdict1 = self.create_field_parameters(nested_sub_sequences_params())
+            writer.master_sub_sequences(pdict, pdict1)
             pdict = self.create_field_parameters(scheduling_params(False))
             writer.scheduling(pdict)
             pdict = self.create_field_parameters(band_filters_params(False))

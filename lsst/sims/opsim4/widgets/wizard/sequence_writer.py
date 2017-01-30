@@ -119,15 +119,18 @@ class SequenceWriter(WriterBase):
                                                                      sub_sequence_spec, "}"))
             self.lines.append(os.linesep)
 
-    def master_sub_sequences(self, params):
+    def master_sub_sequences(self, params, params2):
         """Create the master sub-sequence information.
 
         Parameters
         ----------
         params : dict
             The information for the master sub-sequences.
+        params2 : dict
+            The information for the nested sub-sequences.
         """
         msub_sequences = str(params["master_sub_sequences"]).strip().split(os.linesep)
+        nsub_sequences = str(params2["nested_sub_sequences"]).strip().split(os.linesep)
         if msub_sequences[0] == '':
             msub_sequences = []
         if len(msub_sequences):
@@ -138,54 +141,101 @@ class SequenceWriter(WriterBase):
             self.lines.append("{}# ---------------------------------------------".format(PADDING * 2))
             self.lines.append(os.linesep)
 
+            nsub_sequence_count = 0
             self.lines[2] += ", MasterSubSequence"
-            if ", SubSuequence" not in self.lines[2]:
+            if ", SubSequence" not in self.lines[2]:
                 self.lines[2] += ", SubSequence"
             msub_sequence_list = []
-            for i, sub_sequence in enumerate(msub_sequences):
-                msub_sequence_obj = "sseq{}".format(i)
+            for i, msub_sequence in enumerate(msub_sequences):
+                msub_sequence_obj = "msseq{}".format(i)
                 msub_sequence_list.append((str(i), msub_sequence_obj))
-                parts = sub_sequence.split(',')
-                self.lines.append("{}{} = SubSequence()".format(PADDING * 2, msub_sequence_obj))
+                parts = msub_sequence.split(',')
+                self.lines.append("{}{} = MasterSubSequence()".format(PADDING * 2, msub_sequence_obj))
                 self.lines.append(os.linesep)
                 self.lines.append("{}{}.name = \"{}\"".format(PADDING * 2, msub_sequence_obj, parts[0]))
                 self.lines.append(os.linesep)
-                self.lines.append("{}{}.filters = [{}]".format(PADDING * 2, msub_sequence_obj,
-                                                               self.reformat_string(parts[1])))
-                self.lines.append(os.linesep)
-                self.lines.append("{}{}.visits_per_filter = [{}]".format(PADDING * 2, msub_sequence_obj,
-                                                                         self.reformat_string(parts[2])))
-                self.lines.append(os.linesep)
                 self.lines.append("{}{}.num_events = {}".format(PADDING * 2, msub_sequence_obj,
-                                                                int(parts[3])))
+                                                                int(parts[2])))
                 self.lines.append(os.linesep)
                 self.lines.append("{}{}.num_max_missed = {}".format(PADDING * 2, msub_sequence_obj,
-                                                                    int(parts[4])))
+                                                                    int(parts[3])))
                 self.lines.append(os.linesep)
-                math_ops = "+,-,*,/".split(',')
-                check_math = [op for op in math_ops if op in parts[5]]
-                if len(check_math):
-                    time_interval = parts[5]
-                else:
-                    time_interval = float(parts[5])
+                time_interval = self.time_interval_format(parts[4])
                 self.lines.append("{}{}.time_interval = {}".format(PADDING * 2, msub_sequence_obj,
                                                                    time_interval))
                 self.lines.append(os.linesep)
                 self.lines.append("{}{}.time_window_start = {}".format(PADDING * 2, msub_sequence_obj,
-                                                                       float(parts[6])))
+                                                                       float(parts[5])))
                 self.lines.append(os.linesep)
                 self.lines.append("{}{}.time_window_max = {}".format(PADDING * 2, msub_sequence_obj,
-                                                                     float(parts[7])))
+                                                                     float(parts[6])))
                 self.lines.append(os.linesep)
                 self.lines.append("{}{}.time_window_end = {}".format(PADDING * 2, msub_sequence_obj,
-                                                                     float(parts[8])))
+                                                                     float(parts[7])))
                 self.lines.append(os.linesep)
                 self.lines.append("{}{}.time_weight = {}".format(PADDING * 2, msub_sequence_obj,
-                                                                 float(parts[9])))
+                                                                 float(parts[8])))
+                self.lines.append(os.linesep)
+
+                # Handle nested sub-sequences
+                nsub_sequence_names = self.reformat_string(parts[1]).split(',')
+                nsub_sequence_list = []
+                nsub_sequence_index = 0
+                for nsub_sequence in nsub_sequences:
+                    nparts = nsub_sequence.split(',')
+                    if nparts[0] in nsub_sequence_names:
+                        nsub_sequence_obj = "sseq{}".format(nsub_sequence_count)
+                        nsub_sequence_list.append((str(nsub_sequence_index), nsub_sequence_obj))
+                        nsub_sequence_index += 1
+
+                        self.lines.append("{}{} = SubSequence()".format(PADDING * 2, nsub_sequence_obj))
+                        self.lines.append(os.linesep)
+                        self.lines.append("{}{}.name = \"{}\"".format(PADDING * 2, nsub_sequence_obj,
+                                                                      nparts[0]))
+                        self.lines.append(os.linesep)
+                        self.lines.append("{}{}.filters = [{}]".format(PADDING * 2, nsub_sequence_obj,
+                                                                       self.reformat_string(nparts[1])))
+                        self.lines.append(os.linesep)
+                        self.lines.append("{}{}.visits_per_filter = [{}]".
+                                          format(PADDING * 2, nsub_sequence_obj,
+                                                 self.reformat_string(nparts[2])))
+                        self.lines.append(os.linesep)
+                        self.lines.append("{}{}.num_events = {}".format(PADDING * 2, nsub_sequence_obj,
+                                                                        int(nparts[3])))
+                        self.lines.append(os.linesep)
+                        self.lines.append("{}{}.num_max_missed = {}".format(PADDING * 2, nsub_sequence_obj,
+                                                                            int(nparts[4])))
+                        self.lines.append(os.linesep)
+
+                        time_interval = self.time_interval_format(nparts[5])
+                        self.lines.append("{}{}.time_interval = {}".format(PADDING * 2, nsub_sequence_obj,
+                                                                           time_interval))
+                        self.lines.append(os.linesep)
+                        self.lines.append("{}{}.time_window_start = {}".format(PADDING * 2, nsub_sequence_obj,
+                                                                               float(nparts[6])))
+                        self.lines.append(os.linesep)
+                        self.lines.append("{}{}.time_window_max = {}".format(PADDING * 2, nsub_sequence_obj,
+                                                                             float(nparts[7])))
+                        self.lines.append(os.linesep)
+                        self.lines.append("{}{}.time_window_end = {}".format(PADDING * 2, nsub_sequence_obj,
+                                                                             float(nparts[8])))
+                        self.lines.append(os.linesep)
+                        self.lines.append("{}{}.time_weight = {}".format(PADDING * 2, nsub_sequence_obj,
+                                                                         float(nparts[9])))
+                        self.lines.append(os.linesep)
+                        nsub_sequence_count += 1
+                    else:
+                        continue
+
+                nsub_sequence_spec = self.format_dictionaries(nsub_sequence_list,
+                                                              padding_size=PADDING * 8)
+                self.lines.append("{}{}.sub_sequences = {}{}{}".format(PADDING * 2, msub_sequence_obj,
+                                                                       "{",
+                                                                       nsub_sequence_spec, "}"))
                 self.lines.append(os.linesep)
 
             msub_sequence_spec = self.format_dictionaries(msub_sequence_list,
-                                                          padding_size=PADDING * 9)
+                                                          padding_size=PADDING * 9 + " ")
             self.lines.append("{}self.master_sub_sequences = {}{}{}".format(PADDING * 2, "{",
                                                                             msub_sequence_spec, "}"))
             self.lines.append(os.linesep)
@@ -272,7 +322,7 @@ class SequenceWriter(WriterBase):
         self.lines.append(os.linesep)
 
     def reformat_string(self, istr):
-        """Convert a parantheses str into a comma-delimited str.
+        """Convert a parentheses str into a comma-delimited str.
 
         This function takes a string like: (a b c d) and formats it to
         a string like: a,b,c,d.
@@ -288,3 +338,24 @@ class SequenceWriter(WriterBase):
             The formatted string.
         """
         return ",".join(istr.strip('(').strip(')').split(' '))
+
+    def time_interval_format(self, ti):
+        """Handle time interval as formula or number.
+
+        Parameters
+        ----------
+        ti : str
+            The time interval as a string.
+
+        Returns
+        -------
+        str
+            The appropriately formatted time interval.
+        """
+        math_ops = "+,-,*,/".split(',')
+        check_math = [op for op in math_ops if op in ti]
+        if len(check_math):
+            time_interval_format = ti
+        else:
+            time_interval_format = float(ti)
+        return time_interval_format
