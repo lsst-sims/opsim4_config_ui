@@ -183,7 +183,7 @@ class SubSequencesPage(QtWidgets.QWizardPage):
 
         field_name = "sub_sequences"
         if self.is_nested:
-            field_name = "nested_" + field_name
+            field_name = "nested_" + field_name + "*"
 
         self.registerField(field_name, self.show_subsequences, "plainText",
                            self.show_subsequences.textChanged)
