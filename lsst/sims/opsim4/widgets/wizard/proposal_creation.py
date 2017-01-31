@@ -122,8 +122,9 @@ class ProposalCreationWizard(QtWidgets.QWizard):
                                                                        float(bounds_limit)))
                 prop_file_lines.append(os.linesep)
             start_time = int(parts[4])
-            if start_time:
-                time_range_values.append((start_time, int(parts[5])))
+            end_time = int(parts[5])
+            if start_time or end_time:
+                time_range_values.append((start_time, end_time))
                 if len(selection_mapping_values) == 0:
                     selection_mapping_values.append([i])
                 else:
