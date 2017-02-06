@@ -138,7 +138,9 @@ class ProposalWidget(ConfigurationTab):
         """
         self.create_widget("Float", "max_airmass", layout=glayout, rows=0)
         self.create_widget("Float", "max_cloud", layout=glayout, rows=1)
-        self.group_box_rows.append(2)
+        self.create_widget("Float", "min_distance_moon", layout=glayout, rows=2)
+        self.create_widget("Bool", "exclude_planets", layout=glayout, rows=3)
+        self.group_box_rows.append(4)
 
     def create_scheduling(self, glayout, params):
         """Set the information for the proposal scheduling.
@@ -391,7 +393,11 @@ class ProposalWidget(ConfigurationTab):
         for i in xrange(self.group_box_rows[3]):
             label = glayout.itemAtPosition(i, 0).widget()
             widget = glayout.itemAtPosition(i, 1).widget()
-            widget.setText(str(params[str(label.text())]["value"]))
+            value = params[str(label.text())]["value"]
+            try:
+                widget.setChecked(value)
+            except AttributeError:
+                widget.setText(str(value))
             widget.setToolTip(params[str(label.text())]["doc"])
             units = glayout.itemAtPosition(i, 2).widget()
             self.set_unit_labels(units, params[str(label.text())])
