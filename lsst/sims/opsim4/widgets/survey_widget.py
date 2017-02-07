@@ -22,6 +22,10 @@ class SurveyWidget(ConfigurationTab):
         """
         self.proposals = proposals
         self.GEN_PROP_GB_POS = 3
+        self.SEQ_PROP_GB_POS = 4
+        self.prop_loc_map = {"general_proposals": self.GEN_PROP_GB_POS,
+                             "sequence_proposals": self.SEQ_PROP_GB_POS}
+        self.diff_props = []
         ConfigurationTab.__init__(self, name, parent=parent)
 
     def create_form(self):
@@ -43,6 +47,18 @@ class SurveyWidget(ConfigurationTab):
 
         self.layout.addWidget(general_group_box, self.GEN_PROP_GB_POS, 0, 1, 3)
 
+        sequence_group_box = QtWidgets.QGroupBox("sequence_proposals")
+        sequence_group_box.setObjectName("sequence_proposals")
+        sequence_group_box.setToolTip("Use the checkboxes to deactivate a sequence proposal.")
+        glayout = QtWidgets.QGridLayout()
+
+        for i, prop_name in enumerate(self.proposals["SEQ"]):
+            self.create_widget("Bool", prop_name, layout=glayout, rows=i)
+
+        sequence_group_box.setLayout(glayout)
+
+        self.layout.addWidget(sequence_group_box, self.SEQ_PROP_GB_POS, 0, 1, 3)
+
     def get_changed_parameters(self, layout=None, parent_name=None):
         """Find the changed parameters.
 
@@ -59,23 +75,24 @@ class SurveyWidget(ConfigurationTab):
             A list of 2-tuples of the changed property name and the property value.
         """
         changed_values = ConfigurationTab.get_changed_parameters(self, layout=layout, parent_name=parent_name)
-        general_props_changed = False
+        props_changed = False
         for changed_value in changed_values:
-            if "general_proposals" in changed_value[0]:
-                general_props_changed = True
+            if parent_name in changed_value[0]:
+                props_changed = True
         corrected_changed_values = []
-        if general_props_changed:
+        if props_changed:
             for changed_value in changed_values:
-                if "general_proposals" not in changed_value[0]:
+                if parent_name not in changed_value[0]:
                     corrected_changed_values.append(changed_value)
-            general_prop_gb = self.layout.itemAtPosition(self.GEN_PROP_GB_POS, 0).widget()
-            general_prop_gb_layout = general_prop_gb.layout()
-            general_proposals = []
-            for i in xrange(general_prop_gb_layout.rowCount()):
-                cb = general_prop_gb_layout.itemAtPosition(i, 1).widget()
+            prop_gb_loc = self.prop_loc_map[parent_name]
+            prop_gb = self.layout.itemAtPosition(prop_gb_loc, 0).widget()
+            prop_gb_layout = prop_gb.layout()
+            props = []
+            for i in xrange(prop_gb_layout.rowCount()):
+                cb = prop_gb_layout.itemAtPosition(i, 1).widget()
                 if cb.isChecked():
-                    general_proposals.append(str(general_prop_gb_layout.itemAtPosition(i, 0).widget().text()))
-            corrected_changed_values.append(("general_proposals", general_proposals))
+                    props.append(str(prop_gb_layout.itemAtPosition(i, 0).widget().text()))
+            corrected_changed_values.append((parent_name, props))
         else:
             corrected_changed_values = changed_values
 
@@ -99,23 +116,27 @@ class SurveyWidget(ConfigurationTab):
         if layout is None:
             diff = ConfigurationTab.get_diff(self, layout=layout, parent_name=parent_name)
         else:
+            self.diff_props.append(parent_name)
             # Parent class calls this function with another layout, so just return the results.
             return ConfigurationTab.get_diff(self, layout=layout, parent_name=parent_name)
-        general_props_changed = False
-        for key in diff:
-            if "general_proposals" in key:
-                general_props_changed = True
-        if general_props_changed:
-            del diff["survey/general_proposals"]
-            general_prop_gb = self.layout.itemAtPosition(self.GEN_PROP_GB_POS, 0).widget()
-            general_prop_gb_layout = general_prop_gb.layout()
-            general_proposals = []
-            for i in xrange(general_prop_gb_layout.rowCount()):
-                cb = general_prop_gb_layout.itemAtPosition(i, 1).widget()
-                if cb.isChecked():
-                    general_proposals.append(str(general_prop_gb_layout.itemAtPosition(i, 0).widget().text()))
-            diff["survey"]["general_proposals"] = [",".join(general_proposals)]
+        for name in self.diff_props:
+            props_changed = False
+            for key in diff:
+                if name in key:
+                    props_changed = True
+            if props_changed:
+                del diff["survey/{}".format(name)]
+                prop_gb_loc = self.prop_loc_map[name]
+                prop_gb = self.layout.itemAtPosition(prop_gb_loc, 0).widget()
+                prop_gb_layout = prop_gb.layout()
+                proposals = []
+                for i in xrange(prop_gb_layout.rowCount()):
+                    cb = prop_gb_layout.itemAtPosition(i, 1).widget()
+                    if cb.isChecked():
+                        proposals.append(str(prop_gb_layout.itemAtPosition(i, 0).widget().text()))
+                diff["survey"][name] = [",".join(proposals)]
 
+        self.diff_props = []
         return diff
 
     def is_changed(self, position, is_changed):
@@ -212,10 +233,14 @@ class SurveyWidget(ConfigurationTab):
         """
         for key, value in params.items():
             if "proposals" in key:
+                prop_gb = None
                 if "general" in key:
-                    gen_prop_gb = self.layout.itemAtPosition(self.GEN_PROP_GB_POS, 0).widget()
-                    for proposal in value["value"].split(','):
-                        cb = gen_prop_gb.findChild(QtWidgets.QCheckBox, proposal)
-                        cb.setChecked(True)
+                    prop_gb = self.layout.itemAtPosition(self.GEN_PROP_GB_POS, 0).widget()
+                if "sequence" in key:
+                    prop_gb = self.layout.itemAtPosition(self.SEQ_PROP_GB_POS, 0).widget()
+                for proposal in value["value"].split(','):
+                    cb = prop_gb.findChild(QtWidgets.QCheckBox, proposal)
+                    cb.setChecked(True)
+
             else:
                 ConfigurationTab.set_information(self, key, value)

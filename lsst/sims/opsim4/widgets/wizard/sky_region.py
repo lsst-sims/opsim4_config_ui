@@ -3,6 +3,7 @@ import os
 from PyQt5 import QtGui, QtWidgets
 
 from lsst.sims.ocs.configuration.proposal import SELECTION_LIMIT_TYPES
+from lsst.sims.opsim4.widgets.wizard import WizardPages
 
 __all__ = ["SkyRegionPage"]
 
@@ -185,7 +186,12 @@ class SkyRegionPage(QtWidgets.QWizardPage):
     def clear_selection(self):
         """Clear the last selection.
         """
-        current_text = str(self.show_selections.toPlainText())
+        current_text = str(self.show_selections.toPlainText()).strip()
         parts = current_text.split(os.linesep)
         del parts[-1]
         self.show_selections.setPlainText(os.linesep.join(parts))
+
+    def nextId(self):
+        """Move to next page.
+        """
+        return WizardPages.PageGeneralSkyExclusions

@@ -1,5 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+from lsst.sims.opsim4.widgets.wizard import WizardPages
+
 __all__ = ["ProposalTypePage"]
 
 class ProposalTypePage(QtWidgets.QWizardPage):
@@ -21,16 +23,16 @@ class ProposalTypePage(QtWidgets.QWizardPage):
 
         group_box = QtWidgets.QGroupBox("Proposal Type")
 
-        general_radio = QtWidgets.QRadioButton("General (Area, Hybrid, Time-Domain)")
-        sequence_radio = QtWidgets.QRadioButton("Sequence (Deep Drilling, Nested Subsequences)")
-        general_radio.setChecked(True)
+        self.general_radio = QtWidgets.QRadioButton("General (Area, Hybrid, Time-Domain)")
+        self.sequence_radio = QtWidgets.QRadioButton("Sequence (Deep Drilling, Nested Subsequences)")
+        self.general_radio.setChecked(True)
 
-        self.registerField("general_choice", general_radio)
-        self.registerField("sequence_choice", sequence_radio)
+        self.registerField("general_choice", self.general_radio)
+        self.registerField("sequence_choice", self.sequence_radio)
 
         gb_layout = QtWidgets.QVBoxLayout()
-        gb_layout.addWidget(general_radio)
-        gb_layout.addWidget(sequence_radio)
+        gb_layout.addWidget(self.general_radio)
+        gb_layout.addWidget(self.sequence_radio)
         gb_layout.addStretch(1)
 
         group_box.setLayout(gb_layout)
@@ -50,3 +52,11 @@ class ProposalTypePage(QtWidgets.QWizardPage):
         layout.addWidget(name_le)
 
         self.setLayout(layout)
+
+    def nextId(self):
+        """Move to next page.
+        """
+        if self.general_radio.isChecked():
+            return WizardPages.PageSkyRegions
+        else:
+            return WizardPages.PageSkyUserRegions

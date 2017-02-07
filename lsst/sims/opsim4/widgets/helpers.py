@@ -23,6 +23,7 @@ def get_widget_by_type(widget_type):
         'Float': float_widget,
         'FloatList': lineedit_widget,
         'Int': int_widget,
+        'IntList': lineedit_widget,
         'Bool': bool_widget,
         'File': file_widget
     }

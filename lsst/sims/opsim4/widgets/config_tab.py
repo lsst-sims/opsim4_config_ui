@@ -145,7 +145,11 @@ class ConfigurationTab(QtWidgets.QWidget):
             layout = self.layout
         changed_values = []
         for i in xrange(layout.rowCount()):
-            property_label = layout.itemAtPosition(i, 0).widget()
+            try:
+                property_label = layout.itemAtPosition(i, 0).widget()
+            except AttributeError:
+                # Handle NoneType widgets.
+                continue
             property_name = str(property_label.text())
             if property_name.endswith(self.CHANGED_PARAMETER):
                 property_widget = layout.itemAtPosition(i, 1).widget()
@@ -178,7 +182,11 @@ class ConfigurationTab(QtWidgets.QWidget):
             layout = self.layout
         ddict = collections.defaultdict(dict)
         for i in range(layout.rowCount()):
-            widget = layout.itemAtPosition(i, 0).widget()
+            try:
+                widget = layout.itemAtPosition(i, 0).widget()
+            except AttributeError:
+                # Handle NoneType widgets.
+                continue
             if isinstance(widget, QtWidgets.QGroupBox):
                 gb_name = str(widget.title())
                 glayout = widget.layout()
@@ -300,7 +308,11 @@ class ConfigurationTab(QtWidgets.QWidget):
         if layout is None:
             layout = self.layout
         for i in xrange(layout.rowCount()):
-            property_label = layout.itemAtPosition(i, 0).widget()
+            try:
+                property_label = layout.itemAtPosition(i, 0).widget()
+            except AttributeError:
+                # Handle NoneType widgets
+                continue
             property_name = str(property_label.text())
             if property_name.endswith(self.CHANGED_PARAMETER):
                 property_widget = layout.itemAtPosition(i, 1).widget()
@@ -334,7 +346,11 @@ class ConfigurationTab(QtWidgets.QWidget):
         if layout is None:
             layout = self.layout
         for i in xrange(layout.rowCount()):
-            property_label = layout.itemAtPosition(i, 0).widget()
+            try:
+                property_label = layout.itemAtPosition(i, 0).widget()
+            except AttributeError:
+                # Handle NoneType widgets
+                continue
             if isinstance(property_label, QtWidgets.QGroupBox):
                 continue
             property_name = str(property_label.text())
