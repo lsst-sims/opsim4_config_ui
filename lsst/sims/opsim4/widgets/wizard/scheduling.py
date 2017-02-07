@@ -123,10 +123,10 @@ class SchedulingPage(QtWidgets.QWizardPage):
             label10.setWordWrap(True)
 
             time_weight_la = QtWidgets.QLabel("Time Weight:")
-            time_weight_le = QtWidgets.QLineEdit("0.0")
+            time_weight_le = QtWidgets.QLineEdit("1.0")
             time_weight_la.setBuddy(time_weight_le)
             time_weight_le.setValidator(QtGui.QDoubleValidator())
-            self.registerField("scheduling_time_weight", time_window_end_le)
+            self.registerField("scheduling_time_weight", time_weight_le)
 
         scroll_area_widget = QtWidgets.QWidget()
         scroll_area_widget_layout = QtWidgets.QGridLayout()

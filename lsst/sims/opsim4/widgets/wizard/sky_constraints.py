@@ -43,6 +43,27 @@ class SkyConstraintsPage(QtWidgets.QWizardPage):
         max_cloud_le.setValidator(max_cloud_validator)
         self.registerField("sky_constraints_max_cloud", max_cloud_le)
 
+        label3 = QtWidgets.QLabel("Set the minimum distance to the moon that a field can have "
+                                  "in the proposal.")
+        label3.setWordWrap(True)
+
+        min_distance_moon_la = QtWidgets.QLabel("Minimum Distance to Moon:")
+        min_distance_moon_le = QtWidgets.QLineEdit("30.0")
+        min_distance_moon_la.setBuddy(min_distance_moon_le)
+        min_distance_moon_validator = QtGui.QDoubleValidator()
+        min_distance_moon_validator.setBottom(0.0)
+        min_distance_moon_le.setValidator(min_distance_moon_validator)
+        min_distance_moon_un = QtWidgets.QLabel("degrees")
+        self.registerField("sky_constraints_min_distance_moon", min_distance_moon_le)
+
+        label4 = QtWidgets.QLabel("Set checkbox to use 2 degrees exclusion around bright planets.")
+        label4.setWordWrap(True)
+
+        exclude_planets_la = QtWidgets.QLabel("Exclude Planets:")
+        exclude_planets_cb = QtWidgets.QCheckBox()
+        exclude_planets_la.setBuddy(exclude_planets_cb)
+        self.registerField("sky_constraints_exclude_planets", exclude_planets_cb)
+
         layout = QtWidgets.QGridLayout()
 
         layout.addWidget(label, 0, 0, 1, 4)
@@ -54,6 +75,17 @@ class SkyConstraintsPage(QtWidgets.QWizardPage):
 
         layout.addWidget(max_cloud_la, 3, 0)
         layout.addWidget(max_cloud_le, 3, 1, 1, 2)
+
+        layout.addWidget(label3, 4, 0, 1, 4)
+
+        layout.addWidget(min_distance_moon_la, 5, 0)
+        layout.addWidget(min_distance_moon_le, 5, 1, 1, 2)
+        layout.addWidget(min_distance_moon_un, 5, 3)
+
+        layout.addWidget(label4, 6, 0, 1, 4)
+
+        layout.addWidget(exclude_planets_la, 7, 0)
+        layout.addWidget(exclude_planets_cb, 7, 1, 1, 2)
 
         self.setLayout(layout)
 

@@ -166,7 +166,11 @@ class GeneralWriter(WriterBase):
                                         params["scheduling_restrict_grouped_visits"]))
         self.lines.append(os.linesep)
         time_interval = self.time_interval_format(str(params["scheduling_time_interval"]))
-        if time_interval != 0.0 or eval(time_interval) != 0.0:
+        if isinstance(time_interval, str):
+            time_interval_check = eval(time_interval)
+        else:
+            time_interval_check = time_interval
+        if time_interval_check != 0.0:
             self.lines.append("{}self.scheduling.time_interval "
                               "= {}".format(PADDING * 2, time_interval))
             self.lines.append(os.linesep)

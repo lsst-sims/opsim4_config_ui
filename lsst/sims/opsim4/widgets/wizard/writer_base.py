@@ -129,6 +129,12 @@ class WriterBase(object):
         self.lines.append("{}self.sky_constraints.max_cloud = {}"
                           .format(PADDING * 2, str(params["sky_constraints_max_cloud"])))
         self.lines.append(os.linesep)
+        self.lines.append("{}self.sky_constraints.min_distance_moon = {}"
+                          .format(PADDING * 2, str(params["sky_constraints_min_distance_moon"])))
+        self.lines.append(os.linesep)
+        self.lines.append("{}self.sky_constraints.exclude_planets = {}"
+                          .format(PADDING * 2, str(params["sky_constraints_exclude_planets"])))
+        self.lines.append(os.linesep)
 
     def format_dictionaries(self, infos, padding_size=PADDING * 6):
         """Format dictionaries in columns.
