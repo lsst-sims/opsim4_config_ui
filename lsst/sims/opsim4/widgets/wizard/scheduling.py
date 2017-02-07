@@ -85,7 +85,6 @@ class SchedulingPage(QtWidgets.QWizardPage):
             time_interval_la = QtWidgets.QLabel("Time Interval:")
             time_interval_le = QtWidgets.QLineEdit("0.0")
             time_interval_la.setBuddy(time_interval_le)
-            time_interval_le.setValidator(QtGui.QDoubleValidator())
             time_interval_un = QtWidgets.QLabel("seconds")
             self.registerField("scheduling_time_interval", time_interval_le)
 

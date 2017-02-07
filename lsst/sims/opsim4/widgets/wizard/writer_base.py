@@ -153,3 +153,24 @@ class WriterBase(object):
 
         out_list[-1] = out_list[-1].strip(',')
         return os.linesep.join(out_list)
+
+    def time_interval_format(self, ti):
+        """Handle time interval as formula or number.
+
+        Parameters
+        ----------
+        ti : str
+            The time interval as a string.
+
+        Returns
+        -------
+        str
+            The appropriately formatted time interval.
+        """
+        math_ops = "+,-,*,/".split(',')
+        check_math = [op for op in math_ops if op in ti]
+        if len(check_math):
+            time_interval_format = ti
+        else:
+            time_interval_format = float(ti)
+        return time_interval_format
