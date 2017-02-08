@@ -139,7 +139,13 @@ class ScienceModel(object):
             modules = self.sequence_modules
 
         filename = "{}_prop.py".format(name.lower())
-        with open(os.path.join(save_dir, filename), 'w') as ofile:
+        full_filename = os.path.join(save_dir, filename)
+        if not len(changed_params):
+            if os.path.exists(full_filename):
+                os.remove(full_filename)
+            return
+
+        with open(full_filename, 'w') as ofile:
             ofile.write("import {}".format(modules[name]))
             ofile.write(os.linesep)
             ofile.write("assert type(config)=={0}.{1}, \'config is of type %s.%s instead of {0}.{1}\' % "

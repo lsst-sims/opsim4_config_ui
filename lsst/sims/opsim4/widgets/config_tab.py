@@ -421,8 +421,7 @@ class ConfigurationTab(QtWidgets.QWidget):
                     changed_values.append((str(property_widget.objectName()),
                                           property_value))
 
-        if len(changed_values):
-            self.saveConfiguration.emit(save_dir, self.name, changed_values)
+        self.saveConfiguration.emit(save_dir, self.name, changed_values)
 
     def set_information(self, key, info):
         """Set information in a particular parameter widget.
