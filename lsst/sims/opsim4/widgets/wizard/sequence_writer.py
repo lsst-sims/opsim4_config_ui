@@ -317,24 +317,3 @@ class SequenceWriter(WriterBase):
             The formatted string.
         """
         return ",".join(istr.strip('(').strip(')').split(' '))
-
-    def time_interval_format(self, ti):
-        """Handle time interval as formula or number.
-
-        Parameters
-        ----------
-        ti : str
-            The time interval as a string.
-
-        Returns
-        -------
-        str
-            The appropriately formatted time interval.
-        """
-        math_ops = "+,-,*,/".split(',')
-        check_math = [op for op in math_ops if op in ti]
-        if len(check_math):
-            time_interval_format = ti
-        else:
-            time_interval_format = float(ti)
-        return time_interval_format

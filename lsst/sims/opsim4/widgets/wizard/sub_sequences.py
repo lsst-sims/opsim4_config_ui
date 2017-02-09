@@ -93,7 +93,6 @@ class SubSequencesPage(QtWidgets.QWizardPage):
         time_interval_la = QtWidgets.QLabel("Time Interval:")
         self.time_interval_le = QtWidgets.QLineEdit()
         time_interval_la.setBuddy(self.time_interval_le)
-        #self.time_interval_le.setValidator(QtGui.QDoubleValidator())
         time_interval_un = QtWidgets.QLabel("seconds")
 
         label7 = QtWidgets.QLabel("Set the relative time where the ranking priority for the {} "

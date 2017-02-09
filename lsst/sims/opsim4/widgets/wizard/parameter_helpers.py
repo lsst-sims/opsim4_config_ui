@@ -95,7 +95,9 @@ def sky_constraints_params():
         Set of registered field names.
     """
     return ["sky_constraints_max_airmass",
-            "sky_constraints_max_cloud"]
+            "sky_constraints_max_cloud",
+            "sky_constraints_min_distance_moon",
+            "sky_constraints_exclude_planets"]
 
 def sky_exclusion_params(is_general=True):
     """Create sky exclusions registered field names.

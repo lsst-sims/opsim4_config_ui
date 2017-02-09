@@ -16,6 +16,7 @@ from .telescope_widget import *
 from .observatory_widget import *
 from .observing_site_widget import *
 from .parameter_widget import *
+from .proposal_widget import *
 from .general_proposal_widget import *
 from .sequence_proposal_widget import *
 from .report_dlg import *
