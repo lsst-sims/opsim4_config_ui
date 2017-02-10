@@ -1,7 +1,8 @@
 import collections
 
-from lsst.sims.opsim4.model import CameraModel, DomeModel, ObservatoryVariationModel
-from lsst.sims.opsim4.model import OpticsLoopCorrModel, ParkModel, RotatorModel
+from lsst.sims.opsim4.model import CameraModel, DomeModel, FiltersModel
+from lsst.sims.opsim4.model import ObservatoryVariationModel, OpticsLoopCorrModel
+from lsst.sims.opsim4.model import ParkModel, RotatorModel
 from lsst.sims.opsim4.model import SlewModel, TelescopeModel
 
 __all__ = ["ObservatoryModel"]
@@ -21,6 +22,7 @@ class ObservatoryModel(object):
         self.params["optics_loop_corr"] = OpticsLoopCorrModel()
         self.params["slew"] = SlewModel()
         self.params["park"] = ParkModel()
+        self.params["filters"] = FiltersModel()
         self.params["obs_var"] = ObservatoryVariationModel()
 
     def check_parameter(self, parameter_name, value_to_check):

@@ -26,6 +26,7 @@ class ObservatoryWidget(ConfigurationTabWidget):
                             "optics_loop_corr": "OpticsLoopCorrWidget",
                             "slew": "SlewWidget",
                             "park": "ParkWidget",
+                            "filters": "FiltersWidget",
                             "obs_var": "ObservatoryVariationWidget"}
 
     def create_tabs(self, params):

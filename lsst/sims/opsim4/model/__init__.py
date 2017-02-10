@@ -7,6 +7,7 @@ from .downtime_model import *
 from .camera_model import *
 from .dome_model import *
 from .environment_model import *
+from .filters_model import *
 from .obs_variation_model import *
 from .optics_loop_corr_model import *
 from .park_model import *
