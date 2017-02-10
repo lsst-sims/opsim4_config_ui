@@ -1,6 +1,6 @@
 # Package specfic 
-lsst/sims/opsim4/version.py
-lsst/sims/opsim4/image_resources.py
+python/lsst/opsim4/config/ui/version.py
+python/lsst/sims/opsim4/image_resources.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -55,7 +55,13 @@ coverage.xml
 *.log
 
 # Sphinx documentation
-docs/_build/
+doc/_build/
 
 # PyBuilder
 target/
+
+# LSST Stack
+.sconf_temp
+.sconsign.dblite
+*.tests
+ups/*.cfgc
