@@ -1,5 +1,5 @@
 # Package specfic 
-python/lsst/sims/opsim4/version.py
+python/lsst/opsim4/config/ui/version.py
 python/lsst/sims/opsim4/image_resources.py
 
 # Byte-compiled / optimized / DLL files
@@ -59,3 +59,9 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# LSST Stack
+.sconf_temp
+.sconsign.dblite
+*.tests
+ups/*.cfgc
