@@ -337,7 +337,7 @@ class OpsimConfig(QtWidgets.QMainWindow):
                                  proposals to modify the running of the Operations Simulator
                                  from the baseline configuration.
                                  <br><br>
-                                 Copyright 2016 LSST Simulations
+                                 Copyright 2016-2017 LSST Simulations
                                  """.format(version))
         about.exec_()
 
