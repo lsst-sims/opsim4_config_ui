@@ -1,4 +1,6 @@
-GH_PAGES_SOURCES = Makefile docs setup.py lsst README.rst HISTORY.rst scripts
+GH_PAGES_SOURCES = Makefile doc setup.py python README.rst HISTORY.rst scripts tests SConstruct ups image_resources.qrc images
+SCONS_STUFF = config.log .sconsign.dblite .sconf_temp
+BRANCH := $(shell git branch | grep \* | cut -d ' ' -f2)
 
 .PHONY: clean-pyc clean-build docs clean
 
@@ -12,6 +14,7 @@ help:
 	@echo "test-all - run tests on every Python version with tox"
 	@echo "coverage - check code coverage quickly with the default Python"
 	@echo "docs - generate Sphinx HTML documentation, including API docs"
+	@echo "gh-pages - generate information for GitHub pages"
 	@echo "release - package and upload a release"
 	@echo "dist - package"
 	@echo "install - install the package to the active Python's site-packages"
@@ -37,34 +40,34 @@ clean-test:
 	rm -fr htmlcov/
 
 lint:
-	flake8 lsst tests setup.py scripts/*
+	flake8 python/lsst tests setup.py scripts/*
 
 test:
-	python setup.py test
+	py.test -v
 
 test-all:
 	tox
 
 coverage:
-	coverage run --source opsim4 setup.py test
+	coverage run --source python/lsst -m unittest discover tests
 	coverage report -m
 	coverage html
 	#open htmlcov/index.html
 
 docs:
-	$(MAKE) -C docs clean
-	$(MAKE) -C docs html
-	#open docs/_build/html/index.html
+	$(MAKE) -C doc clean
+	$(MAKE) -C doc html
+	#open doc/_build/html/index.html
 
 gh-pages:
 	git checkout gh-pages
 	rm -rf api build _modules _sources _static
-	git checkout master $(GH_PAGES_SOURCES)
+	git checkout $(BRANCH) $(GH_PAGES_SOURCES)
 	git reset HEAD
-	python setup.py develop
+	scons
 	$(MAKE) docs
-	mv -fv docs/_build/html/* ./
-	rm -rf $(GH_PAGES_SOURCES) opsim4.egg-info
+	mv -fv doc/_build/html/* ./
+	rm -rf $(GH_PAGES_SOURCES) opsim4.egg-info .cache $(SCONS_STUFF)
 
 release: clean
 	python setup.py sdist upload
