@@ -19,6 +19,10 @@ The configuration UI requires the Simulated OCS (SOCS) package as it contains th
 Installation and Setup
 ----------------------
 
+First, the ``fontconfig`` package needs to have a minimum version of 2.12.1-2 and the UI needs ``pyqt`` version 5. Update the packages by doing::
+
+	conda update fontconfig pyqt
+
 Once the above is complete, go to ``gitdir/lsst-sims`` and run the following::
 
 	git clone https://github.com/lsst-sims/opsim4_config_ui.git
@@ -26,12 +30,9 @@ Once the above is complete, go to ``gitdir/lsst-sims`` and run the following::
 Using the conda environment that was created during the prerequisite installation process, activate that environment and then run::
 
 	cd opsim4_config_ui
-	source eups-setups.sh
-	eups declare opsim4_config_ui -r . -c -t $USER
+	eups declare opsim4_config_ui git -r . -c
 	setup opsim4_config_ui
-	python setup.py develop
-
-This last step is important as it creates the version information for the program.
+	scons
 
 Start the Program
 -----------------

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; OpSim4 Configuration UI 0.8.0 documentation</title>
+  <title>Installation &mdash; OpSim4 Configuration UI unknown documentation</title>
   
 
   
@@ -30,7 +30,10 @@
   
 
   
-    <link rel="top" title="OpSim4 Configuration UI 0.8.0 documentation" href="index.html"/>
+        <link rel="index" title="Index"
+              href="genindex.html"/>
+        <link rel="search" title="Search" href="search.html"/>
+    <link rel="top" title="OpSim4 Configuration UI unknown documentation" href="index.html"/>
         <link rel="next" title="History" href="history.html"/>
         <link rel="prev" title="Operations Simulator Version 4 Configuration User Interface" href="index.html"/> 
 
@@ -60,7 +63,7 @@
             
             
               <div class="version">
-                0.8.0
+                unknown
               </div>
             
           
@@ -124,7 +127,7 @@
       <li class="wy-breadcrumbs-aside">
         
           
-            <a href="_sources/installation.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -150,19 +153,21 @@
 </div>
 <div class="section" id="installation-and-setup">
 <h2>Installation and Setup<a class="headerlink" href="#installation-and-setup" title="Permalink to this headline">¶</a></h2>
+<p>First, the <code class="docutils literal"><span class="pre">fontconfig</span></code> package needs to have a minimum version of 2.12.1-2 and the UI needs <code class="docutils literal"><span class="pre">pyqt</span></code> version 5. Update the packages by doing:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">update</span> <span class="n">fontconfig</span> <span class="n">pyqt</span>
+</pre></div>
+</div>
 <p>Once the above is complete, go to <code class="docutils literal"><span class="pre">gitdir/lsst-sims</span></code> and run the following:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">lsst</span><span class="o">-</span><span class="n">sims</span><span class="o">/</span><span class="n">opsim4_config_ui</span><span class="o">.</span><span class="n">git</span>
 </pre></div>
 </div>
 <p>Using the conda environment that was created during the prerequisite installation process, activate that environment and then run:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>cd opsim4_config_ui
-source eups-setups.sh
-eups declare opsim4_config_ui -r . -c -t $USER
-setup opsim4_config_ui
-python setup.py develop
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">opsim4_config_ui</span>
+<span class="n">eups</span> <span class="n">declare</span> <span class="n">opsim4_config_ui</span> <span class="n">git</span> <span class="o">-</span><span class="n">r</span> <span class="o">.</span> <span class="o">-</span><span class="n">c</span>
+<span class="n">setup</span> <span class="n">opsim4_config_ui</span>
+<span class="n">scons</span>
 </pre></div>
 </div>
-<p>This last step is important as it creates the version information for the program.</p>
 </div>
 <div class="section" id="start-the-program">
 <h2>Start the Program<a class="headerlink" href="#start-the-program" title="Permalink to this headline">¶</a></h2>
@@ -215,7 +220,7 @@ python setup.py develop
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.8.0',
+            VERSION:'unknown',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
