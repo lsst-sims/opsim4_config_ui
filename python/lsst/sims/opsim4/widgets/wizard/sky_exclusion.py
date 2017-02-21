@@ -1,6 +1,6 @@
 import os
 
-from PyQt5 import QtGui, QtWidgets
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 from lsst.sims.opsim4.widgets.wizard import WizardPages
 
@@ -51,6 +51,10 @@ class SkyExclusionPage(QtWidgets.QWizardPage):
             exclusion_label = QtWidgets.QLabel("A galactic plane exclusion zone is available by "
                                                "filling out the form below.")
             exclusion_label.setWordWrap(True)
+
+            label_img = QtWidgets.QLabel()
+            label_img.setPixmap(QtGui.QPixmap(":/galactic_plane_envelope.png"))
+            label_img.setAlignment(QtCore.Qt.AlignHCenter)
 
             self.selection_text = []
 
@@ -112,15 +116,26 @@ class SkyExclusionPage(QtWidgets.QWizardPage):
             self.registerField("sky_exclusion_selections", self.show_selections, "plainText",
                                self.show_selections.textChanged)
 
-        layout = QtWidgets.QVBoxLayout()
-        layout.addWidget(dec_win_note_label)
-        layout.addWidget(dec_win_gb)
-        if self.is_general:
-            layout.addWidget(exclusion_label)
-            layout.addWidget(group_box)
-            layout.addWidget(self.show_selections)
+        scroll_area_widget = QtWidgets.QWidget()
+        scroll_area_widget_layout = QtWidgets.QVBoxLayout()
 
-        self.setLayout(layout)
+        scroll_area_widget_layout.addWidget(dec_win_note_label)
+        scroll_area_widget_layout.addWidget(dec_win_gb)
+        if self.is_general:
+            scroll_area_widget_layout.addWidget(exclusion_label)
+            scroll_area_widget_layout.addWidget(label_img)
+            scroll_area_widget_layout.addWidget(group_box)
+            scroll_area_widget_layout.addWidget(self.show_selections)
+        scroll_area_widget_layout.addStretch(1)
+        scroll_area_widget.setLayout(scroll_area_widget_layout)
+
+        scrollable = QtWidgets.QScrollArea()
+        scrollable.setWidgetResizable(True)
+        scrollable.setWidget(scroll_area_widget)
+
+        main_layout = QtWidgets.QVBoxLayout()
+        main_layout.addWidget(scrollable)
+        self.setLayout(main_layout)
 
     def add_selection(self):
         """Combine information for a sky region selection.
