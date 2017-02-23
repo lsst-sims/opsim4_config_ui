@@ -161,6 +161,9 @@ class GeneralWriter(WriterBase):
         self.lines.append("{}self.scheduling.airmass_bonus = {}"
                           .format(PADDING * 2, str(params["general_scheduling_airmass_bonus"])))
         self.lines.append(os.linesep)
+        self.lines.append("{}self.scheduling.hour_angle_bonus = {}"
+                          .format(PADDING * 2, str(params["general_scheduling_hour_angle_bonus"])))
+        self.lines.append(os.linesep)
         self.lines.append("{}self.scheduling.restrict_grouped_visits "
                           "= {}".format(PADDING * 2,
                                         params["scheduling_restrict_grouped_visits"]))

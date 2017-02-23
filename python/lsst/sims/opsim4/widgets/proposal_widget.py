@@ -146,16 +146,17 @@ class ProposalWidget(ConfigurationTab):
         self.create_widget("Bool", "accept_serendipity", layout=glayout, rows=1)
         self.create_widget("Bool", "accept_consecutive_visits", layout=glayout, rows=2)
         self.create_widget("Float", "airmass_bonus", layout=glayout, rows=3)
+        self.create_widget("Float", "hour_angle_bonus", layout=glayout, rows=4)
         if is_general:
-            self.create_widget("Bool", "restrict_grouped_visits", layout=glayout, rows=4)
-            self.create_widget("Float", "time_interval", layout=glayout, rows=5)
-            self.create_widget("Float", "time_window_start", layout=glayout, rows=6)
-            self.create_widget("Float", "time_window_max", layout=glayout, rows=7)
-            self.create_widget("Float", "time_window_end", layout=glayout, rows=8)
-            self.create_widget("Float", "time_weight", layout=glayout, rows=9)
-            num_widgets = 10
+            self.create_widget("Bool", "restrict_grouped_visits", layout=glayout, rows=5)
+            self.create_widget("Float", "time_interval", layout=glayout, rows=6)
+            self.create_widget("Float", "time_window_start", layout=glayout, rows=7)
+            self.create_widget("Float", "time_window_max", layout=glayout, rows=8)
+            self.create_widget("Float", "time_window_end", layout=glayout, rows=9)
+            self.create_widget("Float", "time_weight", layout=glayout, rows=10)
+            num_widgets = 11
         else:
-            num_widgets = 4
+            num_widgets = 5
         self.group_box_rows.append(num_widgets)
 
     def create_filters(self, glayout, params, is_general=True):
