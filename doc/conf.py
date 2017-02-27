@@ -57,7 +57,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'OpSim4 Configuration UI'
-copyright = u'2016, LSST Systems Engineering'
+copyright = u'2016-2017, LSST Systems Engineering'
 
 # The version info for the project you're documenting, acts as replacement
 # for |version| and |release|, also used in various other places throughout
@@ -81,7 +81,7 @@ release = __version__
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
-exclude_patterns = ['_build']
+exclude_patterns = ['_build', "source_installation.rst", "docker_installation.rst"]
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.
