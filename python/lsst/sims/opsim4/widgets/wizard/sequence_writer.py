@@ -198,7 +198,10 @@ class SequenceWriter(WriterBase):
                           .format(PADDING * 2, str(params["sequence_scheduling_airmass_bonus"])))
         self.lines.append(os.linesep)
         self.lines.append("{}self.scheduling.hour_angle_bonus = {}"
-                          .format(PADDING * 2, str(params["general_scheduling_hour_angle_bonus"])))
+                          .format(PADDING * 2, str(params["sequence_scheduling_hour_angle_bonus"])))
+        self.lines.append(os.linesep)
+        self.lines.append("{}self.scheduling.hour_angle_max = {}"
+                          .format(PADDING * 2, str(params["sequence_scheduling_hour_angle_max"])))
         self.lines.append(os.linesep)
 
     def band_filters(self, params):
