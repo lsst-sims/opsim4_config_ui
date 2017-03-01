@@ -60,11 +60,13 @@ docs:
 	#open doc/_build/html/index.html
 
 gh-pages:
+	scons
+	cp python/lsst/opsim4/config/ui/version.py doc_ver.py
 	git checkout gh-pages
 	rm -rf api build _modules _sources _static
 	git checkout $(BRANCH) $(GH_PAGES_SOURCES)
 	git reset HEAD
-	scons
+	mv doc_ver.py python/lsst/opsim4/config/ui/version.py
 	$(MAKE) docs
 	mv -fv doc/_build/html/* ./
 	rm -rf $(GH_PAGES_SOURCES) opsim4.egg-info .cache $(SCONS_STUFF)
