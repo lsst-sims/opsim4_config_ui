@@ -142,12 +142,17 @@ class ProposalWidget(ConfigurationTab):
         is_general : bool, optional
             Flag set to True is general proposal, False for sequence proposal.
         """
+        offset = 0
         self.create_widget("Int", "max_num_targets", layout=glayout, rows=0)
         self.create_widget("Bool", "accept_serendipity", layout=glayout, rows=1)
         self.create_widget("Bool", "accept_consecutive_visits", layout=glayout, rows=2)
-        self.create_widget("Float", "airmass_bonus", layout=glayout, rows=3)
-        self.create_widget("Float", "hour_angle_bonus", layout=glayout, rows=4)
-        self.create_widget("Float", "hour_angle_max", layout=glayout, rows=5)
+        if not is_general:
+            offset = 2
+            self.create_widget("Bool", "restart_lost_sequences", layout=glayout, rows=3)
+            self.create_widget("Bool", "restart_complete_sequences", layout=glayout, rows=4)
+        self.create_widget("Float", "airmass_bonus", layout=glayout, rows=3 + offset)
+        self.create_widget("Float", "hour_angle_bonus", layout=glayout, rows=4 + offset)
+        self.create_widget("Float", "hour_angle_max", layout=glayout, rows=5 + offset)
         if is_general:
             self.create_widget("Bool", "restrict_grouped_visits", layout=glayout, rows=6)
             self.create_widget("Float", "time_interval", layout=glayout, rows=7)
@@ -157,7 +162,7 @@ class ProposalWidget(ConfigurationTab):
             self.create_widget("Float", "time_weight", layout=glayout, rows=11)
             num_widgets = 12
         else:
-            num_widgets = 6
+            num_widgets = 8
         self.group_box_rows.append(num_widgets)
 
     def create_filters(self, glayout, params, is_general=True):

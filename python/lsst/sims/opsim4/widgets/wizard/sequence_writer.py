@@ -194,6 +194,14 @@ class SequenceWriter(WriterBase):
                           "= {}".format(PADDING * 2,
                                         params["sequence_scheduling_accept_consecutive_visits"]))
         self.lines.append(os.linesep)
+        self.lines.append("{}self.scheduling.restart_lost_sequences "
+                          "= {}".format(PADDING * 2,
+                                        params["sequence_scheduling_restart_lost_sequences"]))
+        self.lines.append(os.linesep)
+        self.lines.append("{}self.scheduling.restart_complete_sequences "
+                          "= {}".format(PADDING * 2,
+                                        params["sequence_scheduling_restart_complete_sequences"]))
+        self.lines.append(os.linesep)
         self.lines.append("{}self.scheduling.airmass_bonus = {}"
                           .format(PADDING * 2, str(params["sequence_scheduling_airmass_bonus"])))
         self.lines.append(os.linesep)
