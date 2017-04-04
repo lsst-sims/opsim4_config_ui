@@ -282,8 +282,12 @@ class OpsimConfig(QtWidgets.QMainWindow):
         """Add a save directory to the internals of the program.
         """
         old_save_directory = self.save_directory
+        if old_save_directory == 'None':
+            open_dir = os.path.expanduser("~/")
+        else:
+            open_dir = os.path.dirname(old_save_directory)
         self.save_directory = QtWidgets.QFileDialog.getExistingDirectory(self, "Set Save Directory",
-                                                                         os.path.expanduser("~/"))
+                                                                         open_dir)
 
         if self.save_directory == "":
             self.save_directory = old_save_directory
