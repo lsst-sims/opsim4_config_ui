@@ -3,6 +3,11 @@
 History
 -------
 
+1.0.1 (2017-04-04)
+~~~~~~~~~~~~~~~~~~
+
+* Make save directory dialog start one directory up from last saved directory instead of always user home.
+
 1.0 (2017-02-28)
 ~~~~~~~~~~~~~~~~~
 
