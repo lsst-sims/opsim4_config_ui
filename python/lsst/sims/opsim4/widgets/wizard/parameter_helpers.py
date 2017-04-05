@@ -81,6 +81,8 @@ def scheduling_params(is_general=True):
             "{}_scheduling_airmass_bonus".format(param_tag),
             "{}_scheduling_hour_angle_bonus".format(param_tag),
             "{}_scheduling_hour_angle_max".format(param_tag),
+            "{}_scheduling_restart_lost_sequences".format(param_tag),
+            "{}_scheduling_restart_complete_sequences".format(param_tag),
             "scheduling_restrict_grouped_visits",
             "scheduling_time_interval",
             "scheduling_time_window_start",

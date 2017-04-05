@@ -55,6 +55,26 @@ class SchedulingPage(QtWidgets.QWizardPage):
         self.registerField("{}_scheduling_accept_consecutive_visits".format(self.param_tag),
                            accept_consecutive_visits_cb)
 
+        if not self.is_general:
+            label13 = QtWidgets.QLabel("Set the checkbox to restart sequences that were lost due to "
+                                       "observational constraints.")
+            label13.setWordWrap(True)
+
+            restart_lost_sequences_la = QtWidgets.QLabel("Restart Lost Sequences:")
+            restart_lost_sequences_cb = QtWidgets.QCheckBox()
+            restart_lost_sequences_la.setBuddy(restart_lost_sequences_cb)
+            self.registerField("{}_scheduling_restart_lost_sequences".format(self.param_tag),
+                               restart_lost_sequences_cb)
+
+            label14 = QtWidgets.QLabel("Set the checkbox to restart sequences that are already completed.")
+            label14.setWordWrap(True)
+
+            restart_complete_sequences_la = QtWidgets.QLabel("Restart Complete Sequences:")
+            restart_complete_sequences_cb = QtWidgets.QCheckBox()
+            restart_complete_sequences_la.setBuddy(restart_complete_sequences_cb)
+            self.registerField("{}_scheduling_restart_complete_sequences".format(self.param_tag),
+                               restart_complete_sequences_cb)
+
         label4 = QtWidgets.QLabel("Set the airmass bonus for ranking requested fields.")
         label4.setWordWrap(True)
 
@@ -150,6 +170,7 @@ class SchedulingPage(QtWidgets.QWizardPage):
         scroll_area_widget = QtWidgets.QWidget()
         scroll_area_widget_layout = QtWidgets.QGridLayout()
 
+        offset = 0
         scroll_area_widget_layout.addWidget(label1, 0, 0, 1, 3)
         scroll_area_widget_layout.addWidget(max_num_targets_la, 1, 0)
         scroll_area_widget_layout.addWidget(max_num_targets_le, 1, 1)
@@ -159,16 +180,24 @@ class SchedulingPage(QtWidgets.QWizardPage):
         scroll_area_widget_layout.addWidget(label3, 4, 0, 1, 3)
         scroll_area_widget_layout.addWidget(accept_consecutive_visits_la, 5, 0)
         scroll_area_widget_layout.addWidget(accept_consecutive_visits_cb, 5, 1)
-        scroll_area_widget_layout.addWidget(label4, 6, 0, 1, 3)
-        scroll_area_widget_layout.addWidget(airmass_bonus_la, 7, 0)
-        scroll_area_widget_layout.addWidget(airmass_bonus_le, 7, 1)
-        scroll_area_widget_layout.addWidget(label11, 8, 0, 1, 3)
-        scroll_area_widget_layout.addWidget(hour_angle_bonus_la, 9, 0)
-        scroll_area_widget_layout.addWidget(hour_angle_bonus_le, 9, 1)
-        scroll_area_widget_layout.addWidget(label12, 10, 0, 1, 3)
-        scroll_area_widget_layout.addWidget(hour_angle_max_la, 11, 0)
-        scroll_area_widget_layout.addWidget(hour_angle_max_le, 11, 1)
-        scroll_area_widget_layout.addWidget(hour_angle_max_un, 11, 2)
+        if not self.is_general:
+            offset = 4
+            scroll_area_widget_layout.addWidget(label13, 6, 0, 1, 3)
+            scroll_area_widget_layout.addWidget(restart_lost_sequences_la, 7, 0)
+            scroll_area_widget_layout.addWidget(restart_lost_sequences_cb, 7, 1)
+            scroll_area_widget_layout.addWidget(label14, 8, 0, 1, 3)
+            scroll_area_widget_layout.addWidget(restart_complete_sequences_la, 9, 0)
+            scroll_area_widget_layout.addWidget(restart_complete_sequences_cb, 9, 1)
+        scroll_area_widget_layout.addWidget(label4, 6 + offset, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(airmass_bonus_la, 7 + offset, 0)
+        scroll_area_widget_layout.addWidget(airmass_bonus_le, 7 + offset, 1)
+        scroll_area_widget_layout.addWidget(label11, 8 + offset, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(hour_angle_bonus_la, 9 + offset, 0)
+        scroll_area_widget_layout.addWidget(hour_angle_bonus_le, 9 + offset, 1)
+        scroll_area_widget_layout.addWidget(label12, 10 + offset, 0, 1, 3)
+        scroll_area_widget_layout.addWidget(hour_angle_max_la, 11 + offset, 0)
+        scroll_area_widget_layout.addWidget(hour_angle_max_le, 11 + offset, 1)
+        scroll_area_widget_layout.addWidget(hour_angle_max_un, 11 + offset, 2)
         if self.is_general:
             scroll_area_widget_layout.addWidget(label5, 12, 0, 1, 3)
             scroll_area_widget_layout.addWidget(restrict_grouped_visits_la, 13, 0)
