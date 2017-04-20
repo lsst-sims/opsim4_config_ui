@@ -3,6 +3,11 @@
 History
 -------
 
+1.0.2 (2017-04-20)
+~~~~~~~~~~~~~~~~~~
+
+* Provide parameters for restarting lost and complete sequences for Sequence proposals
+
 1.0.1 (2017-04-04)
 ~~~~~~~~~~~~~~~~~~
 
