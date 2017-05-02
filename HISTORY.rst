@@ -3,6 +3,11 @@
 History
 -------
 
+1.0.3 (2017-05-02)
+~~~~~~~~~~~~~~~~~~
+
+* Fix issue with similarly named parameters getting masked during setup.
+
 1.0.2 (2017-04-20)
 ~~~~~~~~~~~~~~~~~~
 
