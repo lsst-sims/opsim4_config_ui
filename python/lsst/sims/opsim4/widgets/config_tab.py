@@ -437,7 +437,10 @@ class ConfigurationTab(QtWidgets.QWidget):
             widget = self.layout.itemAtPosition(i, 1).widget()
             if isinstance(widget, QtWidgets.QGroupBox):
                 continue
-            if key in str(widget.objectName()):
+            object_name = str(widget.objectName())
+            if "/" in object_name:
+                object_name = object_name.split('/')[-1]
+            if key == object_name:
                 value = info["value"]
                 try:
                     widget.setChecked(value)
