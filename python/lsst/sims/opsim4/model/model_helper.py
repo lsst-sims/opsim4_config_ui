@@ -42,6 +42,7 @@ class ModelHelper(object):
             True if value is different from stored, false if same.
         """
         if self.params is not None:
+            print("B:", self.params)
             srep = str(self.params[parameter_name]["value"])
             return value_to_check != srep
         else:
@@ -266,3 +267,14 @@ class ModelHelper(object):
 
                 ofile.write(property_format.format(pname, pvalue))
                 ofile.write(os.linesep)
+
+    @classmethod
+    def load_config(cls, config_obj, config_files):
+        """
+        """
+        for config_file in config_files:
+            try:
+                config_obj.load(config_file)
+            except AssertionError:
+                # Not the right configuration file, so do nothing.
+                pass

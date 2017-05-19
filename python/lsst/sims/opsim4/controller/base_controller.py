@@ -32,6 +32,7 @@ class BaseController(QtCore.QObject):
         position : list(int)
             The widget position that requested this check.
         """
+        print("A:", param_name, param_value, position)
         is_changed = self.model.check_parameter(str(param_name), param_value)
         self.widget.is_changed(position, is_changed)
 
