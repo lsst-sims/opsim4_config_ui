@@ -271,7 +271,7 @@ class ConfigurationTab(QtWidgets.QWidget):
             # These are reserved for file dialogs
             file_text = QtWidgets.QFileDialog.getOpenFileName(self, "Set New File",
                                                               os.path.expanduser("~/"))
-            pwidget.setText(file_text)
+            pwidget.setText(file_text[0])
         pos = layout.indexOf(pwidget)
         pname = pwidget.objectName()
         if qualifier is not None:
