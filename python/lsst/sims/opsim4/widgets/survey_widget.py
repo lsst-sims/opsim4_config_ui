@@ -30,15 +30,16 @@ class SurveyWidget(ConfigurationTab):
 
     def check_all_parameters(self):
         for i in xrange(self.layout.rowCount()):
-            widget = self.layout.itemAtPosition(i, 0).widget()
+            widget = self.layout.itemAtPosition(i, 1).widget()
             if isinstance(widget, QtWidgets.QGroupBox):
-                self.property_changed(widget)
-                # glayout = widget.layout()
-                # qualifier = "{}/{}".format(self.name, widget.title())
-                # ConfigurationTab.reset_all(self, layout=glayout, qualifier=qualifier, position=i)
+                glayout = widget.layout()
+                qualifier = "{}/{}".format(self.name, widget.title())
+                for j in xrange(glayout.rowCount()):
+                    widget2 = glayout.itemAtPosition(j, 1).widget()
+                    ConfigurationTab.property_changed(self, widget2, layout=glayout,
+                                                      qualifier=qualifier, position=i)
             else:
-                vwidget = self.layout.itemAtPosition(i, 1).widget()
-                self.property_changed(vwidget)
+                self.property_changed(widget)
 
     def create_form(self):
         """Create the UI form for the Survey widget.
@@ -177,7 +178,6 @@ class SurveyWidget(ConfigurationTab):
             The parameter widget that has possibly changed.
         """
         pos = self.layout.indexOf(pwidget)
-        print("E:", pos)
         if pos == -1:
             for i in xrange(3, self.layout.count() - 1):
                 group_box = self.layout.itemAtPosition(i, 0).widget()
@@ -236,13 +236,15 @@ class SurveyWidget(ConfigurationTab):
         else:
             ConfigurationTab.reset_field(self, position, param_value)
 
-    def set_information(self, params):
+    def set_information(self, params, full_check=False):
         """Set the information for the configuration.
 
         Parameters
         ----------
         params : dict
             The configuration information.
+        full_check : bool
+            Flag to run through all proposals in group boxes.
         """
         for key, value in params.items():
             if "proposals" in key:
@@ -251,9 +253,19 @@ class SurveyWidget(ConfigurationTab):
                     prop_gb = self.layout.itemAtPosition(self.GEN_PROP_GB_POS, 0).widget()
                 if "sequence" in key:
                     prop_gb = self.layout.itemAtPosition(self.SEQ_PROP_GB_POS, 0).widget()
-                for proposal in value["value"].split(','):
-                    cb = prop_gb.findChild(QtWidgets.QCheckBox, proposal)
-                    cb.setChecked(True)
-
+                if not full_check:
+                    for proposal in value["value"].split(','):
+                        cb = prop_gb.findChild(QtWidgets.QCheckBox, proposal)
+                        if cb is not None:
+                            cb.setChecked(True)
+                else:
+                    glayout = prop_gb.layout()
+                    proposals = value["value"].split(',')
+                    for i in xrange(glayout.rowCount()):
+                        lwidget = glayout.itemAtPosition(i, 0).widget()
+                        prop_label = str(lwidget.text())
+                        if prop_label not in proposals:
+                            cb = glayout.itemAtPosition(i, 1).widget()
+                            cb.setChecked(False)
             else:
                 ConfigurationTab.set_information(self, key, value)

@@ -35,7 +35,7 @@ class SurveyController(BaseController):
             The list of configuration file paths.
         """
         params = self.model.apply_overrides(config_files)
-        self.widget.set_information(params)
+        self.widget.set_information(params, full_check=True)
         self.widget.check_all_parameters()
 
     def check_property(self, param_name, param_value, position):
