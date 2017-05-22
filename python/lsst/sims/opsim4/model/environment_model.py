@@ -12,3 +12,16 @@ class EnvironmentModel(ModelHelper):
         """Initialize the class.
         """
         ModelHelper.__init__(self, Environment())
+
+    def apply_overrides(self, config_files):
+            """Apply configuration overrides.
+
+            Parameters
+            ----------
+            config_files : list
+                The list of configuration file paths.
+            """
+            environment = Environment()
+            ModelHelper.load_config(environment, config_files)
+            model = ModelHelper(environment)
+            return model.params

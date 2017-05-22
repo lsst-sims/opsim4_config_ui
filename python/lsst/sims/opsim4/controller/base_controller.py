@@ -19,6 +19,19 @@ class BaseController(QtCore.QObject):
         self.model = None
         self.widget = None
 
+    def apply_overrides(self, config_files):
+        """Apply configuration overrides.
+
+        Parameters
+        ----------
+        config_files : list
+            The list of configuration file paths.
+        """
+        params = self.model.apply_overrides(config_files)
+        for key, value in params.items():
+            self.widget.set_information(key, value, full_check=True)
+        #self.widget.check_all_parameters()
+
     @QtCore.pyqtSlot(str, str, list)
     def check_property(self, param_name, param_value, position):
         """Check the stored value of the parameter name against input.

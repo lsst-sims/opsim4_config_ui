@@ -12,3 +12,16 @@ class ObservingSiteModel(ModelHelper):
         """Initialize the class.
         """
         ModelHelper.__init__(self, ObservingSite())
+
+    def apply_overrides(self, config_files):
+            """Apply configuration overrides.
+
+            Parameters
+            ----------
+            config_files : list
+                The list of configuration file paths.
+            """
+            obs_site = ObservingSite()
+            ModelHelper.load_config(obs_site, config_files)
+            model = ModelHelper(obs_site)
+            return model.params

@@ -18,7 +18,12 @@ class SurveyModel(ModelHelper):
                           "SEQ": survey.sequence_proposals}
 
     def apply_overrides(self, config_files):
-        """
+        """Apply configuration overrides.
+
+        Parameters
+        ----------
+        config_files : list
+            The list of configuration file paths.
         """
         survey = Survey()
         ModelHelper.load_config(survey, config_files)
