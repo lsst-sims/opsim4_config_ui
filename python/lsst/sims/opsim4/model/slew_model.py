@@ -15,6 +15,19 @@ class SlewModel(ModelHelper):
         """
         ModelHelper.__init__(self, Slew())
 
+    def apply_overrides(self, config_files):
+            """Apply configuration overrides.
+
+            Parameters
+            ----------
+            config_files : list
+                The list of configuration file paths.
+            """
+            slew = Slew()
+            ModelHelper.load_config(slew, config_files)
+            model = ModelHelper(slew)
+            return model
+
     def save_configuration(self, save_dir, name, changed_params):
         """Save the changed parameters to file.
 

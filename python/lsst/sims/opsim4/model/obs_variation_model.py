@@ -12,3 +12,16 @@ class ObservatoryVariationModel(ModelHelper):
         """Initialize the class.
         """
         ModelHelper.__init__(self, ObservatoryVariation())
+
+    def apply_overrides(self, config_files):
+            """Apply configuration overrides.
+
+            Parameters
+            ----------
+            config_files : list
+                The list of configuration file paths.
+            """
+            obs_var = ObservatoryVariation()
+            ModelHelper.load_config(obs_var, config_files)
+            model = ModelHelper(obs_var)
+            return model

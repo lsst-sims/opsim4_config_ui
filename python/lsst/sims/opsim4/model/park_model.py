@@ -12,3 +12,16 @@ class ParkModel(ModelHelper):
         """Initialize the class.
         """
         ModelHelper.__init__(self, Park())
+
+    def apply_overrides(self, config_files):
+            """Apply configuration overrides.
+
+            Parameters
+            ----------
+            config_files : list
+                The list of configuration file paths.
+            """
+            park = Park()
+            ModelHelper.load_config(park, config_files)
+            model = ModelHelper(park)
+            return model

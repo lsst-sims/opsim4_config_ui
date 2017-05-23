@@ -12,3 +12,16 @@ class TelescopeModel(ModelHelper):
         """Initialize the class.
         """
         ModelHelper.__init__(self, Telescope())
+
+    def apply_overrides(self, config_files):
+            """Apply configuration overrides.
+
+            Parameters
+            ----------
+            config_files : list
+                The list of configuration file paths.
+            """
+            telescope = Telescope()
+            ModelHelper.load_config(telescope, config_files)
+            model = ModelHelper(telescope)
+            return model

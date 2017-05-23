@@ -42,7 +42,7 @@ class ModelHelper(object):
             True if value is different from stored, false if same.
         """
         if self.params is not None:
-            print("B:", self.params)
+            #print("B:", self.params)
             srep = str(self.params[parameter_name]["value"])
             return value_to_check != srep
         else:

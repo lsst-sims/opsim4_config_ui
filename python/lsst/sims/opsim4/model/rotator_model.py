@@ -12,3 +12,16 @@ class RotatorModel(ModelHelper):
         """Initialize the class.
         """
         ModelHelper.__init__(self, Rotator())
+
+    def apply_overrides(self, config_files):
+            """Apply configuration overrides.
+
+            Parameters
+            ----------
+            config_files : list
+                The list of configuration file paths.
+            """
+            rotator = Rotator()
+            ModelHelper.load_config(rotator, config_files)
+            model = ModelHelper(rotator)
+            return model

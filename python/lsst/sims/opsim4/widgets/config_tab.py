@@ -39,6 +39,7 @@ class ConfigurationTab(QtWidgets.QWidget):
             func = self.property_changed
         self.signal_mapper.mapped[QtWidgets.QWidget].connect(func)
         self.rows = 0
+        self.applying_overrides = False
 
         self.create_form()
         grid_widget = QtWidgets.QWidget()
