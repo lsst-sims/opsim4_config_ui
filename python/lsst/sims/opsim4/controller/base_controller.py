@@ -30,6 +30,7 @@ class BaseController(QtCore.QObject):
         params = self.model.apply_overrides(config_files)
         for key, value in params.items():
             self.widget.set_information(key, value, full_check=True)
+        self.widget.full_check = False
         #self.widget.check_all_parameters()
 
     @QtCore.pyqtSlot(str, str, list)

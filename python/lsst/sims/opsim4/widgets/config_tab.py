@@ -39,7 +39,7 @@ class ConfigurationTab(QtWidgets.QWidget):
             func = self.property_changed
         self.signal_mapper.mapped[QtWidgets.QWidget].connect(func)
         self.rows = 0
-        self.applying_overrides = False
+        self.full_check = False
 
         self.create_form()
         grid_widget = QtWidgets.QWidget()
@@ -287,7 +287,7 @@ class ConfigurationTab(QtWidgets.QWidget):
         if layout is None:
             layout = self.layout
 
-        if isinstance(pwidget, QtWidgets.QPushButton):
+        if isinstance(pwidget, QtWidgets.QPushButton) and not self.full_check:
             # These are reserved for file dialogs
             file_text = QtWidgets.QFileDialog.getOpenFileName(self, "Set New File",
                                                               os.path.expanduser("~/"))
@@ -453,6 +453,7 @@ class ConfigurationTab(QtWidgets.QWidget):
         info : dict
             The set of information that describes this parameter.
         """
+        self.full_check = full_check
         for i in xrange(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 1).widget()
             if isinstance(widget, QtWidgets.QGroupBox):
@@ -466,12 +467,12 @@ class ConfigurationTab(QtWidgets.QWidget):
                     widget.setChecked(value)
                 except (AttributeError, TypeError):
                     widget.setText(str(value))
-                    if full_check:
+                    if self.full_check:
                         try:
                             widget.editingFinished.emit()
                         except AttributeError:
                             # QPushButton
-                            pass
+                            widget.clicked.emit()
                     try:
                         widget.home(False)
                     except AttributeError:
