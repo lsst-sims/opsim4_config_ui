@@ -43,7 +43,7 @@ class ScienceController(BaseController):
         """
         general_params, sequence_params = self.model.apply_overrides(config_files)
         self.widget.set_information(general_params, full_check=True)
-        #self.widget.set_information(sequence_params, full_check=True)
+        self.widget.set_information(sequence_params, full_check=True)
         self.widget.finish_overrides()
 
     @QtCore.pyqtSlot(str, str, list)

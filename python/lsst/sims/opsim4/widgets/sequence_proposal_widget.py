@@ -191,6 +191,8 @@ class SequenceProposalWidget(ProposalWidget):
         name_widget.setToolTip(str(params["name"]["doc"]))
         sky_user_regions = self.layout.itemAtPosition(1, 1).widget()
         sky_user_regions.setText(str(params["sky_user_regions"]["value"]))
+        if self.full_check:
+            sky_user_regions.editingFinished.emit()
         sky_user_regions.setToolTip(str(params["sky_user_regions"]["doc"]))
         self.set_sky_exclusion(params["sky_exclusion"]["value"])
         self.set_sky_nightly_bounds(params["sky_nightly_bounds"]["value"], 1)
