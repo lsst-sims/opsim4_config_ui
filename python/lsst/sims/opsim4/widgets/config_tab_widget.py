@@ -39,6 +39,8 @@ class ConfigurationTabWidget(QtWidgets.QTabWidget):
         raise NotImplementedError("Classes must override this!")
 
     def finish_overrides(self):
+        """Reset full_check flag when override application stops.
+        """
         for i in xrange(self.count()):
             tab = self.widget(i)
             tab.full_check = False

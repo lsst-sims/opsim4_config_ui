@@ -182,6 +182,8 @@ class SequenceProposalWidget(ProposalWidget):
         ----------
         params : dict
             The configuration information.
+        full_check : bool
+            Flag to trigger signals for property changes.
         """
         self.full_check = full_check
         name_widget = self.layout.itemAtPosition(0, 1).widget()

@@ -28,23 +28,6 @@ class SurveyWidget(ConfigurationTab):
         self.diff_props = []
         ConfigurationTab.__init__(self, name, parent=parent)
 
-    def check_all_parameters(self):
-        """Check all parameters for changes.
-        """
-        for i in xrange(self.layout.rowCount()):
-            widget = self.layout.itemAtPosition(i, 1).widget()
-            if isinstance(widget, QtWidgets.QGroupBox):
-                glayout = widget.layout()
-                qualifier = "{}/{}".format(self.name, widget.title())
-                # ConfigurationTab.check_all_parameters(layout=glayout,
-                #                                       qualifier=qualifier, position=i)
-                for j in xrange(glayout.rowCount()):
-                    widget2 = glayout.itemAtPosition(j, 1).widget()
-                    ConfigurationTab.property_changed(self, widget2, layout=glayout,
-                                                      qualifier=qualifier, position=i)
-            else:
-                self.property_changed(widget)
-
     def create_form(self):
         """Create the UI form for the Survey widget.
         """

@@ -50,6 +50,8 @@ class ObservatoryWidget(ConfigurationTabWidget):
         ----------
         params : dict
             The set of information for the configuration
+        full_check : bool
+            Flag to trigger signals for property changes.
         """
         for i in xrange(self.count()):
             tab = self.widget(i)

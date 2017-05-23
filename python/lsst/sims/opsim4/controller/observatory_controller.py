@@ -41,6 +41,7 @@ class ObservatoryController(BaseController):
         """
         models = self.model.apply_overrides(config_files)
         self.widget.set_information(models, full_check=True)
+        self.widget.finish_overrides()
 
     @QtCore.pyqtSlot(str, str, list)
     def check_property(self, param_name, param_value, position):

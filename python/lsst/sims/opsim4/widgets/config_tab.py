@@ -452,6 +452,8 @@ class ConfigurationTab(QtWidgets.QWidget):
             The name of the parameter.
         info : dict
             The set of information that describes this parameter.
+        full_check : bool
+            Flag to trigger signals for property changes.
         """
         self.full_check = full_check
         for i in xrange(self.layout.rowCount()):
