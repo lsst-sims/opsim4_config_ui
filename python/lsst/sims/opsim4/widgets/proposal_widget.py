@@ -21,6 +21,7 @@ class ProposalWidget(ConfigurationTab):
         self.group_box_rows = []
         self.num_group_boxes = 0
         self.setup = params
+        self.full_check = False
 
         ConfigurationTab.__init__(self, name, self.property_changed, parent)
         del self.setup
@@ -433,6 +434,8 @@ class ProposalWidget(ConfigurationTab):
             widget.setChecked(value)
         except AttributeError:
             widget.setText(str(value))
+            if self.full_check:
+                widget.editingFinished.emit()
         widget.setToolTip(param["doc"])
         units = ilayout.itemAtPosition(position, 2).widget()
         self.set_unit_labels(units, param)

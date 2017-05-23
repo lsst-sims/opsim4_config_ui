@@ -126,7 +126,7 @@ class GeneralProposalWidget(ProposalWidget):
         """
         ProposalWidget.property_changed(self, pwidget, 1)
 
-    def set_information(self, params):
+    def set_information(self, params, full_check=False):
         """Set the information for the configuration.
 
         Parameters
@@ -134,6 +134,7 @@ class GeneralProposalWidget(ProposalWidget):
         params : dict
             The configuration information.
         """
+        self.full_check = full_check
         name_widget = self.layout.itemAtPosition(0, 1).widget()
         name_widget.setText(str(params["name"]["value"]))
         name_widget.setToolTip(str(params["name"]["doc"]))

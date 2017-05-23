@@ -38,6 +38,11 @@ class ConfigurationTabWidget(QtWidgets.QTabWidget):
         """
         raise NotImplementedError("Classes must override this!")
 
+    def finish_overrides(self):
+        for i in xrange(self.count()):
+            tab = self.widget(i)
+            tab.full_check = False
+
     def get_diff(self):
         """Get the changed parameters.
 
@@ -121,7 +126,7 @@ class ConfigurationTabWidget(QtWidgets.QTabWidget):
             tab = self.widget(i)
             tab.save(save_dir)
 
-    def set_information(self, param_dict):
+    def set_information(self, param_dict, full_check=False):
         """Set information for the configuration tabs.
 
         Parameters
@@ -133,4 +138,4 @@ class ConfigurationTabWidget(QtWidgets.QTabWidget):
         for i in xrange(self.count()):
             tab = self.widget(i)
             if tab.name in proposals:
-                tab.set_information(param_dict[tab.name])
+                tab.set_information(param_dict[tab.name], full_check=full_check)

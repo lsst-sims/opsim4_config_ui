@@ -30,8 +30,6 @@ class MainController(object):
             The list of configuration file paths.
         """
         for tab in self.tab_order:
-            if tab in ("science"):
-                continue
             controller = getattr(self, tab + "_controller")
             controller.apply_overrides(config_files)
 

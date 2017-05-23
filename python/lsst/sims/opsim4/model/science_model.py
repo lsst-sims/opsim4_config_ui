@@ -2,7 +2,7 @@ import os
 
 from lsst.sims.ocs.configuration import ScienceProposals, Survey
 
-from lsst.sims.opsim4.model import GeneralPropModel, SequencePropModel
+from lsst.sims.opsim4.model import GeneralPropModel, ModelHelper, SequencePropModel
 from lsst.sims.opsim4.utilities import load_class
 
 __all__ = ["ScienceModel"]
@@ -42,6 +42,33 @@ class ScienceModel(object):
             prop_name = params["name"]["value"]
             self.sequence_params[prop_name] = params
             self.sequence_modules[prop_name] = sequence_module
+
+    def apply_overrides(self, config_files):
+        sci_props = ScienceProposals()
+        survey = Survey()
+        sci_props.load_proposals({"GEN": survey.general_proposals,
+                                  "SEQ": survey.sequence_proposals})
+
+        general_params = {}
+        general_objs = sci_props.general_props.active
+        for general_obj in general_objs:
+            ModelHelper.load_config(general_obj, config_files)
+            general_model = GeneralPropModel(general_obj)
+            params = general_model.make_parameter_dictionary()
+            prop_name = params["name"]["value"]
+            general_params[prop_name] = params
+
+        sequence_params = {}
+
+        sequence_objs = sci_props.sequence_props.active
+        for sequence_obj in sequence_objs:
+            ModelHelper.load_config(sequence_obj, config_files)
+            sequence_model = SequencePropModel(sequence_obj)
+            params = sequence_model.make_parameter_dictionary()
+            prop_name = params["name"]["value"]
+            sequence_params[prop_name] = params
+
+        return general_params, sequence_params
 
     def get_proposal_names(self):
         """Return names of stored proposals.
