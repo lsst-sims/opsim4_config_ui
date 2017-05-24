@@ -57,7 +57,8 @@ class OpsimConfig(QtWidgets.QMainWindow):
         file_clear_recent = self.create_action("Clear Recent List", self.clear_recent_list, "Ctrl+Alt+C",
                                                "clear.svg", "Clear the list of recent directories.")
         file_apply_overrides = self.create_action("Apply Overrides", self.apply_overrides, "Ctrl+Alt+O",
-                                                  None, "Apply override files to current configuration.")
+                                                  "bottom.svg",
+                                                  "Apply override files to current configuration.")
         file_save_configs = self.create_action("&Save Configuration", self.save_configurations,
                                                QtGui.QKeySequence.Save,
                                                "filesave.svg", "Save the configuration to files.")

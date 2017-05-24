@@ -14,5 +14,6 @@
 		<file alias="clear.svg">images/clear_left-2.0.svg</file>
 		<file alias="time_domain_window.png">images/time_domain_window.png</file>
 		<file alias="galactic_plane_envelope.png">images/galactic_plane_envelope.png</file>
+		<file alias="bottom.svg">images/bottom.svg</file>
 	</qresource>
 </RCC>
