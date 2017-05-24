@@ -73,25 +73,6 @@ class ConfigurationTab(QtWidgets.QWidget):
         palette.setColor(label.foregroundRole(), color)
         label.setPalette(palette)
 
-    def check_all_parameters(self, layout=None, qualifier=None, position=None):
-        """Check all parameters for changes.
-
-        Parameters
-        ----------
-        layout : QLayout, optional
-            An alternative layout to check.
-        qualifier : str, optional
-            A string tp prepend to the parameter name.
-        position : int, optional
-            A position from another layout. Used when layout is not None.
-        """
-        if layout is None:
-            layout = self.layout
-
-        for i in xrange(layout.rowCount()):
-            widget = layout.itemAtPosition(i, 1).widget()
-            self.property_changed(widget, layout, qualifier, position)
-
     def create_widget(self, wtype, name, qualifier=None, layout=None, rows=None, mapping=None):
         """Create a parameter widget.
 
