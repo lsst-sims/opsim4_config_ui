@@ -150,7 +150,7 @@ class SequenceProposalWidget(ProposalWidget):
         ProposalWidget.create_filters(self, glayout, params, is_general=False)
 
     def hide_unused(self):
-        """Hide sub-sequece ot master sub-sequence group box if none present.
+        """Hide sub-sequence and/or master sub-sequence group box if none present.
         """
         for i in xrange(2, self.layout.count() - 1):
             try:
