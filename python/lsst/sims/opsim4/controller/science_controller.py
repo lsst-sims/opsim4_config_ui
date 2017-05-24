@@ -33,17 +33,33 @@ class ScienceController(BaseController):
             tab.getProperty.connect(self.get_property)
             tab.saveConfiguration.connect(self.save_configuration)
 
-    def apply_overrides(self, config_files):
+    def apply_overrides(self, config_files, extra_props=None):
         """Apply configuration overrides.
 
         Parameters
         ----------
         config_files : list
             The list of configuration file paths.
+        extra_props : str, optional
+            A path for extra proposals.
         """
-        general_params, sequence_params = self.model.apply_overrides(config_files)
-        self.widget.set_information(general_params, full_check=True)
-        self.widget.set_information(sequence_params, full_check=True)
+        new_params = self.model.apply_overrides(config_files,
+                                                extra_props=extra_props)
+
+        self.widget.create_tabs(new_params.new_general)
+        self.widget.create_tabs(new_params.new_sequence)
+        new_props = new_params.new_general.keys() + new_params.new_sequence.keys()
+        for i in xrange(self.widget.count()):
+            tab = self.widget.widget(i)
+            if tab.name in new_props:
+                tab.checkProperty.connect(self.check_property)
+                tab.getProperty.connect(self.get_property)
+                tab.saveConfiguration.connect(self.save_configuration)
+
+        self.widget.set_information(new_params.general_params,
+                                    full_check=True)
+        self.widget.set_information(new_params.sequence_params,
+                                    full_check=True)
         self.widget.finish_overrides()
 
     @QtCore.pyqtSlot(str, str, list)

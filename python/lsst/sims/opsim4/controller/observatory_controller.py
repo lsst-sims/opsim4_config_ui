@@ -31,13 +31,15 @@ class ObservatoryController(BaseController):
             tab.getProperty.connect(self.get_property)
             tab.saveConfiguration.connect(self.save_configuration)
 
-    def apply_overrides(self, config_files):
+    def apply_overrides(self, config_files, extra_props=None):
         """Apply configuration overrides.
 
         Parameters
         ----------
         config_files : list
             The list of configuration file paths.
+        extra_props : str, optional
+            A path for extra proposals.
         """
         models = self.model.apply_overrides(config_files)
         self.widget.set_information(models, full_check=True)

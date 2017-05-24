@@ -1,4 +1,5 @@
 import os
+import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -191,8 +192,14 @@ class OpsimConfig(QtWidgets.QMainWindow):
             if os.path.isfile(ifile):
                 config_files.append(ifile)
 
-        if len(config_files):
-            self.main_controller.apply_overrides(config_files)
+        extra_props = None
+        alt_prop_dir = os.path.join(override_dir, "new_props")
+        if os.path.exists(alt_prop_dir):
+            extra_props = alt_prop_dir
+            sys.path.insert(0, extra_props)
+
+        if len(config_files) or extra_props is not None:
+            self.main_controller.apply_overrides(config_files, extra_props)
 
     @QtCore.pyqtSlot()
     def save_configurations(self):

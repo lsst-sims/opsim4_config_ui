@@ -1,6 +1,7 @@
 import collections
 import os
 import re
+import sys
 
 import lsst.pex.config.listField
 import lsst.pex.config.configDictField
@@ -269,7 +270,14 @@ class ModelHelper(object):
 
     @classmethod
     def load_config(cls, config_obj, config_files):
-        """
+        """Apply overrides to configuration object.
+
+        Parameters
+        ----------
+        config_obj : instance
+            A configuration instance.
+        config_files : list
+            A set of paths to configuration file overrides.
         """
         for config_file in config_files:
             try:
