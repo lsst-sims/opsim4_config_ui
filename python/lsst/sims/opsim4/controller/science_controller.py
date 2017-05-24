@@ -47,7 +47,9 @@ class ScienceController(BaseController):
                                                 extra_props=extra_props)
 
         self.widget.create_tabs(new_params.new_general)
+        self.widget.set_information(new_params.new_general)
         self.widget.create_tabs(new_params.new_sequence)
+        self.widget.set_information(new_params.new_sequence)
         new_props = new_params.new_general.keys() + new_params.new_sequence.keys()
         for i in xrange(self.widget.count()):
             tab = self.widget.widget(i)
