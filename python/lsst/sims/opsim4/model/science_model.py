@@ -216,6 +216,9 @@ class ScienceModel(object):
             for pname, value in changed_params:
                 property_format = "config.{}={}"
                 pparts = pname.split('/')
+                if name in pparts:
+                    index = pparts.index(name)
+                    del pparts[index]
                 # Filter parameters need leading part stripped
                 if pparts[0] == "filters":
                     pparts[-1] = "_".join(pparts[-1].split('_')[1:])
