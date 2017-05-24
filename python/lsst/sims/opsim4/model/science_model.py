@@ -1,6 +1,5 @@
 import collections
 import os
-import sys
 
 from lsst.sims.ocs.configuration import ScienceProposals, Survey
 

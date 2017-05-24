@@ -1,7 +1,6 @@
 import collections
 import os
 import re
-import sys
 
 import lsst.pex.config.listField
 import lsst.pex.config.configDictField
