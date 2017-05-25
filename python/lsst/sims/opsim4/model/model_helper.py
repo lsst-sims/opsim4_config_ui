@@ -243,6 +243,8 @@ class ModelHelper(object):
                 try:
                     if "," in value:
                         items = value.split(',')
+                        if items[-1] == '':
+                            del items[-1]
                         try:
                             if "." in items[0]:
                                 pvalue = str([float(x) for x in items])
