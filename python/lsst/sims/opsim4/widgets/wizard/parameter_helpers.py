@@ -75,20 +75,23 @@ def scheduling_params(is_general=True):
         param_tag = "general"
     else:
         param_tag = "sequence"
-    return ["{}_scheduling_max_num_targets".format(param_tag),
-            "{}_scheduling_accept_serendipity".format(param_tag),
-            "{}_scheduling_accept_consecutive_visits".format(param_tag),
-            "{}_scheduling_airmass_bonus".format(param_tag),
-            "{}_scheduling_hour_angle_bonus".format(param_tag),
-            "{}_scheduling_hour_angle_max".format(param_tag),
-            "{}_scheduling_restart_lost_sequences".format(param_tag),
-            "{}_scheduling_restart_complete_sequences".format(param_tag),
-            "scheduling_restrict_grouped_visits",
-            "scheduling_time_interval",
-            "scheduling_time_window_start",
-            "scheduling_time_window_max",
-            "scheduling_time_window_end",
-            "scheduling_time_weight"]
+    plist = ["{}_scheduling_max_num_targets".format(param_tag),
+             "{}_scheduling_accept_serendipity".format(param_tag),
+             "{}_scheduling_accept_consecutive_visits".format(param_tag),
+             "{}_scheduling_airmass_bonus".format(param_tag),
+             "{}_scheduling_hour_angle_bonus".format(param_tag),
+             "{}_scheduling_hour_angle_max".format(param_tag),
+             "scheduling_restrict_grouped_visits",
+             "scheduling_time_interval",
+             "scheduling_time_window_start",
+             "scheduling_time_window_max",
+             "scheduling_time_window_end",
+             "scheduling_time_weight"]
+    if not is_general:
+        plist.append("sequence_scheduling_restart_lost_sequences")
+        plist.append("sequence_scheduling_restart_complete_sequences")
+
+    return plist
 
 def sky_constraints_params():
     """Create sky constraints registered field names.
