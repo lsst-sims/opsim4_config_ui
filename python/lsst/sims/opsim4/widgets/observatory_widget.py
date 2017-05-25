@@ -43,15 +43,17 @@ class ObservatoryWidget(ConfigurationTabWidget):
             tab = obs_widget(name)
             self.addTab(tab, title(name))
 
-    def set_information(self, params):
+    def set_information(self, params, full_check=False):
         """Set information for the configuration tabs.
 
         Parameters
         ----------
-        param_dict : dict
+        params : dict
             The set of information for the configuration
+        full_check : bool
+            Flag to trigger signals for property changes.
         """
         for i in xrange(self.count()):
             tab = self.widget(i)
             for key, info in params[tab.name].params.items():
-                tab.set_information(key, info)
+                tab.set_information(key, info, full_check=full_check)

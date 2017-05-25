@@ -150,7 +150,7 @@ class SequenceProposalWidget(ProposalWidget):
         ProposalWidget.create_filters(self, glayout, params, is_general=False)
 
     def hide_unused(self):
-        """Hide sub-sequece ot master sub-sequence group box if none present.
+        """Hide sub-sequence and/or master sub-sequence group box if none present.
         """
         for i in xrange(2, self.layout.count() - 1):
             try:
@@ -175,19 +175,24 @@ class SequenceProposalWidget(ProposalWidget):
         """
         ProposalWidget.property_changed(self, pwidget, 2)
 
-    def set_information(self, params):
+    def set_information(self, params, full_check=False):
         """Set the information for the configuration.
 
         Parameters
         ----------
         params : dict
             The configuration information.
+        full_check : bool
+            Flag to trigger signals for property changes.
         """
+        self.full_check = full_check
         name_widget = self.layout.itemAtPosition(0, 1).widget()
         name_widget.setText(str(params["name"]["value"]))
         name_widget.setToolTip(str(params["name"]["doc"]))
         sky_user_regions = self.layout.itemAtPosition(1, 1).widget()
         sky_user_regions.setText(str(params["sky_user_regions"]["value"]))
+        if self.full_check:
+            sky_user_regions.editingFinished.emit()
         sky_user_regions.setToolTip(str(params["sky_user_regions"]["doc"]))
         self.set_sky_exclusion(params["sky_exclusion"]["value"])
         self.set_sky_nightly_bounds(params["sky_nightly_bounds"]["value"], 1)

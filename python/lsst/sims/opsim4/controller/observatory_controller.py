@@ -31,6 +31,20 @@ class ObservatoryController(BaseController):
             tab.getProperty.connect(self.get_property)
             tab.saveConfiguration.connect(self.save_configuration)
 
+    def apply_overrides(self, config_files, extra_props=None):
+        """Apply configuration overrides.
+
+        Parameters
+        ----------
+        config_files : list
+            The list of configuration file paths.
+        extra_props : str, optional
+            A path for extra proposals.
+        """
+        models = self.model.apply_overrides(config_files)
+        self.widget.set_information(models, full_check=True)
+        self.widget.finish_overrides()
+
     @QtCore.pyqtSlot(str, str, list)
     def check_property(self, param_name, param_value, position):
         """Check the stored value of the parameter name against input.

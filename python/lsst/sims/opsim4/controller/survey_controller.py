@@ -26,6 +26,20 @@ class SurveyController(BaseController):
         self.widget.getProperty.connect(self.get_property)
         self.widget.saveConfiguration.connect(self.save_configuration)
 
+    def apply_overrides(self, config_files, extra_props=None):
+        """Apply configuration overrides.
+
+        Parameters
+        ----------
+        config_files : list
+            The list of configuration file paths.
+        extra_props : str, optional
+            A path for extra proposals.
+        """
+        params = self.model.apply_overrides(config_files)
+        self.widget.set_information(params, full_check=True)
+        self.widget.full_check = False
+
     def check_property(self, param_name, param_value, position):
         """Check the stored value of the parameter name against input.
 

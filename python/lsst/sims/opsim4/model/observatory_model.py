@@ -25,6 +25,24 @@ class ObservatoryModel(object):
         self.params["filters"] = FiltersModel()
         self.params["obs_var"] = ObservatoryVariationModel()
 
+    def apply_overrides(self, config_files):
+        """Apply configuration overrides.
+
+        Parameters
+        ----------
+        config_files : list
+            The list of configuration file paths.
+
+        Returns
+        -------
+        dict
+            A set of configuration models with overrides applied.
+        """
+        new_models = collections.OrderedDict()
+        for key, model in self.params.items():
+            new_models[key] = model.apply_overrides(config_files)
+        return new_models
+
     def check_parameter(self, parameter_name, value_to_check):
         """Check a given value against the currently stored information.
 

@@ -12,3 +12,16 @@ class CameraModel(ModelHelper):
         """Initialize the class.
         """
         ModelHelper.__init__(self, Camera())
+
+    def apply_overrides(self, config_files):
+            """Apply configuration overrides.
+
+            Parameters
+            ----------
+            config_files : list
+                The list of configuration file paths.
+            """
+            camera = Camera()
+            ModelHelper.load_config(camera, config_files)
+            model = ModelHelper(camera)
+            return model

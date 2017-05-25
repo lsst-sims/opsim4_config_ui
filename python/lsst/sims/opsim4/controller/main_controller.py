@@ -21,6 +21,20 @@ class MainController(object):
             setattr(self, tab + "_controller",
                     getattr(lsst.sims.opsim4.controller, title(tab, spacer="") + "Controller")(tab))
 
+    def apply_overrides(self, config_files, extra_props=None):
+        """Apply configuration overrides to models.
+
+        Parameters
+        ----------
+        config_files : dict
+            The list of configuration file paths.
+        extra_props : str, optional
+            A path for extra proposals.
+        """
+        for tab in self.tab_order:
+            controller = getattr(self, tab + "_controller")
+            controller.apply_overrides(config_files, extra_props)
+
     def get_diff(self):
         """Get the changed parameters and associated defaults.
 

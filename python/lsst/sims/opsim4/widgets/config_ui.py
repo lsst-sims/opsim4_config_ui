@@ -1,4 +1,5 @@
 import os
+import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
@@ -27,6 +28,7 @@ class OpsimConfig(QtWidgets.QMainWindow):
         """
         QtWidgets.QMainWindow.__init__(self, parent)
         self.save_directory = None
+        self.file_menu_offset = -3
 
         self.create_file_menu()
         self.create_reset_menu()
@@ -54,7 +56,9 @@ class OpsimConfig(QtWidgets.QMainWindow):
                                                "Set the directory where the configurations will be saved.")
         file_clear_recent = self.create_action("Clear Recent List", self.clear_recent_list, "Ctrl+Alt+C",
                                                "clear.svg", "Clear the list of recent directories.")
-
+        file_apply_overrides = self.create_action("Apply Overrides", self.apply_overrides, "Ctrl+Alt+O",
+                                                  "bottom.svg",
+                                                  "Apply override files to current configuration.")
         file_save_configs = self.create_action("&Save Configuration", self.save_configurations,
                                                QtGui.QKeySequence.Save,
                                                "filesave.svg", "Save the configuration to files.")
@@ -63,7 +67,8 @@ class OpsimConfig(QtWidgets.QMainWindow):
 
         self.file_menu = self.menuBar().addMenu("&File")
         self.file_menu_actions = (file_set_save_dir, file_clear_recent, None,
-                                  file_save_configs, file_quit_action)
+                                  file_apply_overrides, file_save_configs,
+                                  file_quit_action)
         self.file_menu.aboutToShow.connect(self.update_file_menu)
 
     def create_reset_menu(self):
@@ -169,6 +174,34 @@ class OpsimConfig(QtWidgets.QMainWindow):
         for key, tab in tab_dict.items():
             self.tab_widget.addTab(tab, title(key))
 
+    def apply_overrides(self):
+        """Apply override configuration files to current configuration.
+        """
+        old_save_directory = self.save_directory
+        if old_save_directory == 'None':
+            open_dir = os.path.expanduser("~/")
+        else:
+            open_dir = os.path.dirname(old_save_directory)
+        override_dir = QtWidgets.QFileDialog.getExistingDirectory(self, "Override Directory",
+                                                                  open_dir)
+        if override_dir == "":
+            return
+
+        config_files = []
+        for item in os.listdir(override_dir):
+            ifile = os.path.join(override_dir, item)
+            if os.path.isfile(ifile):
+                config_files.append(ifile)
+
+        extra_props = None
+        alt_prop_dir = os.path.join(override_dir, "new_props")
+        if os.path.exists(alt_prop_dir):
+            extra_props = alt_prop_dir
+            sys.path.insert(0, extra_props)
+
+        if len(config_files) or extra_props is not None:
+            self.main_controller.apply_overrides(config_files, extra_props)
+
     @QtCore.pyqtSlot()
     def save_configurations(self):
         """Save the current differences to configuration files.
@@ -234,7 +267,7 @@ class OpsimConfig(QtWidgets.QMainWindow):
         """Add a new saved directory into the File menu list.
         """
         self.file_menu.clear()
-        self.add_actions(self.file_menu, self.file_menu_actions[:-2])
+        self.add_actions(self.file_menu, self.file_menu_actions[:self.file_menu_offset])
         current = self.save_directory if self.save_directory is not None else None
 
         recent_directories = []
@@ -258,7 +291,7 @@ class OpsimConfig(QtWidgets.QMainWindow):
         else:
             self.recent_directories = []
         self.file_menu.addSeparator()
-        self.add_actions(self.file_menu, self.file_menu_actions[-2:])
+        self.add_actions(self.file_menu, self.file_menu_actions[self.file_menu_offset:])
 
     def ok_to_continue(self):
         """Placeholder function until events can be processed correctly.

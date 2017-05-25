@@ -223,13 +223,15 @@ class SurveyWidget(ConfigurationTab):
         else:
             ConfigurationTab.reset_field(self, position, param_value)
 
-    def set_information(self, params):
+    def set_information(self, params, full_check=False):
         """Set the information for the configuration.
 
         Parameters
         ----------
         params : dict
             The configuration information.
+        full_check : bool
+            Flag to run through all proposals in group boxes.
         """
         for key, value in params.items():
             if "proposals" in key:
@@ -238,9 +240,19 @@ class SurveyWidget(ConfigurationTab):
                     prop_gb = self.layout.itemAtPosition(self.GEN_PROP_GB_POS, 0).widget()
                 if "sequence" in key:
                     prop_gb = self.layout.itemAtPosition(self.SEQ_PROP_GB_POS, 0).widget()
-                for proposal in value["value"].split(','):
-                    cb = prop_gb.findChild(QtWidgets.QCheckBox, proposal)
-                    cb.setChecked(True)
-
+                if not full_check:
+                    for proposal in value["value"].split(','):
+                        cb = prop_gb.findChild(QtWidgets.QCheckBox, proposal)
+                        if cb is not None:
+                            cb.setChecked(True)
+                else:
+                    glayout = prop_gb.layout()
+                    proposals = value["value"].split(',')
+                    for i in xrange(glayout.rowCount()):
+                        lwidget = glayout.itemAtPosition(i, 0).widget()
+                        prop_label = str(lwidget.text())
+                        if prop_label not in proposals:
+                            cb = glayout.itemAtPosition(i, 1).widget()
+                            cb.setChecked(False)
             else:
-                ConfigurationTab.set_information(self, key, value)
+                ConfigurationTab.set_information(self, key, value, full_check=full_check)

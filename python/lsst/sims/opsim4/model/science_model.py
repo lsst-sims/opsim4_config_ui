@@ -1,8 +1,9 @@
+import collections
 import os
 
 from lsst.sims.ocs.configuration import ScienceProposals, Survey
 
-from lsst.sims.opsim4.model import GeneralPropModel, SequencePropModel
+from lsst.sims.opsim4.model import GeneralPropModel, ModelHelper, SequencePropModel
 from lsst.sims.opsim4.utilities import load_class
 
 __all__ = ["ScienceModel"]
@@ -22,8 +23,7 @@ class ScienceModel(object):
         self.general_params = {}
         self.general_modules = {}
 
-        general_objs = sci_props.general_props.active
-        for general_obj in general_objs:
+        for general_obj in sci_props.general_props.active:
             general_module = load_class(general_obj).__module__
             general_model = GeneralPropModel(general_obj)
             params = general_model.make_parameter_dictionary()
@@ -34,14 +34,75 @@ class ScienceModel(object):
         self.sequence_params = {}
         self.sequence_modules = {}
 
-        sequence_objs = sci_props.sequence_props.active
-        for sequence_obj in sequence_objs:
+        for sequence_obj in sci_props.sequence_props.active:
             sequence_module = load_class(sequence_obj).__module__
             sequence_model = SequencePropModel(sequence_obj)
             params = sequence_model.make_parameter_dictionary()
             prop_name = params["name"]["value"]
             self.sequence_params[prop_name] = params
             self.sequence_modules[prop_name] = sequence_module
+
+    def apply_overrides(self, config_files, extra_props=None):
+        """Apply configuration overrides.
+
+        Parameters
+        ----------
+        config_files : list
+            The list of configuration file paths.
+        extra_props : str, optional
+            A path for extra proposals.
+        """
+        original_props = self.get_proposal_names()
+
+        sci_props = ScienceProposals()
+        survey = Survey()
+        sci_props.load_proposals({"GEN": survey.general_proposals,
+                                  "SEQ": survey.sequence_proposals},
+                                 alternate_proposals=extra_props)
+
+        general_params = {}
+        new_general = {}
+
+        for general_obj in sci_props.general_props.active:
+            if general_obj.name not in original_props:
+                name = general_obj.name
+                self.general_modules[name] = load_class(general_obj).__module__
+                model = GeneralPropModel(general_obj)
+                params = model.make_parameter_dictionary()
+                self.general_params[name] = params
+                new_general[name] = params
+            ModelHelper.load_config(general_obj, config_files)
+            general_model = GeneralPropModel(general_obj)
+            params = general_model.make_parameter_dictionary()
+            prop_name = params["name"]["value"]
+            general_params[prop_name] = params
+
+        sequence_params = {}
+        new_sequence = {}
+
+        for sequence_obj in sci_props.sequence_props.active:
+            if sequence_obj.name not in original_props:
+                name = sequence_obj.name
+                self.sequence_modules[name] = load_class(sequence_obj).__module__
+                model = SequencePropModel(sequence_obj)
+                params = model.make_parameter_dictionary()
+                self.sequence_params[name] = params
+                new_sequence[name] = params
+            ModelHelper.load_config(sequence_obj, config_files)
+            sequence_model = SequencePropModel(sequence_obj)
+            params = sequence_model.make_parameter_dictionary()
+            prop_name = params["name"]["value"]
+            sequence_params[prop_name] = params
+
+        new_params = collections.namedtuple("new_params",
+                                            "general_params sequence_params "
+                                            "new_general new_sequence")
+        new_params.general_params = general_params
+        new_params.sequence_params = sequence_params
+        new_params.new_general = new_general
+        new_params.new_sequence = new_sequence
+
+        return new_params
 
     def get_proposal_names(self):
         """Return names of stored proposals.
@@ -155,6 +216,9 @@ class ScienceModel(object):
             for pname, value in changed_params:
                 property_format = "config.{}={}"
                 pparts = pname.split('/')
+                if name in pparts:
+                    index = pparts.index(name)
+                    del pparts[index]
                 # Filter parameters need leading part stripped
                 if pparts[0] == "filters":
                     pparts[-1] = "_".join(pparts[-1].split('_')[1:])

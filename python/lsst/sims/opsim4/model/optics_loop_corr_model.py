@@ -12,3 +12,16 @@ class OpticsLoopCorrModel(ModelHelper):
         """Initialize the class.
         """
         ModelHelper.__init__(self, OpticsLoopCorr())
+
+    def apply_overrides(self, config_files):
+            """Apply configuration overrides.
+
+            Parameters
+            ----------
+            config_files : list
+                The list of configuration file paths.
+            """
+            optics_loop_corr = OpticsLoopCorr()
+            ModelHelper.load_config(optics_loop_corr, config_files)
+            model = ModelHelper(optics_loop_corr)
+            return model

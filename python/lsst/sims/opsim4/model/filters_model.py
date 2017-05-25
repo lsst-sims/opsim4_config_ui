@@ -12,3 +12,16 @@ class FiltersModel(ModelHelper):
         """Initialize the class.
         """
         ModelHelper.__init__(self, Filters())
+
+    def apply_overrides(self, config_files):
+            """Apply configuration overrides.
+
+            Parameters
+            ----------
+            config_files : list
+                The list of configuration file paths.
+            """
+            filters = Filters()
+            ModelHelper.load_config(filters, config_files)
+            model = ModelHelper(filters)
+            return model

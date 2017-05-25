@@ -39,6 +39,7 @@ class ConfigurationTab(QtWidgets.QWidget):
             func = self.property_changed
         self.signal_mapper.mapped[QtWidgets.QWidget].connect(func)
         self.rows = 0
+        self.full_check = False
 
         self.create_form()
         grid_widget = QtWidgets.QWidget()
@@ -267,11 +268,11 @@ class ConfigurationTab(QtWidgets.QWidget):
         if layout is None:
             layout = self.layout
 
-        if isinstance(pwidget, QtWidgets.QPushButton):
+        if isinstance(pwidget, QtWidgets.QPushButton) and not self.full_check:
             # These are reserved for file dialogs
             file_text = QtWidgets.QFileDialog.getOpenFileName(self, "Set New File",
                                                               os.path.expanduser("~/"))
-            pwidget.setText(file_text)
+            pwidget.setText(file_text[0])
         pos = layout.indexOf(pwidget)
         pname = pwidget.objectName()
         if qualifier is not None:
@@ -423,7 +424,7 @@ class ConfigurationTab(QtWidgets.QWidget):
 
         self.saveConfiguration.emit(save_dir, self.name, changed_values)
 
-    def set_information(self, key, info):
+    def set_information(self, key, info, full_check=False):
         """Set information in a particular parameter widget.
 
         Parameters
@@ -432,7 +433,10 @@ class ConfigurationTab(QtWidgets.QWidget):
             The name of the parameter.
         info : dict
             The set of information that describes this parameter.
+        full_check : bool
+            Flag to trigger signals for property changes.
         """
+        self.full_check = full_check
         for i in xrange(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 1).widget()
             if isinstance(widget, QtWidgets.QGroupBox):
@@ -446,6 +450,12 @@ class ConfigurationTab(QtWidgets.QWidget):
                     widget.setChecked(value)
                 except (AttributeError, TypeError):
                     widget.setText(str(value))
+                    if self.full_check:
+                        try:
+                            widget.editingFinished.emit()
+                        except AttributeError:
+                            # QPushButton
+                            widget.clicked.emit()
                     try:
                         widget.home(False)
                     except AttributeError:

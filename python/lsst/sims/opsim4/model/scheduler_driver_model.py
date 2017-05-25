@@ -12,3 +12,16 @@ class SchedulerDriverModel(ModelHelper):
         """Initialize the class.
         """
         ModelHelper.__init__(self, SchedulerDriver())
+
+    def apply_overrides(self, config_files):
+            """Apply configuration overrides.
+
+            Parameters
+            ----------
+            config_files : list
+                The list of configuration file paths.
+            """
+            sched_driver = SchedulerDriver()
+            ModelHelper.load_config(sched_driver, config_files)
+            model = ModelHelper(sched_driver)
+            return model.params

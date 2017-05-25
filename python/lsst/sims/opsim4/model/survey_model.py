@@ -17,6 +17,19 @@ class SurveyModel(ModelHelper):
         self.proposals = {"GEN": survey.general_proposals,
                           "SEQ": survey.sequence_proposals}
 
+    def apply_overrides(self, config_files):
+        """Apply configuration overrides.
+
+        Parameters
+        ----------
+        config_files : list
+            The list of configuration file paths.
+        """
+        survey = Survey()
+        ModelHelper.load_config(survey, config_files)
+        model = ModelHelper(survey)
+        return model.params
+
     def get_parameter(self, parameter_name):
         """Get a value for the given parameter.
 

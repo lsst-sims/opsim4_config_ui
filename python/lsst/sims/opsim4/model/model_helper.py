@@ -266,3 +266,21 @@ class ModelHelper(object):
 
                 ofile.write(property_format.format(pname, pvalue))
                 ofile.write(os.linesep)
+
+    @classmethod
+    def load_config(cls, config_obj, config_files):
+        """Apply overrides to configuration object.
+
+        Parameters
+        ----------
+        config_obj : instance
+            A configuration instance.
+        config_files : list
+            A set of paths to configuration file overrides.
+        """
+        for config_file in config_files:
+            try:
+                config_obj.load(config_file)
+            except AssertionError:
+                # Not the right configuration file, so do nothing.
+                pass
