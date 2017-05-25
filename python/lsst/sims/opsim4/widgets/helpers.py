@@ -1,5 +1,7 @@
 from PyQt5 import QtGui, QtWidgets
 
+from lsst.sims.opsim4.widgets import ListLineEdit
+
 __all__ = ["get_widget_by_type"]
 
 def get_widget_by_type(widget_type):
@@ -19,11 +21,11 @@ def get_widget_by_type(widget_type):
     """
     switcher = {
         'Str': lineedit_widget,
-        'StringList': lineedit_widget,
+        'StringList': list_lineedit_widget,
         'Float': float_widget,
-        'FloatList': lineedit_widget,
+        'FloatList': list_lineedit_widget,
         'Int': int_widget,
-        'IntList': lineedit_widget,
+        'IntList': list_lineedit_widget,
         'Bool': bool_widget,
         'File': file_widget
     }
@@ -55,3 +57,6 @@ def file_widget():
     widget = QtWidgets.QPushButton()
     widget.setCheckable(False)
     return (widget, "clicked")
+
+def list_lineedit_widget():
+    return (ListLineEdit(" "), "editingFinished")

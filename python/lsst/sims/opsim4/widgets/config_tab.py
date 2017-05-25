@@ -157,7 +157,10 @@ class ConfigurationTab(QtWidgets.QWidget):
                 try:
                     property_value = str(property_widget.isChecked())
                 except AttributeError:
-                    property_value = property_widget.text()
+                    try:
+                        property_value = property_widget.text(force_list=True)
+                    except TypeError:
+                        property_value = property_widget.text()
                 pname = str(property_widget.objectName())
                 if parent_name is not None:
                     pname = "{}/{}".format(parent_name, pname)
@@ -418,7 +421,10 @@ class ConfigurationTab(QtWidgets.QWidget):
                         else:
                             property_value = str(property_widget.isChecked())
                     except AttributeError:
-                        property_value = property_widget.text()
+                        try:
+                            property_value = property_widget.text(force_list=True)
+                        except TypeError:
+                            property_value = property_widget.text()
                     changed_values.append((str(property_widget.objectName()),
                                           property_value))
 

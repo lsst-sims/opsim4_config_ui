@@ -1,5 +1,6 @@
 """Module for all the configuration widgets.
 """
+from .list_linedit_widget import *
 from .helpers import *
 from .config_tab import *
 from .config_tab_widget import *
