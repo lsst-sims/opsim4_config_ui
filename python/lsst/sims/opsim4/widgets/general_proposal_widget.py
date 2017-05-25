@@ -41,8 +41,24 @@ class GeneralProposalWidget(ProposalWidget):
             The configuration information for the sky region.
         """
         num_selections = len(params["selections"]["value"])
+        if params["time_ranges"]["value"] is not None:
+            num_time_ranges = len(params["time_ranges"]["value"])
+        else:
+            num_time_ranges = 0
+        if params["selection_mapping"]["value"] is not None:
+            num_mappings = len(params["selection_mapping"]["value"])
+        else:
+            num_mappings = 0
+        use_time_ranges = False
+        use_mappings = False
         if num_selections:
             num_widgets = 4
+            if num_time_ranges:
+                num_widgets += 2
+                use_time_ranges = True
+            if num_mappings:
+                num_widgets += 1
+                use_mappings = True
             for i in xrange(num_selections):
                 j = i * num_widgets
                 qualifier = "selections/{}".format(i)
@@ -54,7 +70,17 @@ class GeneralProposalWidget(ProposalWidget):
                                    rows=(j + 2))
                 self.create_widget("Float", "bounds_limit", qualifier=qualifier, layout=glayout,
                                    rows=(j + 3))
-            self.group_box_rows.append(num_selections * 4)
+                if use_time_ranges:
+                    qualifier = "time_ranges/{}".format(i)
+                    self.create_widget("Int", "start", qualifier=qualifier, layout=glayout,
+                                       rows=(j + 4))
+                    self.create_widget("Int", "end", qualifier=qualifier, layout=glayout,
+                                       rows=(j + 5))
+                if use_mappings:
+                    qualifier = "selection_mapping/{}".format(i)
+                    self.create_widget("IntList", "indexes", qualifier=qualifier, layout=glayout,
+                                       rows=(j + 6))
+            self.group_box_rows.append(num_selections * num_widgets)
 
     def create_sky_exclusion(self, glayout, params):
         """Set the information for the proposal sky exclusion.
@@ -160,7 +186,22 @@ class GeneralProposalWidget(ProposalWidget):
         num_selections = len(params["selections"]["value"])
         if num_selections:
             num_widgets = self.group_box_rows[0] / num_selections
-            for j, v in enumerate(params["selections"]["value"].values()):
-                for i in xrange(num_widgets):
-                    k = j * num_widgets + i
-                    self.set_widget_information(k, glayout, v)
+            if num_widgets == 4:
+                for j, v in enumerate(params["selections"]["value"].values()):
+                    for i in xrange(num_widgets):
+                        k = j * num_widgets + i
+                        self.set_widget_information(k, glayout, v)
+            else:
+                selections = params["selections"]["value"].values()
+                time_ranges = params["time_ranges"]["value"].values()
+                selection_mapping = params["selection_mapping"]["value"].values()
+                for j, (v1, v2, v3) in enumerate(zip(selections, time_ranges,
+                                                     selection_mapping)):
+                    for i in xrange(num_widgets):
+                        k = j * num_widgets + i
+                        if i < 4:
+                            self.set_widget_information(k, glayout, v1)
+                        elif i >= 4 and i < 6:
+                            self.set_widget_information(k, glayout, v2)
+                        else:
+                            self.set_widget_information(k, glayout, v3)
