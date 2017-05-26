@@ -29,6 +29,7 @@ class SequenceProposalWidget(ProposalWidget):
         self.create_group_box("sky_constraints")
         self.create_group_box("sub_sequences")
         self.create_group_box("master_sub_sequences")
+        self.create_group_box("nested_sub_sequences")
         self.create_group_box("scheduling")
         self.create_group_box("filters")
         self.hide_unused()
@@ -110,6 +111,44 @@ class SequenceProposalWidget(ProposalWidget):
             self.group_box_rows.append(0)
 
     def create_master_sub_sequences(self, glayout, params):
+        """Set the master sub-sequences information for the proposal.
+
+        Parameters
+        ----------
+        glayout : QGridLayout
+            Instance of a grid layout.
+        params : dict
+            The configuration information for the master sub-sequences information.
+        """
+        num_master_sub_sequences = len(params)
+        if num_master_sub_sequences:
+            num_widgets = 9
+            for i in xrange(num_master_sub_sequences):
+                j = i * num_widgets
+                qualifier = "{}".format(i)
+                self.create_widget("Str", "name", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 0))
+                self.create_widget("StringList", "sub_sequence_names", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 1))
+                self.create_widget("Int", "num_events", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 2))
+                self.create_widget("Int", "num_max_missed", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 3))
+                self.create_widget("Float", "time_interval", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 4))
+                self.create_widget("Float", "time_window_start", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 5))
+                self.create_widget("Float", "time_window_max", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 6))
+                self.create_widget("Float", "time_window_end", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 7))
+                self.create_widget("Float", "time_weight", qualifier=qualifier, layout=glayout,
+                                   rows=(j + 8))
+            self.group_box_rows.append(num_master_sub_sequences * num_widgets)
+        else:
+            self.group_box_rows.append(0)
+
+    def create_nested_sub_sequences(self, glayout, params):
         """Set the nested sub-sequences information for the proposal.
 
         Parameters
@@ -121,7 +160,36 @@ class SequenceProposalWidget(ProposalWidget):
         """
         num_master_sub_sequences = len(params)
         if num_master_sub_sequences:
-            self.group_box_rows.append(num_master_sub_sequences)
+            num_nested_sub_sequences = 0
+            num_widgets = 10
+            for i in xrange(num_master_sub_sequences):
+                num_sub_sequences = len(params[i]["sub_sequences"]["value"])
+                for k in xrange(num_sub_sequences):
+                    j = num_nested_sub_sequences * num_widgets
+                    qualifier = "{}/{}".format(i, k)
+                    self.create_widget("Str", "name", qualifier=qualifier, layout=glayout,
+                                       rows=(j + 0))
+                    self.create_widget("StringList", "filters", qualifier=qualifier, layout=glayout,
+                                       rows=(j + 1))
+                    self.create_widget("IntList", "visits_per_filter", qualifier=qualifier, layout=glayout,
+                                       rows=(j + 2))
+                    self.create_widget("Int", "num_events", qualifier=qualifier, layout=glayout,
+                                       rows=(j + 3))
+                    self.create_widget("Int", "num_max_missed", qualifier=qualifier, layout=glayout,
+                                       rows=(j + 4))
+                    self.create_widget("Float", "time_interval", qualifier=qualifier, layout=glayout,
+                                       rows=(j + 5))
+                    self.create_widget("Float", "time_window_start", qualifier=qualifier, layout=glayout,
+                                       rows=(j + 6))
+                    self.create_widget("Float", "time_window_max", qualifier=qualifier, layout=glayout,
+                                       rows=(j + 7))
+                    self.create_widget("Float", "time_window_end", qualifier=qualifier, layout=glayout,
+                                       rows=(j + 8))
+                    self.create_widget("Float", "time_weight", qualifier=qualifier, layout=glayout,
+                                       rows=(j + 9))
+                    num_nested_sub_sequences += 1
+
+            self.group_box_rows.append(num_nested_sub_sequences * num_widgets)
         else:
             self.group_box_rows.append(0)
 
@@ -161,6 +229,9 @@ class SequenceProposalWidget(ProposalWidget):
             if group_box.title() == "master_sub_sequences":
                 if not self.group_box_rows[4]:
                     group_box.hide()
+            if group_box.title() == "nested_sub_sequences":
+                if not self.group_box_rows[5]:
+                    group_box.hide()
             if group_box.title() == "sub_sequences":
                 if not self.group_box_rows[3]:
                     group_box.hide()
@@ -198,8 +269,50 @@ class SequenceProposalWidget(ProposalWidget):
         self.set_sky_nightly_bounds(params["sky_nightly_bounds"]["value"], 1)
         self.set_sky_constraints(params["sky_constraints"]["value"], 2)
         self.set_sub_sequences(params["sub_sequences"]["value"])
-        self.set_scheduling(params["scheduling"]["value"], 7, 5)
-        self.set_filters(params["filters"]["value"], 8, 6)
+        self.set_master_subsequences(params["master_sub_sequences"]["value"])
+        self.set_nested_subsequences(params["master_sub_sequences"]["value"])
+        self.set_scheduling(params["scheduling"]["value"], 8, 6)
+        self.set_filters(params["filters"]["value"], 9, 7)
+
+    def set_master_subsequences(self, params):
+        """Set information in the master sub-sequences parameters group box.
+
+        Parameters
+        ----------
+        params : dict
+            The set of parameters for the sub-sequences information.
+        """
+        group_box = self.layout.itemAtPosition(6, 0).widget()
+        glayout = group_box.layout()
+        num_master_sub_sequences = len(params)
+        if num_master_sub_sequences:
+            num_widgets = self.group_box_rows[4] / num_master_sub_sequences
+            for j, v in enumerate(params.values()):
+                for i in xrange(num_widgets):
+                    k = j * num_widgets + i
+                    self.set_widget_information(k, glayout, v)
+
+    def set_nested_subsequences(self, params):
+        """Set information in the nested sub-sequences parameters group box.
+
+        Parameters
+        ----------
+        params : dict
+            The set of parameters for the sub-sequences information.
+        """
+        group_box = self.layout.itemAtPosition(7, 0).widget()
+        glayout = group_box.layout()
+        num_master_sub_sequences = len(params)
+        if num_master_sub_sequences:
+            num_nested_sub_sequences = sum([len(x["sub_sequences"]["value"]) for x in params.values()])
+            num_widgets = self.group_box_rows[5] / num_nested_sub_sequences
+            nested_index = 0
+            for k, v in enumerate(params.values()):
+                for j, v1 in enumerate(v["sub_sequences"]["value"].values()):
+                    for i in xrange(num_widgets):
+                        m = (k * nested_index + j) * num_widgets + i
+                        self.set_widget_information(m, glayout, v1)
+                    nested_index += 1
 
     def set_sub_sequences(self, params):
         """Set information in the sub-sequences parameters group box.

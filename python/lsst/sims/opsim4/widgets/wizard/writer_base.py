@@ -43,6 +43,8 @@ class WriterBase(object):
         self.lines.append(os.linesep)
         self.lines.append("{}def setDefaults(self):".format(PADDING))
         self.lines.append(os.linesep)
+        self.lines.append("{}{}.setDefaults(self)".format(PADDING * 2, params["prop_type"]))
+        self.lines.append(os.linesep)
         self.lines.append("{}self.name = \"{}\"".format(PADDING * 2, full_prop_name))
         self.lines.append(os.linesep)
 

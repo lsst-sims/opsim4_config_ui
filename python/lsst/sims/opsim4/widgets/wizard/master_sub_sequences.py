@@ -58,7 +58,7 @@ class MasterSubSequencesPage(QtWidgets.QWizardPage):
                                   "missed over the duration of the survey.")
         label5.setWordWrap(True)
 
-        num_max_missed_la = QtWidgets.QLabel("Maximum Number of Events:")
+        num_max_missed_la = QtWidgets.QLabel("Missed Number of Events:")
         self.num_max_missed_le = QtWidgets.QLineEdit()
         num_max_missed_la.setBuddy(self.num_max_missed_le)
         int_validator2 = QtGui.QIntValidator()

@@ -38,7 +38,8 @@ class SequenceWriter(WriterBase):
         self.lines.append(os.linesep)
         self.lines.append("{}# -------------------------------".format(PADDING * 2))
         self.lines.append(os.linesep)
-        self.lines.append("{}self.sky_user_regions = {}".format(PADDING * 2, params["sky_user_regions"]))
+        user_regions = str([int(x) for x in params["sky_user_regions"].split(',')])
+        self.lines.append("{}self.sky_user_regions = {}".format(PADDING * 2, user_regions))
         self.lines.append(os.linesep)
 
     def sky_exclusions(self, params):
@@ -281,12 +282,12 @@ class SequenceWriter(WriterBase):
         self.lines.append("{}{}.name = \"{}\"".format(PADDING * 2, ss_obj,
                                                       iparts[0]))
         self.lines.append(os.linesep)
-        self.lines.append("{}{}.filters = [{}]".format(PADDING * 2, ss_obj,
-                                                       self.reformat_string(iparts[1])))
+        band_filters = str([str(x) for x in self.reformat_string(iparts[1]).split(',')])
+        self.lines.append("{}{}.filters = {}".format(PADDING * 2, ss_obj, band_filters))
         self.lines.append(os.linesep)
+        num_visits = self.reformat_string(iparts[2]).replace(',', ', ')
         self.lines.append("{}{}.visits_per_filter = [{}]".
-                          format(PADDING * 2, ss_obj,
-                                 self.reformat_string(iparts[2])))
+                          format(PADDING * 2, ss_obj, num_visits))
         self.lines.append(os.linesep)
         self.lines.append("{}{}.num_events = {}".format(PADDING * 2, ss_obj,
                                                         int(iparts[3])))

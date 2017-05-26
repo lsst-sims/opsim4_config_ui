@@ -30,7 +30,11 @@ class SubSequencesPage(QtWidgets.QWizardPage):
 
         self.setTitle("{} Specifications".format(self.title_name))
 
-        label = QtWidgets.QLabel("Set the parameters for a {} in the form provided.".format(self.text_name))
+        top_label = "Set the parameters for a {} in the form provided.".format(self.text_name)
+        if not self.is_nested:
+            top_label += " DO NOT set nested sub-sequences here."
+
+        label = QtWidgets.QLabel()
         label.setWordWrap(True)
 
         group_box = QtWidgets.QGroupBox("{}".format(self.title_name))
@@ -76,7 +80,7 @@ class SubSequencesPage(QtWidgets.QWizardPage):
                                   "missed over the duration of the survey.".format(self.text_name))
         label5.setWordWrap(True)
 
-        num_max_missed_la = QtWidgets.QLabel("Maximum Number of Events:")
+        num_max_missed_la = QtWidgets.QLabel("Missed Number of Events:")
         self.num_max_missed_le = QtWidgets.QLineEdit()
         num_max_missed_la.setBuddy(self.num_max_missed_le)
         int_validator2 = QtGui.QIntValidator()

@@ -38,6 +38,10 @@ class ProposalWidget(ConfigurationTab):
             params = self.setup[name]["value"]
         except TypeError:
             return
+        except KeyError:
+            # Treating nested sub-sequences differently
+            params = self.setup["master_sub_sequences"]["value"]
+
         self.num_group_boxes += 1
         group_box = QtWidgets.QGroupBox(name)
         grid_layout = QtWidgets.QGridLayout()
@@ -47,32 +51,6 @@ class ProposalWidget(ConfigurationTab):
         group_box.setLayout(grid_layout)
         self.layout.addWidget(group_box, self.rows, 0, 1, 3)
         self.rows += 1
-
-    def create_sky_region(self, glayout, params):
-        """Set the information for the proposal sky region.
-
-        Parameters
-        ----------
-        glayout : QGridLayout
-            Instance of a grid layout.
-        params : dict
-            The configuration information for the sky region.
-        """
-        num_selections = len(params["selections"]["value"])
-        if num_selections:
-            num_widgets = 4
-            for i in xrange(num_selections):
-                j = i * num_widgets
-                qualifier = "selections/{}".format(i)
-                self.create_widget("Str", "limit_type", qualifier=qualifier, layout=glayout,
-                                   rows=(j + 0))
-                self.create_widget("Float", "minimum_limit", qualifier=qualifier, layout=glayout,
-                                   rows=(j + 1))
-                self.create_widget("Float", "maximum_limit", qualifier=qualifier, layout=glayout,
-                                   rows=(j + 2))
-                self.create_widget("Float", "bounds_limit", qualifier=qualifier, layout=glayout,
-                                   rows=(j + 3))
-            self.group_box_rows.append(num_selections * 4)
 
     def create_sky_exclusion(self, glayout, params, is_general=True):
         """Set the information for the proposal sky exclusion.

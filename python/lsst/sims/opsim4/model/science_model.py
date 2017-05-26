@@ -155,6 +155,11 @@ class ScienceModel(object):
         if prop_name in self.sequence_params:
             prop_params = self.sequence_params[prop_name]
 
+        # Nested sub-sequences need to be treated differently.
+        if "nested" in pnames[0]:
+            pnames = ["master_sub_sequences", pnames[1],
+                      "sub_sequences", pnames[2], pnames[3]]
+
         while len(pnames):
             name = pnames.pop(0)
             try:
@@ -216,6 +221,10 @@ class ScienceModel(object):
             for pname, value in changed_params:
                 property_format = "config.{}={}"
                 pparts = pname.split('/')
+                # Nested sub-sequences need to be treated differently.
+                if "nested" in pparts[0]:
+                    pparts = ["master_sub_sequences", pparts[1],
+                              "sub_sequences", pparts[2], pparts[3]]
                 if name in pparts:
                     index = pparts.index(name)
                     del pparts[index]

@@ -41,6 +41,21 @@ class SequencePropModel(ModelHelper):
                         sparams1 = ModelHelper.make_parameter_dictionary(self, fields=sub_cls1._fields,
                                                                          obj=v1)
                         iparams[key]["value"][k1] = sparams1
+                        if "master" in key:
+                            iparams[key]["value"][k1]["sub_sequences"]["value"] = {}
+                            # Need to handle sub-sequence lists
+                            sub_seq_names = []
+                            for k3, v3 in v1.sub_sequences.items():
+                                sub_cls3 = load_class(v3)
+                                sparams3 = ModelHelper.make_parameter_dictionary(self,
+                                                                                 fields=sub_cls3._fields,
+                                                                                 obj=v3)
+                                iparams[key]["value"][k1]["sub_sequences"]["value"][k3] = sparams3
+                                sub_seq_names.append(sparams3["name"]["value"])
+                            iparams[key]["value"][k1]["sub_sequence_names"] = \
+                                {"units": None, "dtype": "StringList", "format": None,
+                                 "doc": iparams[key]["value"][0]["sub_sequences"]["doc"],
+                                 "value": ','.join(sub_seq_names)}
 
                 iparams1 = iparams[key]["value"]
                 for k2 in iparams1:
