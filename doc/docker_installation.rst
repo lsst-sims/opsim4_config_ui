@@ -7,11 +7,9 @@ The UI is graphical program and requires a special setup outside the Docker cont
 
 	socat TCP-LISTEN:6000,reuseaddr,fork UNIX-CLIENT:\"$DISPLAY\"
 
-To run the configuration UI, enter or startup a container and execute the following::
+You will need to have XQuartz_ installed as well. To run the configuration UI, enter or startup a container and execute the following::
 
 	setup opsim4_config_ui
 	opsim4_config_ui
-
-**NOTE**: There is a bug in the latest version of XQuartz_ that causes the UI to fail to launch. You will need to ensure that version 2.7.9 is installed or downgrade your installed version.
 
 .. _XQuartz: https://www.xquartz.org/
