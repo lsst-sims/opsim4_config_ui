@@ -58,10 +58,10 @@ class ScienceController(BaseController):
                 tab.getProperty.connect(self.get_property)
                 tab.saveConfiguration.connect(self.save_configuration)
 
-        # self.widget.set_information(new_params.general_params,
-        #                             full_check=True)
-        # self.widget.set_information(new_params.sequence_params,
-        #                             full_check=True)
+        self.widget.set_information(new_params.general_params,
+                                    full_check=True)
+        self.widget.set_information(new_params.sequence_params,
+                                    full_check=True)
         self.widget.finish_overrides()
 
     @QtCore.pyqtSlot(str, str, list)
