@@ -3,6 +3,17 @@
 History
 -------
 
+1.1.0 (2017-05-26)
+~~~~~~~~~~~~~~~~~~
+
+* Ability to apply a directory of override files onto the current default set of parameters
+
+  * Changed parameters are flagged as usual
+  * Any new proposals (``new_props``) available will be displayed
+  * Override files for new proposals can also be displayed
+
+* Fix for issue with list parameters having single entries when writing override and new proposal files 
+
 1.0.3 (2017-05-02)
 ~~~~~~~~~~~~~~~~~~
 
