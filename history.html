@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>History &mdash; OpSim4 Configuration UI 1.0.1 documentation</title>
+  <title>History &mdash; OpSim4 Configuration UI 1.1.0 documentation</title>
   
 
   
@@ -33,7 +33,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="OpSim4 Configuration UI 1.0.1 documentation" href="index.html"/>
+    <link rel="top" title="OpSim4 Configuration UI 1.1.0 documentation" href="index.html"/>
         <link rel="prev" title="Installation" href="installation.html"/> 
 
   
@@ -62,7 +62,7 @@
             
             
               <div class="version">
-                1.0.1
+                1.1.0
               </div>
             
           
@@ -86,8 +86,11 @@
                 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">History</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">1.0.1 (2017-04-04)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">1.0 (2017-02-28)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id1">1.1.0 (2017-05-26)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">1.0.3 (2017-05-02)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">1.0.2 (2017-04-20)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">1.0.1 (2017-04-04)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">1.0 (2017-02-28)</a></li>
 </ul>
 </li>
 </ul>
@@ -137,13 +140,37 @@
   <div class="section" id="history">
 <h1>History<a class="headerlink" href="#history" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="id1">
-<h2>1.0.1 (2017-04-04)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<h2>1.1.0 (2017-05-26)<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Ability to apply a directory of override files onto the current default set of parameters<ul>
+<li>Changed parameters are flagged as usual</li>
+<li>Any new proposals (<code class="docutils literal"><span class="pre">new_props</span></code>) available will be displayed</li>
+<li>Override files for new proposals can also be displayed</li>
+</ul>
+</li>
+<li>Fix for issue with list parameters having single entries when writing override and new proposal files</li>
+</ul>
+</div>
+<div class="section" id="id2">
+<h2>1.0.3 (2017-05-02)<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Fix issue with similarly named parameters getting masked during setup.</li>
+</ul>
+</div>
+<div class="section" id="id3">
+<h2>1.0.2 (2017-04-20)<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li>Provide parameters for restarting lost and complete sequences for Sequence proposals</li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h2>1.0.1 (2017-04-04)<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h2>
 <ul class="simple">
 <li>Make save directory dialog start one directory up from last saved directory instead of always user home.</li>
 </ul>
 </div>
-<div class="section" id="id2">
-<h2>1.0 (2017-02-28)<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="id5">
+<h2>1.0 (2017-02-28)<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h2>
 <p>This release will be the baseline interaction for configuring OpSim version 4. It will have access to all necessary parameters and has the capability to generate new proposals.</p>
 </div>
 </div>
@@ -187,7 +214,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.0.1',
+            VERSION:'1.1.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true

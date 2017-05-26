@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Installation &mdash; OpSim4 Configuration UI 1.0.1 documentation</title>
+  <title>Installation &mdash; OpSim4 Configuration UI 1.1.0 documentation</title>
   
 
   
@@ -33,7 +33,7 @@
         <link rel="index" title="Index"
               href="genindex.html"/>
         <link rel="search" title="Search" href="search.html"/>
-    <link rel="top" title="OpSim4 Configuration UI 1.0.1 documentation" href="index.html"/>
+    <link rel="top" title="OpSim4 Configuration UI 1.1.0 documentation" href="index.html"/>
         <link rel="next" title="History" href="history.html"/>
         <link rel="prev" title="Operations Simulator Version 4 Configuration User Interface" href="index.html"/> 
 
@@ -63,7 +63,7 @@
             
             
               <div class="version">
-                1.0.1
+                1.1.0
               </div>
             
           
@@ -191,12 +191,11 @@
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">socat</span> <span class="n">TCP</span><span class="o">-</span><span class="n">LISTEN</span><span class="p">:</span><span class="mi">6000</span><span class="p">,</span><span class="n">reuseaddr</span><span class="p">,</span><span class="n">fork</span> <span class="n">UNIX</span><span class="o">-</span><span class="n">CLIENT</span><span class="p">:</span>\<span class="s2">&quot;$DISPLAY</span><span class="se">\&quot;</span>
 </pre></div>
 </div>
-<p>To run the configuration UI, enter or startup a container and execute the following:</p>
+<p>You will need to have <a class="reference external" href="https://www.xquartz.org/">XQuartz</a> installed as well. To run the configuration UI, enter or startup a container and execute the following:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">setup</span> <span class="n">opsim4_config_ui</span>
 <span class="n">opsim4_config_ui</span>
 </pre></div>
 </div>
-<p><strong>NOTE</strong>: There is a bug in the latest version of <a class="reference external" href="https://www.xquartz.org/">XQuartz</a> that causes the UI to fail to launch. You will need to ensure that version 2.7.9 is installed or downgrade your installed version.</p>
 </div>
 </div>
 
@@ -241,7 +240,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'1.0.1',
+            VERSION:'1.1.0',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
             HAS_SOURCE:  true
