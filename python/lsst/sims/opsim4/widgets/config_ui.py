@@ -4,6 +4,7 @@ import sys
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 from lsst.sims.ocs.utilities.file_helpers import expand_path
+from lsst.sims.ocs.version import __version__ as socs_version
 
 from lsst.sims.opsim4 import __version__ as version
 from lsst.sims.opsim4.controller import MainController
@@ -370,12 +371,14 @@ class OpsimConfig(QtWidgets.QMainWindow):
         about.setInformativeText("""
                                  <b>Operations Simulator Configuration UI</b>
                                  <p>Version {}</p>
+                                 <p>SOCS Version: {}</p>
                                  <p>This application is used to create override files and new
                                  proposals to modify the running of the Operations Simulator
                                  from the baseline configuration.
                                  <br><br>
                                  Copyright 2016-2017 LSST Simulations
-                                 """.format(version))
+                                 """.format(version, socs_version))
+
         about.exec_()
 
 def run(opts):
