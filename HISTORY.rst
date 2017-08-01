@@ -3,6 +3,17 @@
 History
 -------
 
+1.1.1 (2017-08-01)
+~~~~~~~~~~~~~~~~~~
+
+* New parameters for main UI tabs
+
+  * propboost_weight for Scheduler Driver
+  * max_visits_goal for Sequence proposals
+
+* Added max_visits_goal to Sequence proposal in creation wizard
+* Added SOCS version to About dialog
+
 1.1.0 (2017-05-26)
 ~~~~~~~~~~~~~~~~~~
 
