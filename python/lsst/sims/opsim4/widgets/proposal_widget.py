@@ -126,9 +126,10 @@ class ProposalWidget(ConfigurationTab):
         self.create_widget("Bool", "accept_serendipity", layout=glayout, rows=1)
         self.create_widget("Bool", "accept_consecutive_visits", layout=glayout, rows=2)
         if not is_general:
-            offset = 2
+            offset = 3
             self.create_widget("Bool", "restart_lost_sequences", layout=glayout, rows=3)
             self.create_widget("Bool", "restart_complete_sequences", layout=glayout, rows=4)
+            self.create_widget("Int", "max_visits_goal", layout=glayout, rows=5)
         self.create_widget("Float", "airmass_bonus", layout=glayout, rows=3 + offset)
         self.create_widget("Float", "hour_angle_bonus", layout=glayout, rows=4 + offset)
         self.create_widget("Float", "hour_angle_max", layout=glayout, rows=5 + offset)
@@ -141,7 +142,7 @@ class ProposalWidget(ConfigurationTab):
             self.create_widget("Float", "time_weight", layout=glayout, rows=11)
             num_widgets = 12
         else:
-            num_widgets = 8
+            num_widgets = 9
         self.group_box_rows.append(num_widgets)
 
     def create_filters(self, glayout, params, is_general=True):
