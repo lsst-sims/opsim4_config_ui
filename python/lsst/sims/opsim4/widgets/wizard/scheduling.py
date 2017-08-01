@@ -1,3 +1,5 @@
+import sys
+
 from PyQt5 import QtGui, QtWidgets
 
 from lsst.sims.opsim4.widgets.wizard import WizardPages
@@ -23,6 +25,11 @@ class SchedulingPage(QtWidgets.QWizardPage):
             self.param_tag = "general"
         else:
             self.param_tag = "sequence"
+
+        try:
+            max_int = sys.maxsize
+        except AttributeError:
+            max_int = sys.maxint
 
         label1 = QtWidgets.QLabel("Set the maximum number of targets to be sent to the scheduler "
                                   "driver for final target consideration")
@@ -74,6 +81,15 @@ class SchedulingPage(QtWidgets.QWizardPage):
             restart_complete_sequences_la.setBuddy(restart_complete_sequences_cb)
             self.registerField("{}_scheduling_restart_complete_sequences".format(self.param_tag),
                                restart_complete_sequences_cb)
+
+            label15 = QtWidgets.QLabel("Set maximum number of goal visits for the proposal.")
+            label15.setWordWrap(True)
+
+            max_visits_goal_la = QtWidgets.QLabel("Max Visits Goal:")
+            max_visits_goal_le = QtWidgets.QLineEdit("1")
+            max_visits_goal_la.setBuddy(max_visits_goal_le)
+            max_visits_goal_le.setValidator(QtGui.QIntValidator())
+            self.registerField("{}_scheduling_max_visits_goal".format(self.param_tag), max_visits_goal_le)
 
         label4 = QtWidgets.QLabel("Set the airmass bonus for ranking requested fields.")
         label4.setWordWrap(True)
@@ -181,13 +197,16 @@ class SchedulingPage(QtWidgets.QWizardPage):
         scroll_area_widget_layout.addWidget(accept_consecutive_visits_la, 5, 0)
         scroll_area_widget_layout.addWidget(accept_consecutive_visits_cb, 5, 1)
         if not self.is_general:
-            offset = 4
+            offset = 6
             scroll_area_widget_layout.addWidget(label13, 6, 0, 1, 3)
             scroll_area_widget_layout.addWidget(restart_lost_sequences_la, 7, 0)
             scroll_area_widget_layout.addWidget(restart_lost_sequences_cb, 7, 1)
             scroll_area_widget_layout.addWidget(label14, 8, 0, 1, 3)
             scroll_area_widget_layout.addWidget(restart_complete_sequences_la, 9, 0)
             scroll_area_widget_layout.addWidget(restart_complete_sequences_cb, 9, 1)
+            scroll_area_widget_layout.addWidget(label15, 10, 0, 1, 3)
+            scroll_area_widget_layout.addWidget(max_visits_goal_la, 11, 0)
+            scroll_area_widget_layout.addWidget(max_visits_goal_le, 11, 1)
         scroll_area_widget_layout.addWidget(label4, 6 + offset, 0, 1, 3)
         scroll_area_widget_layout.addWidget(airmass_bonus_la, 7 + offset, 0)
         scroll_area_widget_layout.addWidget(airmass_bonus_le, 7 + offset, 1)

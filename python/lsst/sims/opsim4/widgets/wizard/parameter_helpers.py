@@ -90,6 +90,7 @@ def scheduling_params(is_general=True):
     if not is_general:
         plist.append("sequence_scheduling_restart_lost_sequences")
         plist.append("sequence_scheduling_restart_complete_sequences")
+        plist.append("sequence_scheduling_max_visits_goal")
 
     return plist
 
