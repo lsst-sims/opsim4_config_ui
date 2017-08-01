@@ -28,6 +28,7 @@ class SchedulerDriverWidget(ConfigurationTab):
         self.create_widget("Float", "timecost_cost_ref")
         self.create_widget("Float", "timecost_weight")
         self.create_widget("Float", "filtercost_weight")
+        self.create_widget("Float", "propboost_weight")
         self.create_widget("Float", "night_boundary")
         self.create_widget("Float", "new_moon_phase_threshold")
         self.create_widget("Bool", "ignore_sky_brightness")
