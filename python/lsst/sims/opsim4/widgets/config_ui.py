@@ -8,7 +8,7 @@ from lsst.sims.ocs.version import __version__ as socs_version
 
 from lsst.sims.opsim4 import __version__ as version
 from lsst.sims.opsim4.controller import MainController
-from lsst.sims.opsim4.utilities import title
+from lsst.sims.opsim4.utilities import NEW_PROPS_DIR, title
 from lsst.sims.opsim4.widgets import ReportDialog
 from lsst.sims.opsim4.widgets.constants import CSS
 from lsst.sims.opsim4.widgets.wizard import ProposalCreationWizard
@@ -195,7 +195,7 @@ class OpsimConfig(QtWidgets.QMainWindow):
                 config_files.append(ifile)
 
         extra_props = None
-        alt_prop_dir = os.path.join(override_dir, "new_props")
+        alt_prop_dir = os.path.join(override_dir, NEW_PROPS_DIR)
         if os.path.exists(alt_prop_dir):
             extra_props = alt_prop_dir
             sys.path.insert(0, extra_props)
