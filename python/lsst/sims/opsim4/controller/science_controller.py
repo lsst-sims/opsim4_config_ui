@@ -1,7 +1,11 @@
+import os
+import shutil
+
 from PyQt5 import QtCore
 
 from lsst.sims.opsim4.controller import BaseController
 from lsst.sims.opsim4.model import ScienceModel
+from lsst.sims.opsim4.utilities import NEW_PROPS_DIR, filename_from_proposal_name
 from lsst.sims.opsim4.widgets import ScienceWidget
 
 __all__ = ["ScienceController"]
@@ -21,6 +25,9 @@ class ScienceController(BaseController):
         BaseController.__init__(self, name)
         self.model = ScienceModel()
         self.widget = ScienceWidget(name)
+
+        self.extra_props = None
+        self.extra_props_dir = None
 
         self.widget.create_tabs(self.model.general_params)
         self.widget.set_information(self.model.general_params)
@@ -45,12 +52,14 @@ class ScienceController(BaseController):
         """
         new_params = self.model.apply_overrides(config_files,
                                                 extra_props=extra_props)
+        self.extra_props_dir = extra_props
 
         self.widget.create_tabs(new_params.new_general)
         self.widget.set_information(new_params.new_general)
         self.widget.create_tabs(new_params.new_sequence)
         self.widget.set_information(new_params.new_sequence)
         new_props = new_params.new_general.keys() + new_params.new_sequence.keys()
+        self.extra_props = new_props
         for i in xrange(self.widget.count()):
             tab = self.widget.widget(i)
             if tab.name in new_props:
@@ -95,3 +104,27 @@ class ScienceController(BaseController):
         pvalue = str(self.model.get_parameter(str(param_name)))
         home_tab = str(param_name).split('/')[0]
         self.widget.reset_field(position, pvalue, home_tab=home_tab)
+
+    @QtCore.pyqtSlot(str, str, list)
+    def save_configuration(self, save_dir, name, changed_params):
+        """Delegate configuration saving to model.
+
+        Parameters
+        ----------
+        save_dir : str
+            The directory to save the configuration information to.
+        name : str
+            Name of the configuration to save.
+        changed_params : dict
+            The set of changed information.
+        """
+        if len(changed_params):
+            prop_file = os.path.join(self.extra_props_dir,
+                                     filename_from_proposal_name(name))
+            if os.path.exists(prop_file):
+                copy_loc = os.path.join(save_dir, NEW_PROPS_DIR)
+                if not os.path.exists(copy_loc):
+                    os.makedirs(copy_loc)
+                shutil.copy(prop_file, copy_loc)
+
+        BaseController.save_configuration(self, save_dir, name, changed_params)
