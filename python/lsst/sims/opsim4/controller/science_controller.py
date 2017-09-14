@@ -105,6 +105,25 @@ class ScienceController(BaseController):
         home_tab = str(param_name).split('/')[0]
         self.widget.reset_field(position, pvalue, home_tab=home_tab)
 
+    def remove_extra_proposals(self):
+        """Remove the extra proposal tab widgets.
+
+        This function handles removing the extra proposal tab widgets from the science
+        tab widget and resets the model.
+        """
+        self.extra_props_dir = None
+        for extra_prop in self.extra_props:
+            for i in range(self.widget.count()):
+                tab = self.widget.widget(i)
+                if tab.name == extra_prop:
+                    tab.checkProperty.disconnect(self.check_property)
+                    tab.getProperty.disconnect(self.get_property)
+                    tab.saveConfiguration.disconnect(self.save_configuration)
+                    tab.deleteLater()
+        self.extra_props = None
+        del self.model
+        self.model = ScienceModel()
+
     @QtCore.pyqtSlot(str, str, list)
     def save_configuration(self, save_dir, name, changed_params):
         """Delegate configuration saving to model.
