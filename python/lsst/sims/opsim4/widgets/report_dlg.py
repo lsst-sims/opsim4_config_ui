@@ -78,7 +78,7 @@ class ReportDialog(QtWidgets.QDialog):
         v : dict(str: (changed value, default value))
             The set of changed and default information.
         """
-        for j, (k, i) in enumerate(v.iteritems()):
+        for j, (k, i) in enumerate(v.items()):
             if j % 2 == 0:
                 row_color = "#BDBDBD"
             else:
@@ -111,7 +111,7 @@ class ReportDialog(QtWidgets.QDialog):
             The set of changed and default information.
         """
         headings = collections.defaultdict(list)
-        for name in ddict.keys():
+        for name in ddict:
             if "/" in name:
                 h1, h2 = name.split('/')
                 headings[h1].append(h2)
@@ -121,7 +121,7 @@ class ReportDialog(QtWidgets.QDialog):
         self.report = []
         self._make_css()
 
-        for heading, sub_headings in headings.iteritems():
+        for heading, sub_headings in headings.items():
             self._make_heading(title(heading) if heading.islower() else heading)
             if len(sub_headings) == 0:
                 self._make_table(ddict[heading])

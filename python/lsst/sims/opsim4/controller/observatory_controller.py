@@ -25,7 +25,7 @@ class ObservatoryController(BaseController):
         self.widget.create_tabs(self.model.params)
         self.widget.set_information(self.model.params)
 
-        for i in xrange(self.widget.count()):
+        for i in range(self.widget.count()):
             tab = self.widget.widget(i)
             tab.checkProperty.connect(self.check_property)
             tab.getProperty.connect(self.get_property)

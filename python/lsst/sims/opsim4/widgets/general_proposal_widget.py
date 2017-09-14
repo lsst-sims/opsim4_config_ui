@@ -1,3 +1,5 @@
+from builtins import zip
+
 from lsst.sims.opsim4.widgets import ProposalWidget
 
 __all__ = ["GeneralProposalWidget"]
@@ -59,7 +61,7 @@ class GeneralProposalWidget(ProposalWidget):
             if num_mappings:
                 num_widgets += 1
                 use_mappings = True
-            for i in xrange(num_selections):
+            for i in range(num_selections):
                 j = i * num_widgets
                 qualifier = "selections/{}".format(i)
                 self.create_widget("Str", "limit_type", qualifier=qualifier, layout=glayout,
@@ -188,16 +190,16 @@ class GeneralProposalWidget(ProposalWidget):
             num_widgets = self.group_box_rows[0] / num_selections
             if num_widgets == 4:
                 for j, v in enumerate(params["selections"]["value"].values()):
-                    for i in xrange(num_widgets):
+                    for i in range(num_widgets):
                         k = j * num_widgets + i
                         self.set_widget_information(k, glayout, v)
             else:
-                selections = params["selections"]["value"].values()
-                time_ranges = params["time_ranges"]["value"].values()
-                selection_mapping = params["selection_mapping"]["value"].values()
+                selections = list(params["selections"]["value"].values())
+                time_ranges = list(params["time_ranges"]["value"].values())
+                selection_mapping = list(params["selection_mapping"]["value"].values())
                 for j, (v1, v2, v3) in enumerate(zip(selections, time_ranges,
                                                      selection_mapping)):
-                    for i in xrange(num_widgets):
+                    for i in range(num_widgets):
                         k = j * num_widgets + i
                         if i < 4:
                             self.set_widget_information(k, glayout, v1)

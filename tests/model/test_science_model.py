@@ -14,10 +14,10 @@ class ScienceModelTest(unittest.TestCase):
                          self.num_general_proposals + self.num_sequence_proposals)
         general_params = self.model.general_params
         self.assertEqual(len(general_params), self.num_general_proposals)
-        self.assertEqual(len(general_params[general_params.keys()[0]]), 7)
+        self.assertEqual(len(general_params[list(general_params.keys())[0]]), 7)
         sequence_params = self.model.sequence_params
         self.assertEqual(len(sequence_params), self.num_sequence_proposals)
-        self.assertEqual(len(sequence_params[sequence_params.keys()[0]]), 9)
+        self.assertEqual(len(sequence_params[list(sequence_params.keys())[0]]), 9)
 
         for k, v in self.model.general_params.items():
             if k == "SouthCelestialPole":

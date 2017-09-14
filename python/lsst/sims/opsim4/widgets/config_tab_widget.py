@@ -41,7 +41,7 @@ class ConfigurationTabWidget(QtWidgets.QTabWidget):
     def finish_overrides(self):
         """Reset full_check flag when override application stops.
         """
-        for i in xrange(self.count()):
+        for i in range(self.count()):
             tab = self.widget(i)
             tab.full_check = False
 
@@ -54,7 +54,7 @@ class ConfigurationTabWidget(QtWidgets.QTabWidget):
             The set of changed parameters.
         """
         ddict = {}
-        for i in xrange(self.count()):
+        for i in range(self.count()):
             tab = self.widget(i)
             ddict.update(tab.get_diff())
         return ddict
@@ -75,7 +75,7 @@ class ConfigurationTabWidget(QtWidgets.QTabWidget):
         home_tab : str, optional
             The name of the tab to search.
         """
-        for i in xrange(self.count()):
+        for i in range(self.count()):
             tab = self.widget(i)
             if home_tab == tab.name:
                 tab.is_changed(position, is_changed)
@@ -105,7 +105,7 @@ class ConfigurationTabWidget(QtWidgets.QTabWidget):
         home_tab : str, optional
             The name of the tab to search.
         """
-        for i in xrange(self.count()):
+        for i in range(self.count()):
             tab = self.widget(i)
             if home_tab == tab.name:
                 tab.reset_field(position, param_value)
@@ -124,7 +124,7 @@ class ConfigurationTabWidget(QtWidgets.QTabWidget):
         save_dir : str
             The directory for saving the configuration in.
         """
-        for i in xrange(self.count()):
+        for i in range(self.count()):
             tab = self.widget(i)
             tab.save(save_dir)
 
@@ -136,8 +136,8 @@ class ConfigurationTabWidget(QtWidgets.QTabWidget):
         param_dict : dict
             The set of information for the configuration
         """
-        proposals = param_dict.keys()
-        for i in xrange(self.count()):
+        proposals = list(param_dict.keys())
+        for i in range(self.count()):
             tab = self.widget(i)
             if tab.name in proposals:
                 tab.set_information(param_dict[tab.name], full_check=full_check)

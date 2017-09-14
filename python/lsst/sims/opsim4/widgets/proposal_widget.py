@@ -66,7 +66,7 @@ class ProposalWidget(ConfigurationTab):
         num_selections = len(params["selections"]["value"])
         if num_selections:
             num_widgets = 4
-            for i in xrange(num_selections):
+            for i in range(num_selections):
                 j = i * num_widgets
                 qualifier = "selections/{}".format(i)
                 self.create_widget("Str", "limit_type", qualifier=qualifier, layout=glayout,
@@ -221,7 +221,7 @@ class ProposalWidget(ConfigurationTab):
         """
         pos = self.layout.indexOf(pwidget)
         if pos == -1:
-            for i in xrange(index, self.layout.count() - 1):
+            for i in range(index, self.layout.count() - 1):
                 group_box = self.layout.itemAtPosition(i, 0).widget()
                 glayout = group_box.layout()
                 pos = glayout.indexOf(pwidget)
@@ -236,7 +236,7 @@ class ProposalWidget(ConfigurationTab):
     def reset_active_field(self):
         """Reset the active (has focus) parameter widget.
         """
-        for i in xrange(self.layout.rowCount()):
+        for i in range(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 0).widget()
             if isinstance(widget, QtWidgets.QGroupBox):
                 glayout = widget.layout()
@@ -257,7 +257,7 @@ class ProposalWidget(ConfigurationTab):
     def reset_all(self, layout=None, qualifier=None, positions=None):
         """Reset all of the changed parameters.
         """
-        for i in xrange(self.layout.rowCount()):
+        for i in range(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 0).widget()
             if isinstance(widget, QtWidgets.QGroupBox):
                 glayout = widget.layout()
@@ -302,7 +302,7 @@ class ProposalWidget(ConfigurationTab):
 
         if num_selections:
             for v in params["selections"]["value"].values():
-                for i in xrange(self.group_box_rows[1] - 1):
+                for i in range(self.group_box_rows[1] - 1):
                     self.set_widget_information(i + 1, glayout, v)
 
     def set_sky_nightly_bounds(self, params, gbr_loc):
@@ -317,7 +317,7 @@ class ProposalWidget(ConfigurationTab):
         """
         group_box = self.layout.itemAtPosition(3, 0).widget()
         glayout = group_box.layout()
-        for i in xrange(self.group_box_rows[gbr_loc]):
+        for i in range(self.group_box_rows[gbr_loc]):
             self.set_widget_information(i, glayout, params)
 
     def set_sky_constraints(self, params, gbr_loc):
@@ -332,7 +332,7 @@ class ProposalWidget(ConfigurationTab):
         """
         group_box = self.layout.itemAtPosition(4, 0).widget()
         glayout = group_box.layout()
-        for i in xrange(self.group_box_rows[gbr_loc]):
+        for i in range(self.group_box_rows[gbr_loc]):
             self.set_widget_information(i, glayout, params)
 
     def set_scheduling(self, params, gb_loc, gbr_loc):
@@ -349,7 +349,7 @@ class ProposalWidget(ConfigurationTab):
         """
         group_box = self.layout.itemAtPosition(gb_loc, 0).widget()
         glayout = group_box.layout()
-        for i in xrange(self.group_box_rows[gbr_loc]):
+        for i in range(self.group_box_rows[gbr_loc]):
             self.set_widget_information(i, glayout, params)
 
     def set_filters(self, params, gb_loc, gbr_loc):
@@ -368,7 +368,7 @@ class ProposalWidget(ConfigurationTab):
         glayout = group_box.layout()
         num_filters = len(params)
         if num_filters:
-            for i in xrange(self.group_box_rows[gbr_loc]):
+            for i in range(self.group_box_rows[gbr_loc]):
                 self.set_widget_information(i, glayout, params,
                                             alt_indexer=self.filter_index)
 

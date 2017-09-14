@@ -53,7 +53,7 @@ class ObservatoryWidget(ConfigurationTabWidget):
         full_check : bool
             Flag to trigger signals for property changes.
         """
-        for i in xrange(self.count()):
+        for i in range(self.count()):
             tab = self.widget(i)
             for key, info in params[tab.name].params.items():
                 tab.set_information(key, info, full_check=full_check)
