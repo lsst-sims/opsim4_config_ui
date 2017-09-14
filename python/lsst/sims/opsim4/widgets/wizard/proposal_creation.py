@@ -1,5 +1,4 @@
 import os
-import re
 
 from PyQt5 import QtGui, QtWidgets
 

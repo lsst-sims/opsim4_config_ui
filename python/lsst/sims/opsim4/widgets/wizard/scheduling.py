@@ -1,5 +1,3 @@
-import sys
-
 from PyQt5 import QtGui, QtWidgets
 
 from lsst.sims.opsim4.widgets.wizard import WizardPages
@@ -25,11 +23,6 @@ class SchedulingPage(QtWidgets.QWizardPage):
             self.param_tag = "general"
         else:
             self.param_tag = "sequence"
-
-        try:
-            max_int = sys.maxsize
-        except AttributeError:
-            max_int = sys.maxint
 
         label1 = QtWidgets.QLabel("Set the maximum number of targets to be sent to the scheduler "
                                   "driver for final target consideration")

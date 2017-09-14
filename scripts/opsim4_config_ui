@@ -6,6 +6,7 @@ from lsst.sims.opsim4.widgets.config_ui import run
 def main(options):
     run(options)
 
+
 if __name__ == '__main__':
     parser = create_parser()
     args = parser.parse_args()
