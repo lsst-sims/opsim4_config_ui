@@ -8,7 +8,7 @@ from lsst.sims.ocs.version import __version__ as socs_version
 
 from lsst.sims.opsim4 import __version__ as version
 from lsst.sims.opsim4.controller import MainController
-from lsst.sims.opsim4.utilities import title
+from lsst.sims.opsim4.utilities import NEW_PROPS_DIR, title
 from lsst.sims.opsim4.widgets import ReportDialog
 from lsst.sims.opsim4.widgets.constants import CSS
 from lsst.sims.opsim4.widgets.wizard import ProposalCreationWizard
@@ -30,6 +30,7 @@ class OpsimConfig(QtWidgets.QMainWindow):
         QtWidgets.QMainWindow.__init__(self, parent)
         self.save_directory = None
         self.file_menu_offset = -3
+        self.extra_props_dir = None
 
         self.create_file_menu()
         self.create_reset_menu()
@@ -83,10 +84,13 @@ class OpsimConfig(QtWidgets.QMainWindow):
         reset_active_field_default = self.create_action("Active Field Default", self.reset_active_field,
                                                         "Ctrl+Alt+F", "undo_field.svg",
                                                         "Reset value of the active field.")
+        reset_overrides = self.create_action("Overrides", self.reset_overrides, "Ctrl+Alt+Shift+O",
+                                             "undo_override.svg",
+                                             "Reset overrides including new proposals.")
 
         reset_menu = self.menuBar().addMenu("Reset")
         self.add_actions(reset_menu, (reset_all_defaults, reset_active_tab_defaults,
-                                      reset_active_field_default))
+                                      reset_active_field_default, reset_overrides))
 
     def create_create_menu(self):
         """ Create the create menu for the UI.
@@ -195,10 +199,11 @@ class OpsimConfig(QtWidgets.QMainWindow):
                 config_files.append(ifile)
 
         extra_props = None
-        alt_prop_dir = os.path.join(override_dir, "new_props")
+        alt_prop_dir = os.path.join(override_dir, NEW_PROPS_DIR)
         if os.path.exists(alt_prop_dir):
             extra_props = alt_prop_dir
             sys.path.insert(0, extra_props)
+            self.extra_props_dir = extra_props
 
         if len(config_files) or extra_props is not None:
             self.main_controller.apply_overrides(config_files, extra_props)
@@ -240,6 +245,19 @@ class OpsimConfig(QtWidgets.QMainWindow):
         """
         tab = self.tab_widget.widget(self.tab_widget.currentIndex())
         tab.reset_active_field()
+        self.statusBar().showMessage("Reset complete.", self.STATUS_BAR_TIMEOUT)
+
+    def reset_overrides(self):
+        """Reset all values from overrides including new proposals.
+        """
+        for i in range(self.tab_widget.count()):
+            tab = self.tab_widget.widget(i)
+            tab.reset_all()
+
+        if self.extra_props_dir is not None:
+            sys.path.remove(self.extra_props_dir)
+            self.main_controller.remove_extra_proposals()
+            self.extra_props_dir = None
         self.statusBar().showMessage("Reset complete.", self.STATUS_BAR_TIMEOUT)
 
     def closeEvent(self, event):

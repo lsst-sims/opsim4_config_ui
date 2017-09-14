@@ -244,6 +244,8 @@ class ProposalWidget(ConfigurationTab):
                 ConfigurationTab.reset_active_field(self, layout=glayout, qualifier=qualifier, position=i)
             else:
                 property_name = str(widget.text())
+                if property_name != "name":
+                    property_name = self.name + "/" + property_name
                 if property_name.endswith(self.CHANGED_PARAMETER):
                     self.getProperty.emit(property_name.strip(self.CHANGED_PARAMETER), [i])
 
@@ -263,6 +265,8 @@ class ProposalWidget(ConfigurationTab):
                 ConfigurationTab.reset_all(self, layout=glayout, qualifier=qualifier, position=i)
             else:
                 property_name = str(widget.text())
+                if property_name != "name":
+                    property_name = self.name + "/" + property_name
                 if property_name.endswith(self.CHANGED_PARAMETER):
                     self.getProperty.emit(property_name.strip(self.CHANGED_PARAMETER), [i])
 

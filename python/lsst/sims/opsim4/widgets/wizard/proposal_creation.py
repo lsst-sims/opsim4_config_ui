@@ -3,6 +3,7 @@ import re
 
 from PyQt5 import QtGui, QtWidgets
 
+from lsst.sims.opsim4.utilities import NEW_PROPS_DIR, filename_from_proposal_name
 from lsst.sims.opsim4.widgets.wizard import BandFiltersPage, MasterSubSequencesPage, ProposalTypePage
 from lsst.sims.opsim4.widgets.wizard import SchedulingPage
 from lsst.sims.opsim4.widgets.wizard import SkyConstraintsPage, SkyExclusionPage
@@ -67,7 +68,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
     def accept(self):
         """Process the given information.
         """
-        prop_save_dir = os.path.join(str(self.save_directory), "new_props")
+        prop_save_dir = os.path.join(str(self.save_directory), NEW_PROPS_DIR)
         if not os.path.exists(prop_save_dir):
             os.mkdir(prop_save_dir)
 
@@ -83,9 +84,7 @@ class ProposalCreationWizard(QtWidgets.QWizard):
             prop_reg_type = "sequence_prop_reg"
 
         full_prop_name = self.field("proposal_name")
-        m = re.compile(r'[A-Z][^A-Z]+')
-        name_parts = [x.lower() for x in m.findall(full_prop_name)]
-        prop_file_name = "{}.py".format("_".join(name_parts))
+        prop_file_name = filename_from_proposal_name(full_prop_name)
 
         file_def_dict = {"full_prop_name": full_prop_name,
                          "prop_type": prop_type,

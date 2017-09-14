@@ -61,3 +61,12 @@ class MainController(object):
         for tab in self.tab_order:
             tab_dictionary[tab] = getattr(self, tab + "_controller").get_tab()
         return tab_dictionary
+
+    def remove_extra_proposals(self):
+        """Return list of proposals to remove.
+
+        Returns
+        -------
+        list(tuple(str, str))
+        """
+        self.science_controller.remove_extra_proposals()

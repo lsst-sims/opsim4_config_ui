@@ -1,6 +1,9 @@
 import importlib
+import re
 
-__all__ = ["load_class", "title"]
+__all__ = ["NEW_PROPS_DIR", "load_class", "filename_from_proposal_name", "title"]
+
+NEW_PROPS_DIR = "new_props"
 
 def load_class(instance_obj):
     """Dynamically load a class from a string.
@@ -27,6 +30,28 @@ def load_class(instance_obj):
     module = importlib.import_module(module_path)
     # Finally, we retrieve the Class
     return getattr(module, class_str)
+
+def filename_from_proposal_name(prop_name):
+    """Create a filename from a proposal name.
+
+    This function creates a lowercase, underscore separated filename based on
+    the given camel-case proposal name. The proposal TestIt would have a filename
+    of test_it.py.
+
+    Parameters
+    ----------
+    prop_name : str
+        The name of the proposal.
+
+    Returns
+    -------
+    str
+        The filename based on the proposal name.
+    """
+    m = re.compile(r'[A-Z][^A-Z]+')
+    name_parts = [x.lower() for x in m.findall(prop_name)]
+    prop_file_name = "{}.py".format("_".join(name_parts))
+    return prop_file_name
 
 def title(tab_name, spacer=" "):
     """Create a title for a tab.
