@@ -3,6 +3,13 @@
 History
 -------
 
+1.2.0 (2017-09-14)
+~~~~~~~~~~~~~~~~~~
+
+* Added feature for saving new proposals in override mode
+* Fixing linting errors
+* Python 2/3 compatibility work
+
 1.1.1 (2017-08-01)
 ~~~~~~~~~~~~~~~~~~
 
