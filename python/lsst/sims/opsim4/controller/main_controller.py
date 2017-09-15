@@ -1,3 +1,4 @@
+from builtins import object
 import collections
 
 import lsst.sims.opsim4.controller

@@ -34,7 +34,7 @@ class ScienceController(BaseController):
         self.widget.create_tabs(self.model.sequence_params)
         self.widget.set_information(self.model.sequence_params)
 
-        for i in xrange(self.widget.count()):
+        for i in range(self.widget.count()):
             tab = self.widget.widget(i)
             tab.checkProperty.connect(self.check_property)
             tab.getProperty.connect(self.get_property)
@@ -58,9 +58,9 @@ class ScienceController(BaseController):
         self.widget.set_information(new_params.new_general)
         self.widget.create_tabs(new_params.new_sequence)
         self.widget.set_information(new_params.new_sequence)
-        new_props = new_params.new_general.keys() + new_params.new_sequence.keys()
+        new_props = list(new_params.new_general.keys()) + list(new_params.new_sequence.keys())
         self.extra_props = new_props
-        for i in xrange(self.widget.count()):
+        for i in range(self.widget.count()):
             tab = self.widget.widget(i)
             if tab.name in new_props:
                 tab.checkProperty.connect(self.check_property)

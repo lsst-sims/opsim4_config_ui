@@ -1,3 +1,4 @@
+from builtins import object
 import collections
 
 from lsst.sims.opsim4.model import CameraModel, DomeModel, FiltersModel

@@ -88,7 +88,7 @@ class SurveyWidget(ConfigurationTab):
             prop_gb = self.layout.itemAtPosition(prop_gb_loc, 0).widget()
             prop_gb_layout = prop_gb.layout()
             props = []
-            for i in xrange(prop_gb_layout.rowCount()):
+            for i in range(prop_gb_layout.rowCount()):
                 cb = prop_gb_layout.itemAtPosition(i, 1).widget()
                 if cb.isChecked():
                     props.append(str(prop_gb_layout.itemAtPosition(i, 0).widget().text()))
@@ -130,7 +130,7 @@ class SurveyWidget(ConfigurationTab):
                 prop_gb = self.layout.itemAtPosition(prop_gb_loc, 0).widget()
                 prop_gb_layout = prop_gb.layout()
                 proposals = []
-                for i in xrange(prop_gb_layout.rowCount()):
+                for i in range(prop_gb_layout.rowCount()):
                     cb = prop_gb_layout.itemAtPosition(i, 1).widget()
                     if cb.isChecked():
                         proposals.append(str(prop_gb_layout.itemAtPosition(i, 0).widget().text()))
@@ -166,7 +166,7 @@ class SurveyWidget(ConfigurationTab):
         """
         pos = self.layout.indexOf(pwidget)
         if pos == -1:
-            for i in xrange(3, self.layout.count() - 1):
+            for i in range(3, self.layout.count() - 1):
                 group_box = self.layout.itemAtPosition(i, 0).widget()
                 glayout = group_box.layout()
                 pos = glayout.indexOf(pwidget)
@@ -181,7 +181,7 @@ class SurveyWidget(ConfigurationTab):
     def reset_active_field(self):
         """Reset the active (has focus) parameter widget.
         """
-        for i in xrange(self.layout.rowCount()):
+        for i in range(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 0).widget()
             if isinstance(widget, QtWidgets.QGroupBox):
                 glayout = widget.layout()
@@ -195,7 +195,7 @@ class SurveyWidget(ConfigurationTab):
     def reset_all(self):
         """Reset all of the changed parameters.
         """
-        for i in xrange(self.layout.rowCount()):
+        for i in range(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 0).widget()
             if isinstance(widget, QtWidgets.QGroupBox):
                 glayout = widget.layout()
@@ -233,7 +233,7 @@ class SurveyWidget(ConfigurationTab):
         full_check : bool
             Flag to run through all proposals in group boxes.
         """
-        for key, value in params.items():
+        for key, value in list(params.items()):
             if "proposals" in key:
                 prop_gb = None
                 if "general" in key:
@@ -248,7 +248,7 @@ class SurveyWidget(ConfigurationTab):
                 else:
                     glayout = prop_gb.layout()
                     proposals = value["value"].split(',')
-                    for i in xrange(glayout.rowCount()):
+                    for i in range(glayout.rowCount()):
                         lwidget = glayout.itemAtPosition(i, 0).widget()
                         prop_label = str(lwidget.text())
                         if prop_label not in proposals:

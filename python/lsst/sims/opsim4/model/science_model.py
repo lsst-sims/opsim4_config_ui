@@ -1,3 +1,4 @@
+from builtins import object
 import collections
 import os
 
@@ -111,8 +112,8 @@ class ScienceModel(object):
         -------
         list(str)
         """
-        proposal_names = self.general_params.keys()
-        proposal_names += self.sequence_params.keys()
+        proposal_names = list(self.general_params.keys())
+        proposal_names += list(self.sequence_params.keys())
         return proposal_names
 
     def check_parameter(self, parameter_name, value_to_check):

@@ -145,7 +145,7 @@ class ConfigurationTab(QtWidgets.QWidget):
         if layout is None:
             layout = self.layout
         changed_values = []
-        for i in xrange(layout.rowCount()):
+        for i in range(layout.rowCount()):
             try:
                 property_label = layout.itemAtPosition(i, 0).widget()
             except AttributeError:
@@ -311,7 +311,7 @@ class ConfigurationTab(QtWidgets.QWidget):
         location = []
         if layout is None:
             layout = self.layout
-        for i in xrange(layout.rowCount()):
+        for i in range(layout.rowCount()):
             try:
                 property_label = layout.itemAtPosition(i, 0).widget()
             except AttributeError:
@@ -349,7 +349,7 @@ class ConfigurationTab(QtWidgets.QWidget):
         location = []
         if layout is None:
             layout = self.layout
-        for i in xrange(layout.rowCount()):
+        for i in range(layout.rowCount()):
             try:
                 property_label = layout.itemAtPosition(i, 0).widget()
             except AttributeError:
@@ -404,7 +404,7 @@ class ConfigurationTab(QtWidgets.QWidget):
             The directory for saving the configuration in.
         """
         changed_values = []
-        for i in xrange(self.layout.rowCount()):
+        for i in range(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 0).widget()
             if isinstance(widget, QtWidgets.QGroupBox):
                 gb_name = str(widget.title())
@@ -443,7 +443,7 @@ class ConfigurationTab(QtWidgets.QWidget):
             Flag to trigger signals for property changes.
         """
         self.full_check = full_check
-        for i in xrange(self.layout.rowCount()):
+        for i in range(self.layout.rowCount()):
             widget = self.layout.itemAtPosition(i, 1).widget()
             if isinstance(widget, QtWidgets.QGroupBox):
                 continue

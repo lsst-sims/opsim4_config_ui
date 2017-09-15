@@ -83,7 +83,7 @@ class SequenceProposalWidget(ProposalWidget):
         num_sub_sequences = len(params)
         if num_sub_sequences:
             num_widgets = 10
-            for i in xrange(num_sub_sequences):
+            for i in range(num_sub_sequences):
                 j = i * num_widgets
                 qualifier = "{}".format(i)
                 self.create_widget("Str", "name", qualifier=qualifier, layout=glayout,
@@ -123,7 +123,7 @@ class SequenceProposalWidget(ProposalWidget):
         num_master_sub_sequences = len(params)
         if num_master_sub_sequences:
             num_widgets = 9
-            for i in xrange(num_master_sub_sequences):
+            for i in range(num_master_sub_sequences):
                 j = i * num_widgets
                 qualifier = "{}".format(i)
                 self.create_widget("Str", "name", qualifier=qualifier, layout=glayout,
@@ -162,9 +162,9 @@ class SequenceProposalWidget(ProposalWidget):
         if num_master_sub_sequences:
             num_nested_sub_sequences = 0
             num_widgets = 10
-            for i in xrange(num_master_sub_sequences):
+            for i in range(num_master_sub_sequences):
                 num_sub_sequences = len(params[i]["sub_sequences"]["value"])
-                for k in xrange(num_sub_sequences):
+                for k in range(num_sub_sequences):
                     j = num_nested_sub_sequences * num_widgets
                     qualifier = "{}/{}".format(i, k)
                     self.create_widget("Str", "name", qualifier=qualifier, layout=glayout,
@@ -220,7 +220,7 @@ class SequenceProposalWidget(ProposalWidget):
     def hide_unused(self):
         """Hide sub-sequence and/or master sub-sequence group box if none present.
         """
-        for i in xrange(2, self.layout.count() - 1):
+        for i in range(2, self.layout.count() - 1):
             try:
                 group_box = self.layout.itemAtPosition(i, 0).widget()
             except AttributeError:
@@ -288,7 +288,7 @@ class SequenceProposalWidget(ProposalWidget):
         if num_master_sub_sequences:
             num_widgets = self.group_box_rows[4] / num_master_sub_sequences
             for j, v in enumerate(params.values()):
-                for i in xrange(num_widgets):
+                for i in range(num_widgets):
                     k = j * num_widgets + i
                     self.set_widget_information(k, glayout, v)
 
@@ -309,7 +309,7 @@ class SequenceProposalWidget(ProposalWidget):
             nested_index = 0
             for k, v in enumerate(params.values()):
                 for j, v1 in enumerate(v["sub_sequences"]["value"].values()):
-                    for i in xrange(num_widgets):
+                    for i in range(num_widgets):
                         m = (k * nested_index + j) * num_widgets + i
                         self.set_widget_information(m, glayout, v1)
                     nested_index += 1
@@ -328,6 +328,6 @@ class SequenceProposalWidget(ProposalWidget):
         if num_sub_sequences:
             num_widgets = self.group_box_rows[3] / num_sub_sequences
             for j, v in enumerate(params.values()):
-                for i in xrange(num_widgets):
+                for i in range(num_widgets):
                     k = j * num_widgets + i
                     self.set_widget_information(k, glayout, v)
