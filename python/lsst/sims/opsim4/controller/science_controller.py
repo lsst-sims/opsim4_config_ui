@@ -137,7 +137,7 @@ class ScienceController(BaseController):
         changed_params : dict
             The set of changed information.
         """
-        if len(changed_params):
+        if len(changed_params) and self.extra_props_dir is not None:
             prop_file = os.path.join(self.extra_props_dir,
                                      filename_from_proposal_name(name))
             if os.path.exists(prop_file):
