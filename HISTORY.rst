@@ -3,6 +3,11 @@
 History
 -------
 
+1.2.1 (2017-09-20)
+~~~~~~~~~~~~~~~~~~
+
+* Fixed issue with proposal saving without overrides
+
 1.2.0 (2017-09-14)
 ~~~~~~~~~~~~~~~~~~
 
