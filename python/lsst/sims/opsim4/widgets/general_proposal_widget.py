@@ -31,6 +31,8 @@ class GeneralProposalWidget(ProposalWidget):
         self.create_group_box("sky_constraints")
         self.create_group_box("scheduling")
         self.create_group_box("filters")
+        self.create_group_box("group_limit")
+        
 
     def create_sky_region(self, glayout, params):
         """Set the information for the proposal sky region.
@@ -169,11 +171,27 @@ class GeneralProposalWidget(ProposalWidget):
         name_widget.setText(str(params["name"]["value"]))
         name_widget.setToolTip(str(params["name"]["doc"]))
         self.set_sky_region(params["sky_region"]["value"])
+
+        print(params)
+        print("\n")
+        print(params["sky_region"]["value"])
+        print("\n")
+
         self.set_sky_exclusion(params["sky_exclusion"]["value"])
+        
+        print(params["sky_exclusion"]["value"])
+        print("\n")
+
         self.set_sky_nightly_bounds(params["sky_nightly_bounds"]["value"], 2)
         self.set_sky_constraints(params["sky_constraints"]["value"], 3)
         self.set_scheduling(params["scheduling"]["value"], 5, 4)
         self.set_filters(params["filters"]["value"], 6, 5)
+
+
+        print(params["group_limit"]["value"])
+        print("\n")
+        self.set_group_limit(params["group_limit"]["value"], 6)
+
 
     def set_sky_region(self, params):
         """Set information in the sky region parameters group box.
@@ -183,6 +201,7 @@ class GeneralProposalWidget(ProposalWidget):
         params : dict
             The set of parameters for the sky region information.
         """
+
         group_box = self.layout.itemAtPosition(1, 0).widget()
         glayout = group_box.layout()
         num_selections = len(params["selections"]["value"])

@@ -15,8 +15,8 @@ class GeneralPropModel(ModelHelper):
         config_obj : lsst.sims.ocs.configuration.proposal.General instance
             The instance containing the area distribution proposal information.
         """
-        self.parameter_order = ["name", "group_limit","sky_region", "sky_exclusion", "sky_nightly_bounds",
-                                "sky_constraints", "scheduling", "filters"]
+        self.parameter_order = ["name", "sky_region", "sky_exclusion", "sky_nightly_bounds",
+                                "sky_constraints", "scheduling", "filters", "group_limit"]
 
         ModelHelper.__init__(self, config_obj)
 

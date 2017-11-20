@@ -52,6 +52,14 @@ class ProposalWidget(ConfigurationTab):
         self.layout.addWidget(group_box, self.rows, 0, 1, 3)
         self.rows += 1
 
+    def create_group_limit(self, glayout, params):
+        print("hi")
+        # self.create_widget("Float", "dec_window", layout=glayout, rows=0)
+        self.create_widget("Float", "group_limit", layout=glayout, rows=0)
+        self.group_box_rows.append(1)
+
+
+
     def create_sky_exclusion(self, glayout, params, is_general=True):
         """Set the information for the proposal sky exclusion.
 
@@ -372,6 +380,28 @@ class ProposalWidget(ConfigurationTab):
                 self.set_widget_information(i, glayout, params,
                                             alt_indexer=self.filter_index)
 
+    def set_group_limit(self, params, gbr_loc):
+        """Set information in the sky constraints group box.
+
+        Parameters
+        ----------
+        params : dict
+            The set of parameters for the sky constraints information.
+        gbr_loc : int
+            The index into the group_box_rows array for the main widget.
+        """
+
+        print("Set group_limit")
+        # print(self.group_box_rows[7])
+
+        print(params["value"])
+
+        group_box = self.layout.itemAtPosition(7, 0).widget()
+        glayout = group_box.layout()
+        for i in range(self.group_box_rows[gbr_loc]):
+            self.set_widget_information(i, glayout, params)
+
+
     def set_unit_labels(self, widget, params):
         """Set the unit labels if necessary.
 
@@ -412,6 +442,7 @@ class ProposalWidget(ConfigurationTab):
             data_label = "_".join(label_text.split('_')[1:])
             index = alt_indexer[leading_label]
             param = params[index][data_label]
+            print("param" + str(param))
         value = param["value"]
         try:
             widget.setChecked(value)

@@ -27,6 +27,7 @@ class ScienceWidget(ConfigurationTabWidget):
         params : dict(str: params)
             Set of configuration information.
         """
+        # print(params)
         for name, values in sorted(params.items()):
             if "sky_region" in values:
                 tab = GeneralProposalWidget(name, values)
