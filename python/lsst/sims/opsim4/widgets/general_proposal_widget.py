@@ -187,7 +187,7 @@ class GeneralProposalWidget(ProposalWidget):
         glayout = group_box.layout()
         num_selections = len(params["selections"]["value"])
         if num_selections:
-            num_widgets = self.group_box_rows[0] / num_selections
+            num_widgets = self.group_box_rows[0] // num_selections
             if num_widgets == 4:
                 for j, v in enumerate(params["selections"]["value"].values()):
                     for i in range(num_widgets):

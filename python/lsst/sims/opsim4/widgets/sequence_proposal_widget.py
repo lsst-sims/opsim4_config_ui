@@ -286,7 +286,7 @@ class SequenceProposalWidget(ProposalWidget):
         glayout = group_box.layout()
         num_master_sub_sequences = len(params)
         if num_master_sub_sequences:
-            num_widgets = self.group_box_rows[4] / num_master_sub_sequences
+            num_widgets = self.group_box_rows[4] // num_master_sub_sequences
             for j, v in enumerate(params.values()):
                 for i in range(num_widgets):
                     k = j * num_widgets + i
@@ -305,7 +305,7 @@ class SequenceProposalWidget(ProposalWidget):
         num_master_sub_sequences = len(params)
         if num_master_sub_sequences:
             num_nested_sub_sequences = sum([len(x["sub_sequences"]["value"]) for x in params.values()])
-            num_widgets = self.group_box_rows[5] / num_nested_sub_sequences
+            num_widgets = self.group_box_rows[5] // num_nested_sub_sequences
             nested_index = 0
             for k, v in enumerate(params.values()):
                 for j, v1 in enumerate(v["sub_sequences"]["value"].values()):
@@ -326,7 +326,7 @@ class SequenceProposalWidget(ProposalWidget):
         glayout = group_box.layout()
         num_sub_sequences = len(params)
         if num_sub_sequences:
-            num_widgets = self.group_box_rows[3] / num_sub_sequences
+            num_widgets = self.group_box_rows[3] // num_sub_sequences
             for j, v in enumerate(params.values()):
                 for i in range(num_widgets):
                     k = j * num_widgets + i
