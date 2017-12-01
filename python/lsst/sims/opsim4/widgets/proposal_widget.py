@@ -160,7 +160,7 @@ class ProposalWidget(ConfigurationTab):
         num_filters = len(params)
         if num_filters:
             if is_general:
-                offset = 2
+                offset = 3
             else:
                 offset = 0
             filter_order = "u g r i z y".split()
@@ -181,6 +181,8 @@ class ProposalWidget(ConfigurationTab):
                                        layout=glayout, rows=(j + 0))
                     self.create_widget("Int", "{}_num_grouped_visits".format(filter_name),
                                        qualifier=qualifier, layout=glayout, rows=(j + 1))
+                    self.create_widget("Int", "{}_max_grouped_visits".format(filter_name),
+                                       qualifier=qualifier, layout=glayout, rows=(j + 2))
                 self.create_widget("Float", "{}_bright_limit".format(filter_name), qualifier=qualifier,
                                    layout=glayout, rows=(j + offset))
                 self.create_widget("Float", "{}_dark_limit".format(filter_name), qualifier=qualifier,
