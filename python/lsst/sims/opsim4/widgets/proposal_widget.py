@@ -140,7 +140,8 @@ class ProposalWidget(ConfigurationTab):
             self.create_widget("Float", "time_window_max", layout=glayout, rows=9)
             self.create_widget("Float", "time_window_end", layout=glayout, rows=10)
             self.create_widget("Float", "time_weight", layout=glayout, rows=11)
-            num_widgets = 12
+            self.create_widget("Int", "field_revisit_limit", layout=glayout, rows=12)
+            num_widgets = 13
         else:
             num_widgets = 9
         self.group_box_rows.append(num_widgets)
